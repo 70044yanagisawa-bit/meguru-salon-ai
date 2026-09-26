@@ -1,0 +1,9 @@
+{
+  // Cloudflare Workers（静的アセットのみ）の設定。
+  // public/ の中身をそのまま配信するだけで、サーバー側のコードは動かしていない。
+  "name": "meguru-salon-ai",
+  "compatibility_date": "2026-09-01",
+  "assets": {
+    "directory": "./public"
+  }
+}
