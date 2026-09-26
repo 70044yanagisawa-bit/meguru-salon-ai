@@ -91,6 +91,68 @@ body{ background:var(--paper); color:var(--ink); }
   }
 }
 
+/* =========================================================
+   ヒーローが奥に留まり、次の面が下から登って覆っていく
+   （JSなし。position:sticky だけなのでスクロールは普通に動く）
+   ========================================================= */
+
+.hero{
+  position:sticky; top:0; z-index:0;
+  min-height:100svh;
+  align-content:center;
+}
+
+/* 以降の面はすべて不透明にして、ヒーローの上を滑っていく */
+main > section:not(.hero),
+main > figure{
+  position:relative; z-index:1;
+  background:var(--paper);
+}
+.flow, .cta{ background:#000; }
+.service{ background:#f4f0e9; }
+.faq{ background:var(--paper-2); }
+
+/* 登ってくる面の輪郭。黒同士でも境目が分かるように上端だけ光らせる */
+.ask{
+  border-top:1px solid var(--rule-2);
+  box-shadow:0 -34px 60px rgba(0,0,0,.72);
+}
+
+/* フッターもヒーローを覆う側 */
+.foot{ position:relative; z-index:1; background:var(--paper); max-width:none; }
+.foot > *{ max-width:var(--max); margin-inline:auto; width:100%; }
+
+/* ---------- スマホ：写真を右上の面にして、1画面に収める ---------- */
+
+@media (max-width: 899px){
+  /* 1画面に「写真 → 見出し → 予約ボタン」までを収める */
+  .hero{
+    padding-top:min(36svh, 310px);
+    padding-bottom:1.6rem;
+  }
+  .hero__fig{
+    position:absolute; top:0; right:0;
+    width:64%; height:min(32svh, 280px);
+  }
+  .hero__fig img{
+    width:100%; height:100%;
+    aspect-ratio:auto;
+    object-fit:cover;
+  }
+  .hero__label{ margin-bottom:.9em; }
+  .hero__en{ margin-bottom:.9em; }
+  .hero__lead{ font-size:.93rem; line-height:1.8; margin-bottom:1.5rem; }
+  .hero__cta{ gap:1rem 1.6rem; }
+}
+
+/* 画面の短い端末（iPhone SEなど）では写真と余白をさらに詰める */
+@media (max-width: 899px) and (max-height: 720px){
+  .hero{ padding-top:min(29svh, 230px); }
+  .hero__fig{ height:min(25svh, 200px); }
+  .hero__lead{ margin-bottom:1.1rem; }
+  .hero__en{ margin-bottom:.7em; }
+}
+
 /* ---------- できること＝白い面にして反転させる ---------- */
 
 .service{
