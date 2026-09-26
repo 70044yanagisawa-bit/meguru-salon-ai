@@ -182,7 +182,7 @@ body[data-guide="on"] .guide{
 /* 裏面はサイトのCTA（墨面に大きな文字1枚）と同じ組み */
 .card--back .card__in{
   display:grid;
-  grid-template-rows:auto auto auto 1fr;
+  grid-template-rows:auto auto 1fr;
 }
 
 .lbl{
@@ -197,13 +197,6 @@ body[data-guide="on"] .guide{
   padding-bottom:3mm;
   border-bottom:var(--t) solid var(--rev-rule);
 }
-
-/* サービスは一行だけ、静かに置く */
-.svc{
-  margin-top:2.6mm;
-  font-size:2.1mm; letter-spacing:.08em; color:rgba(243,239,232,.72);
-}
-.svc i{ font-style:normal; margin:0 1.4mm; color:var(--rev-acc); }
 
 .back__foot{
   align-self:end;
