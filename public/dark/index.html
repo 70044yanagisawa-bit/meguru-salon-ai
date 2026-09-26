@@ -5,17 +5,18 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>柳沢恵瑠のAIコンサルティング｜美容室のMEO・ホームページ制作・AI業務効率</title>
 <meta name="description" content="美容室専門のAIコンサルティング。Googleビジネスプロフィール（MEO）の運用、写真が主役のホームページ制作、口コミ返信や月次集計といった事務作業のAI化を、現場で回る形にして運用まで続けます。">
-<meta name="theme-color" content="#f6f2ec">
-<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<meta name="theme-color" content="#0c0b0a">
+<meta name="robots" content="noindex"><!-- 比較用の黒版。検索には出さない -->
+<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
 <meta property="og:type" content="website">
 <meta property="og:title" content="柳沢恵瑠のAIコンサルティング｜美容室専門">
 <meta property="og:description" content="美容室の事務を閉店後に持ち帰らない仕組みをつくります。MEO運用・ホームページ制作・AI業務効率。">
-<meta property="og:image" content="assets/img/ogp.svg">
-<!-- TODO: 公開ドメインが決まったら og:url と canonical を入れる -->
+<meta property="og:image" content="../assets/img/ogp.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;500&display=swap">
-<link rel="stylesheet" href="assets/style.css">
+<link rel="stylesheet" href="../assets/style.css">
+<link rel="stylesheet" href="dark.css"><!-- 色と見出し処理だけを上書き -->
 <!-- JSが動くときだけスクロール表示を使う（動かない環境では最初から全部見える） -->
 <script>document.documentElement.classList.add('js');</script>
 </head>
@@ -67,6 +68,7 @@
 <section class="hero" id="top">
   <div class="hero__text">
     <p class="hero__label" aria-hidden="true">美容室専門</p>
+    <p class="hero__en" aria-hidden="true">SALON &times; AI</p>
     <h1 class="hero__h">
       <span class="line"><span>美容室の“事務”を、</span></span>
       <span class="line"><span>閉店後に</span></span>
@@ -83,9 +85,11 @@
   </div>
 
   <figure class="hero__fig">
-    <img src="assets/img/hero.svg" width="900" height="1200"
+    <img src="../assets/img/hero.svg" width="900" height="1200"
          alt="自然光が入る店内のセット面。窓際の椅子と鏡。">
   </figure>
+
+  <p class="scroll-cue" aria-hidden="true">scroll</p>
 </section>
 
 <!-- ============ 課題 ============ -->
@@ -134,7 +138,7 @@
       </ul>
     </div>
     <figure class="svc__fig">
-      <img src="assets/img/service-meo.svg" width="1200" height="800" loading="lazy"
+      <img src="../assets/img/service-meo.svg" width="1200" height="800" loading="lazy"
            alt="スマートフォンで自店のGoogleビジネスプロフィールを確認している手元。">
     </figure>
   </article>
@@ -156,7 +160,7 @@
       </ul>
     </div>
     <figure class="svc__fig">
-      <img src="assets/img/service-web.svg" width="1200" height="675" loading="lazy"
+      <img src="../assets/img/service-web.svg" width="1200" height="675" loading="lazy"
            alt="窓際に椅子が並ぶ店内の引きの写真。">
     </figure>
   </article>
@@ -179,7 +183,7 @@
       </ul>
     </div>
     <figure class="svc__fig">
-      <img src="assets/img/service-ai.svg" width="1200" height="800" loading="lazy"
+      <img src="../assets/img/service-ai.svg" width="1200" height="800" loading="lazy"
            alt="バックヤードでノートパソコンの画面を見ながら話す2人。">
     </figure>
   </article>
@@ -245,7 +249,7 @@
 
 <!-- ============ 進め方（墨面） ============ -->
 <figure class="band" aria-hidden="true">
-  <img src="assets/img/band.svg" width="2100" height="700" loading="lazy" alt="">
+  <img src="../assets/img/band.svg" width="2100" height="700" loading="lazy" alt="">
 </figure>
 
 <section class="flow" id="flow">
@@ -281,7 +285,7 @@
 <!-- ============ プロフィール ============ -->
 <section class="about" id="about">
   <figure class="about__fig">
-    <img src="assets/img/profile.svg" width="800" height="1000" loading="lazy"
+    <img src="../assets/img/profile.svg" width="800" height="1000" loading="lazy"
          alt="柳沢恵瑠。自然光の入る店内で撮影したポートレート。">
   </figure>
 
@@ -396,13 +400,24 @@
   </nav>
   <p class="foot__copy">&copy; 2026 柳沢恵瑠</p>
   <!-- 比較用。どちらかに決めたら消します -->
-  <p class="foot__switch"><a href="dark/">黒い版を見る →</a></p>
+  <p class="foot__switch"><a href="../">紙色の版を見る →</a></p>
 </footer>
+
+<!-- 黒版だけの遊び。円周にそって文字がゆっくり回る（PC表示のみ／動き軽減設定では停止） -->
+<a class="badge" href="#contact" aria-label="30分の相談を予約する">
+  <svg class="badge__ring" viewBox="0 0 120 120" aria-hidden="true">
+    <defs>
+      <path id="badgePath" d="M60,60 m-46,0 a46,46 0 1,1 92,0 a46,46 0 1,1 -92,0"/>
+    </defs>
+    <text><textPath href="#badgePath">まずは30分、現場の話を聞かせてください　・　</textPath></text>
+  </svg>
+  <span class="badge__core" aria-hidden="true">30<small>min</small></span>
+</a>
 
 <div class="sticky" id="sticky" aria-hidden="true">
   <a class="sticky__btn" href="#contact" tabindex="-1">30分の相談を予約する</a>
 </div>
 
-<script src="assets/main.js" defer></script>
+<script src="../assets/main.js" defer></script>
 </body>
 </html>

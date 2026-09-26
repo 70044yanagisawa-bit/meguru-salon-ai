@@ -1,0 +1,177 @@
+@charset "UTF-8";
+/* =========================================================
+   黒版（比較用）
+   style.css を読み込んだ上から、色と一部の見出し処理だけを上書きする。
+   レイアウト・文章・動きの設計は紙色版と共通。
+   ========================================================= */
+
+:root{
+  color-scheme: dark;
+
+  --paper:   #0c0b0a;          /* 地：真っ黒より少し温かい墨 */
+  --paper-2: #141210;          /* 面の切り替え */
+  --ink:     #f0ece4;          /* 文字 */
+  --ink-2:   #a8a299;
+  --ink-3:   #6f6a63;
+  --accent:  #d07f55;          /* 柿渋を黒地で読める明るさに */
+  --rule:    rgba(240,236,228,.18);
+  --rule-2:  rgba(240,236,228,.09);
+  /* rev-* は「黒い面の上に置く文字」用。白い面（できること）だけは個別に指定する */
+  --rev-ink: #f0ece4;
+  --rev-rule:rgba(240,236,228,.24);
+}
+
+body{ background:var(--paper); color:var(--ink); }
+
+/* 写真は黒地に馴染むよう少しだけ落とす */
+.hero__fig img,
+.svc__fig img,
+.about__fig img,
+.band img{ filter:brightness(.88) contrast(1.04); }
+
+/* ---------- ヘッダー：予約をピル型で常時見せる ---------- */
+
+.head{ background:color-mix(in srgb, var(--paper) 82%, transparent); }
+.head.is-scrolled{ border-bottom-color:var(--rule-2); }
+
+.brand__name{ letter-spacing:.2em; }
+
+.nav__list a{ font-size:.8rem; letter-spacing:.1em; }
+
+.head .btn--sm{
+  border-radius:999px;
+  padding:.75em 1.5em;
+  font-family:var(--gothic);
+  font-size:.76rem; letter-spacing:.16em;
+  border-color:var(--ink);
+}
+.head .btn--sm::before{ display:none; }
+
+.menu-btn__bars i{ background:var(--ink); }
+.menu{ background:#111 ; }
+
+/* ---------- 欧文ラベルを大きく、字間を広く ---------- */
+
+.sec-h__en{
+  font-family:var(--gothic);
+  font-size:.8rem;
+  letter-spacing:.5em;
+  color:var(--accent);
+}
+.hero__en{
+  margin:0 0 1.2em;
+  font-family:var(--gothic);
+  font-size:clamp(.8rem, 2.2vw, 1.05rem);
+  letter-spacing:.52em;
+  color:var(--ink-2);
+  opacity:0;
+  animation:fadeUp .9s var(--ease) .1s forwards;
+}
+.hero__label{ color:var(--accent); }
+
+/* ---------- スクロールの合図（縦組み） ---------- */
+
+.scroll-cue{
+  display:none;
+  margin:0;
+  font-family:var(--gothic);
+  font-size:.66rem; letter-spacing:.42em; color:var(--ink-3);
+  writing-mode:vertical-rl;
+}
+.scroll-cue::after{
+  content:""; display:block; width:1px; height:4.5rem; margin:1.2em auto 0;
+  background:linear-gradient(var(--ink-3), transparent);
+}
+@media (min-width:900px){
+  .hero{ position:relative; }
+  .scroll-cue{
+    display:block;
+    position:absolute; left:calc(var(--pad) * .45); bottom:clamp(2rem,6vh,4rem);
+    opacity:0; animation:fadeUp 1s var(--ease) 1.1s forwards;
+  }
+}
+
+/* ---------- できること＝白い面にして反転させる ---------- */
+
+.service{
+  background:#f4f0e9;
+  color:#17150f;
+}
+.service .sec-h__ja,
+.service .svc__h{ color:#17150f; }
+.service .sec-h::after{ background:rgba(23,21,15,.45); }
+.service .sec-h__en{ color:#a8542f; }
+.service .svc{ border-top-color:rgba(23,21,15,.16); }
+.service .svc__num{ color:#a8542f; }
+.service .svc__catch{ color:#a8542f; }
+.service .svc__body p{ color:rgba(23,21,15,.76); }
+.service .svc__items,
+.service .svc__items li{ border-color:rgba(23,21,15,.16); }
+.service .svc__items li::before{ background:#a8542f; }
+.service .svc__fig img{ filter:none; }
+
+/* 事例の台帳は罫線だけを調整 */
+.ledger{ border-top-color:var(--ink); }
+
+/* 進め方は黒のままなので、境目に線を足して面を分ける */
+.flow{ background:#000; }
+.flow .sec-h__en{ color:var(--accent); }
+.steps p:last-child{ color:var(--ink-2); }
+
+.faq{ background:var(--paper-2); }
+
+.cta{ background:#000; }
+.cta__label{ color:var(--accent); font-family:var(--gothic); letter-spacing:.5em; }
+.cta__lead{ color:var(--ink-2); }
+.cta__mail{ color:var(--ink-3); }
+.btn--rev{ border-radius:999px; }
+.btn--rev::after{ background:var(--ink); }
+
+/* 追従ボタン */
+.sticky{ background:color-mix(in srgb, var(--paper) 92%, transparent); border-top-color:var(--rule-2); }
+.sticky__btn{ background:var(--ink); color:var(--paper); border-radius:999px; }
+
+.foot__switch{ margin:0; font-size:.75rem; }
+.foot__switch a{ color:var(--ink-3); }
+@media (hover:hover){ .foot__switch a:hover{ color:var(--accent); } }
+
+/* =========================================================
+   円形バッジ（黒版だけの遊び）
+   ========================================================= */
+
+.badge{
+  display:none;
+  position:fixed; right:clamp(1rem,2.5vw,2.2rem); bottom:clamp(1rem,2.5vw,2.2rem);
+  z-index:70;
+  width:124px; height:124px;
+  text-decoration:none;
+  place-items:center;
+}
+.badge__ring{
+  position:absolute; inset:0; width:100%; height:100%;
+  animation:badgeSpin 26s linear infinite;
+}
+.badge__ring text{
+  font-family:var(--gothic);
+  font-size:8.6px;
+  letter-spacing:.14em;
+  fill:var(--ink-2);
+}
+.badge__core{
+  display:grid; place-items:center; gap:.1em;
+  width:62px; height:62px; border-radius:50%;
+  background:var(--accent); color:#17150f;
+  font-family:var(--mincho); font-size:1.15rem; line-height:1;
+  transition:transform .4s var(--ease);
+}
+.badge__core small{ font-size:.5rem; letter-spacing:.1em; }
+@keyframes badgeSpin{ to{ transform:rotate(360deg); } }
+
+@media (min-width:900px){ .badge{ display:grid; } }
+@media (hover:hover){
+  .badge:hover .badge__core{ transform:scale(1.08); }
+}
+@media (prefers-reduced-motion: reduce){
+  .badge__ring{ animation:none; }
+  .hero__en, .scroll-cue{ opacity:1; }
+}

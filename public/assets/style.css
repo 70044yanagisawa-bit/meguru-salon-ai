@@ -695,6 +695,9 @@ section[id]{ scroll-margin-top:clamp(4.5rem, 9vw, 6rem); }
   .foot__nav a:hover{ color:var(--accent); border-bottom-color:var(--accent); }
 }
 .foot__copy{ margin:0; font-size:.72rem; letter-spacing:.1em; color:var(--ink-3); }
+.foot__switch{ margin:0; font-size:.75rem; }
+.foot__switch a{ color:var(--ink-3); text-decoration:none; border-bottom:1px solid var(--rule); padding-bottom:.2em; }
+@media (hover:hover){ .foot__switch a:hover{ color:var(--accent); border-bottom-color:var(--accent); } }
 @media (min-width:900px){
   .foot{ grid-template-columns:auto 1fr; align-items:start; column-gap:4rem; }
   .foot__copy{ grid-column:1 / -1; }
