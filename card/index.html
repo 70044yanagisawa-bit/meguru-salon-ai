@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>名刺｜柳沢恵瑠 美容室専門 AIコンサルティング</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;500&display=swap">
+<link rel="stylesheet" href="card.css">
+<style id="pagerule">@page{ size:97mm 61mm; margin:0; }</style>
+</head>
+<body data-mode="bleed" data-guide="on">
+
+<!-- ===== 画面用の操作パネル（印刷されません） ===== -->
+<div class="panel no-print">
+  <div class="panel__row">
+    <p class="panel__title">名刺 91 × 55mm（横）</p>
+    <p class="panel__sub">柳沢恵瑠 / 美容室専門 AIコンサルティング — サイトと同じ 紙・墨・柿渋</p>
+  </div>
+
+  <div class="panel__row">
+    <fieldset class="seg">
+      <legend>入稿サイズ</legend>
+      <label><input type="radio" name="mode" value="trim"><span>仕上がり<br><i>91×55</i></span></label>
+      <label><input type="radio" name="mode" value="bleed" checked><span>塗り足し3mm<br><i>97×61</i></span></label>
+      <label><input type="radio" name="mode" value="marks"><span>トンボ付き<br><i>103×67</i></span></label>
+    </fieldset>
+
+    <label class="chk"><input type="checkbox" id="guide" checked> 仕上がり線のガイドを表示（画面のみ）</label>
+
+    <button class="prt" type="button" id="print">印刷 / PDFで保存</button>
+  </div>
+
+  <p class="panel__note">
+    PDFにするとき：Chromeの印刷画面で <b>用紙サイズ = 上で選んだmm</b>／<b>倍率 100%</b>／<b>背景のグラフィック ON</b>／<b>余白 なし</b>。
+    印刷所へは通常「塗り足し3mm・トンボなし」で入稿できます（ラクスル・プリントパック等）。
+  </p>
+</div>
+
+<!-- ===== 表 ===== -->
+<div class="sheet">
+  <div class="marks" aria-hidden="true"></div>
+  <div class="card card--front">
+    <div class="card__in">
+
+      <p class="shop">〔屋号を記入〕</p>
+
+      <p class="side" aria-hidden="true">美容室専門</p>
+
+      <div class="name">
+        <h1 class="name__ja">柳沢 恵瑠</h1>
+        <p class="name__ro">やなぎさわ めぐる</p>
+      </div>
+
+      <div class="foot">
+        <span class="hair" aria-hidden="true"></span>
+        <p class="role">AIコンサルティング</p>
+        <p class="role role--sub">MEO ／ ホームページ制作 ／ AI業務効率</p>
+      </div>
+
+    </div>
+    <span class="guide" aria-hidden="true"></span>
+  </div>
+</div>
+
+<!-- ===== 裏（墨面） ===== -->
+<div class="sheet">
+  <div class="marks" aria-hidden="true"></div>
+  <div class="card card--back">
+    <div class="card__in">
+
+      <p class="lbl">Contact</p>
+
+      <p class="claim">美容室の“事務”を、<br>閉店後に持ち帰らない。</p>
+
+      <p class="svc">
+        <span>MEO</span><i aria-hidden="true">／</i><span>ホームページ制作</span><i aria-hidden="true">／</i><span>AIでの業務効率化</span>
+      </p>
+
+      <div class="back__foot">
+        <dl class="ct">
+          <dt>TEL</dt><dd>〔記入待ち〕</dd>
+          <dt>MAIL</dt><dd>〔記入待ち〕</dd>
+          <dt>WEB</dt><dd>〔記入待ち〕</dd>
+        </dl>
+
+        <div class="qr__wrap">
+          <!-- TODO: 下のdivを、サイトURLのQR画像（正方形・余白なしのSVG/PNG）に差し替え -->
+          <div class="qr"><span>QR</span></div>
+          <p class="qr__cap">サイトはこちら</p>
+        </div>
+      </div>
+
+    </div>
+    <span class="guide" aria-hidden="true"></span>
+  </div>
+</div>
+
+<script src="card.js" defer></script>
+</body>
+</html>

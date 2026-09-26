@@ -1,0 +1,314 @@
+@charset "UTF-8";
+/* =========================================================
+   名刺 91 × 55mm（横）
+   柳沢恵瑠 / 美容室専門 AIコンサルティング
+   サイト（../assets/style.css）と同じ設計語彙：
+   ・色は 紙・生成り・墨・灰 ＋ アクセント柿渋1色（面には使わず罫と番号のみ）
+   ・見出し＝Shippori Mincho / 本文＝OSゴシック
+   ・縦組みラベルは一箇所だけ（表の右端）
+   ・墨面への反転は一回だけ（裏面）
+   ========================================================= */
+
+:root{
+  color-scheme: light;
+
+  --paper:   #f6f2ec;
+  --paper-2: #ede7de;
+  --ink:     #1c1a17;
+  --ink-2:   #6b665e;
+  --ink-3:   #9a948a;
+  --accent:  #a84e2c;      /* 柿渋 */
+  --rule:    rgba(28,26,23,.14);
+  --rev-ink: #f3efe8;      /* 墨面の文字 */
+  --rev-rule:rgba(243,239,232,.22);
+  --rev-acc: #d8a288;      /* 墨面での柿渋（サイトのcta__labelと同じ） */
+
+  --mincho: "Shippori Mincho", "Hiragino Mincho ProN", "Yu Mincho", "YuMincho", serif;
+  --gothic: -apple-system, BlinkMacSystemFont, "Hiragino Kaku Gothic ProN",
+            "Noto Sans JP", "Yu Gothic", "Meiryo", sans-serif;
+
+  /* 版面 */
+  --trim-w: 91mm;
+  --trim-h: 55mm;
+  --bleed:  3mm;   /* 塗り足し */
+  --mark:   0mm;   /* トンボ領域 */
+  --pad:    6.5mm; /* 仕上がり線からの内側マージン */
+  --t:      .25mm; /* トンボの線幅 */
+}
+
+/* 入稿モード */
+body[data-mode="trim"]  { --bleed:0mm; --mark:0mm; }
+body[data-mode="bleed"] { --bleed:3mm; --mark:0mm; }
+body[data-mode="marks"] { --bleed:3mm; --mark:3mm; }
+
+*,*::before,*::after{ box-sizing:border-box; }
+
+html{ -webkit-text-size-adjust:100%; }
+
+body{
+  margin:0;
+  padding:0;
+  background:#cfc8bd;                 /* 作業台（印刷されません） */
+  color:var(--ink);
+  font-family:var(--gothic);
+  font-feature-settings:"palt" 1;
+  -webkit-print-color-adjust:exact;
+  print-color-adjust:exact;
+}
+
+h1{ margin:0; font-weight:500; }
+p,dl,dd,ol{ margin:0; padding:0; }
+li{ list-style:none; }
+
+:focus-visible{ outline:2px solid var(--accent); outline-offset:3px; }
+
+/* =========================================================
+   台紙（1面＝1ページ）
+   ========================================================= */
+
+.sheet{
+  position:relative;
+  width:  calc(var(--trim-w) + 2 * (var(--bleed) + var(--mark)));
+  height: calc(var(--trim-h) + 2 * (var(--bleed) + var(--mark)));
+  margin:12mm auto;
+  display:grid;
+  place-items:center;
+  background:#fff;
+  box-shadow:0 1mm 6mm rgba(28,26,23,.22);
+}
+
+/* 角トンボ：仕上がり線の延長を四隅の外側に出す */
+.marks{
+  position:absolute; inset:0; pointer-events:none;
+  background-image:
+    linear-gradient(var(--ink),var(--ink)), linear-gradient(var(--ink),var(--ink)),
+    linear-gradient(var(--ink),var(--ink)), linear-gradient(var(--ink),var(--ink)),
+    linear-gradient(var(--ink),var(--ink)), linear-gradient(var(--ink),var(--ink)),
+    linear-gradient(var(--ink),var(--ink)), linear-gradient(var(--ink),var(--ink));
+  background-repeat:no-repeat;
+  background-size:
+    var(--mark) var(--t), var(--mark) var(--t), var(--mark) var(--t), var(--mark) var(--t),
+    var(--t) var(--mark), var(--t) var(--mark), var(--t) var(--mark), var(--t) var(--mark);
+  background-position:
+    left 0 top    calc(var(--bleed) + var(--mark) - var(--t) / 2),
+    right 0 top   calc(var(--bleed) + var(--mark) - var(--t) / 2),
+    left 0 bottom calc(var(--bleed) + var(--mark) - var(--t) / 2),
+    right 0 bottom calc(var(--bleed) + var(--mark) - var(--t) / 2),
+    left  calc(var(--bleed) + var(--mark) - var(--t) / 2) top 0,
+    left  calc(var(--bleed) + var(--mark) - var(--t) / 2) bottom 0,
+    right calc(var(--bleed) + var(--mark) - var(--t) / 2) top 0,
+    right calc(var(--bleed) + var(--mark) - var(--t) / 2) bottom 0;
+}
+
+/* =========================================================
+   カード本体（塗り足しを含んだ面）
+   ========================================================= */
+
+.card{
+  position:relative;
+  width:  calc(var(--trim-w) + 2 * var(--bleed));
+  height: calc(var(--trim-h) + 2 * var(--bleed));
+  padding: calc(var(--bleed) + var(--pad));
+  overflow:hidden;
+}
+.card__in{ height:100%; }
+
+/* 仕上がり線ガイド（画面のみ） */
+.guide{ display:none; }
+body[data-guide="on"] .guide{
+  display:block; position:absolute; pointer-events:none;
+  inset:var(--bleed);
+  outline:var(--t) dashed rgba(168,78,44,.5);
+}
+
+/* ---------------- 表 ---------------- */
+
+.card--front{
+  background:var(--paper);
+  /* 縦組みラベルのぶんだけ右を空ける */
+  padding-right: calc(var(--bleed) + var(--pad) + 6mm);
+}
+.card--front .card__in{
+  display:grid;
+  grid-template-rows:auto 1fr auto;
+}
+
+.shop{
+  font-family:var(--mincho);
+  font-size:2.3mm; letter-spacing:.16em; color:var(--ink-2);
+}
+
+/* 縦組みラベル＝この一箇所だけ（サイトのhero__labelと同じ作法） */
+.side{
+  position:absolute;
+  top: calc(var(--bleed) + var(--pad));
+  right: calc(var(--bleed) + var(--pad));
+  writing-mode:vertical-rl;
+  font-family:var(--mincho);
+  font-size:2.2mm; letter-spacing:.42em; color:var(--accent);
+}
+
+.name{ align-self:center; }
+.name__ja{
+  font-family:var(--mincho);
+  font-size:7.4mm; line-height:1.2; letter-spacing:.09em;
+}
+.name__ro{
+  margin-top:1.6mm;
+  font-size:2.1mm; letter-spacing:.22em; color:var(--ink-2);
+}
+
+.foot{ align-self:end; }
+.hair{
+  display:block; width:20mm; height:var(--t); margin-bottom:2.4mm;
+  background:linear-gradient(90deg, var(--accent) 0 4mm, var(--rule) 4mm 100%);
+}
+.role{
+  font-family:var(--mincho);
+  font-size:2.6mm; letter-spacing:.12em; line-height:1.5;
+}
+.role--sub{
+  margin-top:.9mm;
+  font-family:var(--gothic);
+  font-size:2.05mm; letter-spacing:.1em; color:var(--ink-2);
+}
+
+/* ---------------- 裏（墨面・反転は一回だけ） ---------------- */
+
+.card--back{
+  background:var(--ink);
+  color:var(--rev-ink);
+}
+/* 裏面はサイトのCTA（墨面に大きな文字1枚）と同じ組み */
+.card--back .card__in{
+  display:grid;
+  grid-template-rows:auto auto auto 1fr;
+}
+
+.lbl{
+  font-family:var(--mincho);
+  font-size:2mm; letter-spacing:.34em; color:var(--rev-acc);
+  margin-bottom:3.4mm;
+}
+
+.claim{
+  font-family:var(--mincho);
+  font-size:3.6mm; line-height:1.5; letter-spacing:.06em;
+  padding-bottom:3mm;
+  border-bottom:var(--t) solid var(--rev-rule);
+}
+
+/* サービスは一行だけ、静かに置く */
+.svc{
+  margin-top:2.6mm;
+  font-size:2.1mm; letter-spacing:.08em; color:rgba(243,239,232,.72);
+}
+.svc i{ font-style:normal; margin:0 1.4mm; color:var(--rev-acc); }
+
+.back__foot{
+  align-self:end;
+  display:flex; justify-content:space-between; align-items:flex-end; gap:5mm;
+}
+.ct{ display:grid; grid-template-columns:auto 1fr; gap:1.3mm 2.2mm; align-items:baseline; }
+.ct dt{
+  font-size:1.75mm; letter-spacing:.18em; color:rgba(243,239,232,.5);
+}
+.ct dd{ font-size:2.2mm; letter-spacing:.02em; }
+
+.qr__wrap{ text-align:center; }
+.qr{
+  width:15mm; height:15mm;
+  display:grid; place-items:center;
+  border:var(--t) dashed var(--rev-rule);
+  color:rgba(243,239,232,.4);
+  font-size:1.9mm; letter-spacing:.2em;
+}
+.qr__cap{
+  margin-top:1.2mm;
+  font-size:1.75mm; letter-spacing:.14em; color:rgba(243,239,232,.5);
+}
+
+/* =========================================================
+   画面用の操作パネル
+   ========================================================= */
+
+body[data-view="proof"] .panel{ display:none; }
+body[data-view="proof"] .sheet:first-of-type{ margin-top:6mm; }
+
+.panel{
+  max-width:103mm;
+  margin:0 auto;
+  padding:7mm 0 0;
+  color:var(--ink);
+}
+.panel__row{
+  display:flex; flex-wrap:wrap; align-items:flex-end; gap:4mm;
+  margin-bottom:4mm;
+}
+.panel__title{
+  font-family:var(--mincho); font-size:4mm; letter-spacing:.1em;
+}
+.panel__sub{
+  font-size:2.5mm; letter-spacing:.04em; color:var(--ink-2); line-height:1.8;
+}
+.panel__note{
+  font-size:2.5mm; line-height:1.9; color:var(--ink-2);
+  padding-top:3mm; border-top:var(--t) solid rgba(28,26,23,.2);
+}
+.panel__note b{ font-weight:600; color:var(--ink); }
+
+.seg{
+  display:flex; gap:0; margin:0; padding:0; border:0;
+}
+.seg legend{
+  font-size:2.2mm; letter-spacing:.2em; color:var(--ink-2); padding:0 0 1.4mm;
+}
+.seg label{
+  cursor:pointer;
+  border:var(--t) solid rgba(28,26,23,.3);
+  border-right-width:0;
+}
+.seg label:last-child{ border-right-width:var(--t); }
+.seg input{ position:absolute; opacity:0; pointer-events:none; }
+.seg span{
+  display:block; padding:2mm 3mm;
+  font-family:var(--mincho); font-size:2.4mm; letter-spacing:.06em; line-height:1.4;
+  text-align:center;
+}
+.seg i{ font-style:normal; font-size:1.9mm; color:var(--ink-2); letter-spacing:.08em; }
+.seg input:checked + span{ background:var(--ink); color:var(--paper); }
+.seg input:checked + span i{ color:rgba(243,239,232,.6); }
+.seg input:focus-visible + span{ outline:2px solid var(--accent); outline-offset:1px; }
+
+.chk{ font-size:2.4mm; letter-spacing:.04em; cursor:pointer; }
+
+.prt{
+  margin-left:auto;
+  padding:2.6mm 5mm;
+  font-family:var(--mincho); font-size:2.6mm; letter-spacing:.08em;
+  color:var(--ink); background:transparent;
+  border:var(--t) solid var(--ink);
+  cursor:pointer;
+  transition:color .35s cubic-bezier(.2,.75,.2,1), background-color .35s cubic-bezier(.2,.75,.2,1);
+}
+@media (hover:hover){
+  .prt:hover{ background:var(--ink); color:var(--paper); }
+}
+.prt:focus-visible{ background:var(--ink); color:var(--paper); }
+
+/* =========================================================
+   印刷
+   ========================================================= */
+
+@media print{
+  body{ background:#fff; }
+  .no-print{ display:none !important; }
+  .guide{ display:none !important; }
+  .sheet{
+    margin:0;
+    box-shadow:none;
+    break-after:page;
+    page-break-after:always;
+  }
+  .sheet:last-of-type{ break-after:auto; page-break-after:auto; }
+}

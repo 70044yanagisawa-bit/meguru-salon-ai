@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2100 700" width="2100" height="700" role="img" aria-label="05 帯（進め方の上） 写真プレースホルダ">
+  <rect width="2100" height="700" fill="#d9d1c4"/>
+  <g stroke="#1c1a17" stroke-opacity=".18" fill="none">
+    <rect x="38" y="38" width="2024" height="624"/>
+    <path d="M38 350h25 M2062 350h-25 M1050 38v25 M1050 662v-25"/>
+  </g>
+  <g font-family="Hiragino Mincho ProN, Yu Mincho, serif" fill="#1c1a17">
+    <text x="76" y="98" font-size="22" letter-spacing="4.8" fill-opacity=".55">05 帯（進め方の上）</text>
+    <text x="76" y="164" font-size="35" fill-opacity=".8">横 3:1 / 暗めのトーン</text>
+    <text x="76" y="220" font-family="Hiragino Kaku Gothic ProN, sans-serif" font-size="20" fill-opacity=".62">開店前のワゴンや道具が整えて並んでいる寄りの写真。</text>
+    <text x="76" y="260" font-family="Hiragino Kaku Gothic ProN, sans-serif" font-size="20" fill-opacity=".62">横に細長くトリミングするため、画面中央に情報を集めない。</text>
+    <text x="76" y="300" font-family="Hiragino Kaku Gothic ProN, sans-serif" font-size="20" fill-opacity=".62">少し暗めに現像し、次の墨色セクションへつなぐ。</text>
+  </g>
+  <text x="76" y="634" font-family="Hiragino Kaku Gothic ProN, sans-serif" font-size="20" fill="#1c1a17" fill-opacity=".38">写真プレースホルダ（差し替えてください）</text>
+</svg>

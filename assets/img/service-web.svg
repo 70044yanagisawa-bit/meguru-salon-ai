@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" width="1200" height="675" role="img" aria-label="03 ホームページ 写真プレースホルダ">
+  <rect width="1200" height="675" fill="#e7dfd3"/>
+  <g stroke="#1c1a17" stroke-opacity=".18" fill="none">
+    <rect x="37" y="37" width="1126" height="601"/>
+    <path d="M37 337h24 M1163 337h-24 M600 37v24 M600 638v-24"/>
+  </g>
+  <g font-family="Hiragino Mincho ProN, Yu Mincho, serif" fill="#1c1a17">
+    <text x="74" y="96" font-size="22" letter-spacing="4.8" fill-opacity=".55">03 ホームページ</text>
+    <text x="74" y="161" font-size="34" fill-opacity=".8">横 16:9</text>
+    <text x="74" y="215" font-family="Hiragino Kaku Gothic ProN, sans-serif" font-size="19" fill-opacity=".62">窓際に椅子が並ぶ店内の引き。</text>
+    <text x="74" y="253" font-family="Hiragino Kaku Gothic ProN, sans-serif" font-size="19" fill-opacity=".62">無人・開店前の状態。</text>
+    <text x="74" y="291" font-family="Hiragino Kaku Gothic ProN, sans-serif" font-size="19" fill-opacity=".62">床と天井を入れて空間の広さを見せる。</text>
+    <text x="74" y="329" font-family="Hiragino Kaku Gothic ProN, sans-serif" font-size="19" fill-opacity=".62">水平をしっかり出す。</text>
+  </g>
+  <text x="74" y="610" font-family="Hiragino Kaku Gothic ProN, sans-serif" font-size="19" fill="#1c1a17" fill-opacity=".38">写真プレースホルダ（差し替えてください）</text>
+</svg>

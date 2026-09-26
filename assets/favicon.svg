@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <rect width="64" height="64" fill="#1c1a17"/>
+  <rect x="14" y="13" width="2" height="38" fill="#a84e2c"/>
+  <g fill="#f3efe8" font-family="Hiragino Mincho ProN, Yu Mincho, serif" font-size="34">
+    <text x="26" y="45">柳</text>
+  </g>
+</svg>

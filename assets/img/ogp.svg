@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630" role="img" aria-label="07 OGP 写真プレースホルダ">
+  <rect width="1200" height="630" fill="#f6f2ec"/>
+  <g stroke="#1c1a17" stroke-opacity=".18" fill="none">
+    <rect x="35" y="35" width="1130" height="560"/>
+    <path d="M35 315h22 M1165 315h-22 M600 35v22 M600 595v-22"/>
+  </g>
+  <g font-family="Hiragino Mincho ProN, Yu Mincho, serif" fill="#1c1a17">
+    <text x="70" y="90" font-size="20" letter-spacing="4.4" fill-opacity=".55">07 OGP</text>
+    <text x="70" y="151" font-size="32" fill-opacity=".8">横 1200×630</text>
+    <text x="70" y="202" font-family="Hiragino Kaku Gothic ProN, sans-serif" font-size="18" fill-opacity=".62">SNSで共有されたときの画像。</text>
+    <text x="70" y="238" font-family="Hiragino Kaku Gothic ProN, sans-serif" font-size="18" fill-opacity=".62">ヒーロー写真＋店名ロゴで作成。</text>
+  </g>
+  <text x="70" y="569" font-family="Hiragino Kaku Gothic ProN, sans-serif" font-size="18" fill="#1c1a17" fill-opacity=".38">写真プレースホルダ（差し替えてください）</text>
+</svg>

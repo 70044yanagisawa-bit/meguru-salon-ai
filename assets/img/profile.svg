@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 1000" width="800" height="1000" role="img" aria-label="06 プロフィール 写真プレースホルダ">
+  <rect width="800" height="1000" fill="#e3dbcf"/>
+  <g stroke="#1c1a17" stroke-opacity=".18" fill="none">
+    <rect x="44" y="44" width="712" height="912"/>
+    <path d="M44 500h28 M756 500h-28 M400 44v28 M400 956v-28"/>
+  </g>
+  <g font-family="Hiragino Mincho ProN, Yu Mincho, serif" fill="#1c1a17">
+    <text x="88" y="114" font-size="26" letter-spacing="5.7" fill-opacity=".55">06 プロフィール</text>
+    <text x="88" y="190" font-size="40" fill-opacity=".8">縦 4:5</text>
+    <text x="88" y="254" font-family="Hiragino Kaku Gothic ProN, sans-serif" font-size="22" fill-opacity=".62">柳沢さんのポートレート。</text>
+    <text x="88" y="298" font-family="Hiragino Kaku Gothic ProN, sans-serif" font-size="22" fill-opacity=".62">店内・自然光・胸上か膝上。</text>
+    <text x="88" y="342" font-family="Hiragino Kaku Gothic ProN, sans-serif" font-size="22" fill-opacity=".62">目線はカメラから少し外す。</text>
+    <text x="88" y="386" font-family="Hiragino Kaku Gothic ProN, sans-serif" font-size="22" fill-opacity=".62">背景は店内の壁か窓、余白を広くとる。</text>
+  </g>
+  <text x="88" y="923" font-family="Hiragino Kaku Gothic ProN, sans-serif" font-size="22" fill="#1c1a17" fill-opacity=".38">写真プレースホルダ（差し替えてください）</text>
+</svg>

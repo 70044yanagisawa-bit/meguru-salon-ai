@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 1200" width="900" height="1200" role="img" aria-label="01 ヒーロー 写真プレースホルダ">
+  <rect width="900" height="1200" fill="#e7dfd3"/>
+  <g stroke="#1c1a17" stroke-opacity=".18" fill="none">
+    <rect x="50" y="50" width="800" height="1100"/>
+    <path d="M50 600h32 M850 600h-32 M450 50v32 M450 1150v-32"/>
+  </g>
+  <g font-family="Hiragino Mincho ProN, Yu Mincho, serif" fill="#1c1a17">
+    <text x="100" y="129" font-size="29" letter-spacing="6.4" fill-opacity=".55">01 ヒーロー</text>
+    <text x="100" y="215" font-size="45" fill-opacity=".8">縦 3:4 / 1200px以上</text>
+    <text x="100" y="287" font-family="Hiragino Kaku Gothic ProN, sans-serif" font-size="25" fill-opacity=".62">自然光が入る窓際のセット面。</text>
+    <text x="100" y="337" font-family="Hiragino Kaku Gothic ProN, sans-serif" font-size="25" fill-opacity=".62">鏡・椅子・観葉が入る引き気味の縦位置。</text>
+    <text x="100" y="387" font-family="Hiragino Kaku Gothic ProN, sans-serif" font-size="25" fill-opacity=".62">人物は手元や後ろ姿だけでも可。</text>
+    <text x="100" y="437" font-family="Hiragino Kaku Gothic ProN, sans-serif" font-size="25" fill-opacity=".62">窓を画面の上1/3に置き、下に余白を残す。</text>
+  </g>
+  <text x="100" y="1112" font-family="Hiragino Kaku Gothic ProN, sans-serif" font-size="25" fill="#1c1a17" fill-opacity=".38">写真プレースホルダ（差し替えてください）</text>
+</svg>

@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" width="1200" height="800" role="img" aria-label="04 業務効率化 写真プレースホルダ">
+  <rect width="1200" height="800" fill="#e0d8cb"/>
+  <g stroke="#1c1a17" stroke-opacity=".18" fill="none">
+    <rect x="44" y="44" width="1112" height="712"/>
+    <path d="M44 400h28 M1156 400h-28 M600 44v28 M600 756v-28"/>
+  </g>
+  <g font-family="Hiragino Mincho ProN, Yu Mincho, serif" fill="#1c1a17">
+    <text x="88" y="114" font-size="26" letter-spacing="5.7" fill-opacity=".55">04 業務効率化</text>
+    <text x="88" y="190" font-size="40" fill-opacity=".8">横 3:2</text>
+    <text x="88" y="254" font-family="Hiragino Kaku Gothic ProN, sans-serif" font-size="22" fill-opacity=".62">バックヤードでノートPCの画面を見ながら</text>
+    <text x="88" y="298" font-family="Hiragino Kaku Gothic ProN, sans-serif" font-size="22" fill-opacity=".62">話している2人（スタッフとご本人）。</text>
+    <text x="88" y="342" font-family="Hiragino Kaku Gothic ProN, sans-serif" font-size="22" fill-opacity=".62">手元とノート・伝票が入ると良い。</text>
+    <text x="88" y="386" font-family="Hiragino Kaku Gothic ProN, sans-serif" font-size="22" fill-opacity=".62">顔は半分見切れていても可。</text>
+  </g>
+  <text x="88" y="723" font-family="Hiragino Kaku Gothic ProN, sans-serif" font-size="22" fill="#1c1a17" fill-opacity=".38">写真プレースホルダ（差し替えてください）</text>
+</svg>
