@@ -14,6 +14,9 @@ wrangler.jsonc             Cloudflareの設定（public/ を配信するだけ�
 
 公開されるのは `public/` の中身だけです。README や写真リストはサイトには出ません。
 
+`instagram-autopost/` は、ホットペッパービューティーのブログをInstagramに自動投稿する別のWorkerです。
+サイトの公開とは関係なく動きます。設定は `instagram-autopost/README.md` を参照してください。
+
 ---
 
 ## 1. GitHubに上げる

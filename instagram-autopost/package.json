@@ -1,0 +1,22 @@
+{
+  "name": "meguru-instagram-autopost",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "typecheck": "tsc --noEmit",
+    "db:init": "wrangler d1 execute meguru-autopost --remote --file=schema.sql",
+    "db:init:local": "wrangler d1 execute meguru-autopost --local --file=schema.sql",
+    "test": "esbuild test/smoke.ts --bundle --platform=node --format=esm --outfile=.test/smoke.mjs --log-level=warning && node --no-warnings .test/smoke.mjs"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^1.3.0"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^5.20261026.1",
+    "typescript": "^5.9.0",
+    "wrangler": "^4.153.0",
+    "esbuild": "^0.28.2"
+  }
+}

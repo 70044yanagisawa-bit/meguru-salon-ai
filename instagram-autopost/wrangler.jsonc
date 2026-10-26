@@ -1,0 +1,42 @@
+{
+  // HPBブログ → Instagram 自動投稿のWorker。
+  // サイト本体（リポジトリ直下の wrangler.jsonc）とは別のWorkerとして公開する。
+  "name": "meguru-instagram-autopost",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-09-01",
+  "compatibility_flags": ["nodejs_compat"],
+
+  // 8時〜22時（日本時間）のあいだ2時間おきにブログを確認する（UTC表記）。
+  "triggers": {
+    "crons": ["7 23,1,3,5,7,9,11,13 * * *"]
+  },
+
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "meguru-autopost",
+      // `npx wrangler d1 create meguru-autopost` で表示されたIDに置き換える
+      "database_id": "REPLACE_WITH_D1_DATABASE_ID"
+    }
+  ],
+
+  "vars": {
+    // 公開ページのブログ一覧URL（SALON BOARDではない）。例: https://beauty.hotpepper.jp/slnH000123456/blog/
+    "HPB_BLOG_URL": "",
+    // このWorkerの公開URL（末尾スラッシュなし）。編集ページと画像の受け渡しに使う
+    "PUBLIC_BASE_URL": "https://meguru-instagram-autopost.<アカウント名>.workers.dev",
+    // "true" にすると承認なしで投稿する（LINEには結果だけ届く）
+    "AUTO_PUBLISH": "false",
+    // Instagramのビジネスアカウントのユーザーid（数字）
+    "IG_USER_ID": "",
+    "IG_API_VERSION": "v24.0",
+    // キャプション作成に使う店舗情報
+    "SALON_NAME": "",
+    "BOOKING_TEXT": "ご予約はプロフィールのリンクから🌿",
+    "FIXED_HASHTAGS": ""
+  }
+
+  // 秘密の値は `npx wrangler secret put <名前>` で登録する（READMEを参照）:
+  //   ANTHROPIC_API_KEY, IG_ACCESS_TOKEN,
+  //   LINE_CHANNEL_ACCESS_TOKEN, LINE_CHANNEL_SECRET, LINE_OWNER_USER_ID, ADMIN_KEY
+}
