@@ -44,10 +44,18 @@ export const SPOTS = [
   },
   {
     id: 'roomR1', code: 'R1',
-    en: 'Room R1', ja: 'トリートメントルーム R1',
-    catch: '施術のためだけに整えた、いちばん広い個室。',
+    en: 'Room R1', ja: '個室 R1',
+    catch: '〔記入待ち〕',
+    body: '〔記入待ち〕 この部屋の使い方・設備を教えてください。',
+    specs: [['設備', '〔記入待ち〕'], ['広さ', '〔記入待ち〕'], ['利用料金', '〔記入待ち〕']],
+    photo: '',
+  },
+  {
+    id: 'roomA', code: 'A',
+    en: 'Room A', ja: 'トリートメントルーム A',
+    catch: '横になる時間まで、上質であること。',
     body:
-      '施術ベッドとシンク、カウンセリング用のデスクを備えた個室。' +
+      '施術ベッドとシンク、デスクを備えた個室。' +
       'ヘッドスパやエステなど、横になってもらうメニューに。',
     specs: [
       ['設備', '施術ベッド／シンク／デスク／ロッカー 〔要確認〕'],
@@ -56,15 +64,14 @@ export const SPOTS = [
     ],
     photo: '',
   },
-  { id: 'roomA', code: 'A', en: 'Room A', ja: '個室 A', catch: '仕上がりを、いちばん正直に映す鏡。', body: SALON_BODY, specs: SALON_SPECS, photo: '' },
-  { id: 'roomB', code: 'B', en: 'Room B', ja: '個室 B', catch: 'あなたの名前で迎える、自分だけのサロン。', body: SALON_BODY, specs: SALON_SPECS, photo: '' },
+  { id: 'roomB', code: 'B', en: 'Room B', ja: '個室 B', catch: '仕上がりを、いちばん正直に映す鏡。', body: SALON_BODY, specs: SALON_SPECS, photo: '' },
   { id: 'roomC', code: 'C', en: 'Room C', ja: '個室 C', catch: '会話も、沈黙も、心地よい距離で。', body: SALON_BODY, specs: SALON_SPECS, photo: '' },
   {
     id: 'roomR2', code: 'R2',
     en: 'Room R2', ja: '個室 R2',
-    catch: 'いちばん奥の、とっておきの一室。',
-    body: SALON_BODY,
-    specs: [['設備', 'シャンプー一体型チェア／ミラー／ロッカー 〔要確認〕'], ['広さ', '〔記入待ち〕'], ['利用料金', '〔記入待ち〕']],
+    catch: '〔記入待ち〕',
+    body: '〔記入待ち〕 この部屋の使い方・設備を教えてください。',
+    specs: [['設備', '〔記入待ち〕'], ['広さ', '〔記入待ち〕'], ['利用料金', '〔記入待ち〕']],
     photo: '',
   },
   {

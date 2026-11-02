@@ -666,13 +666,7 @@ function salonRoom(parent, chair, mirror, lockerAt, lightAt, stoolAt) {
 function buildRooms(room) {
   const W = 0.06; // 壁の内側へのオフセット
 
-  // 個室 A（鏡は奥の壁）
-  salonRoom(room,
-    [X(888), Z(88) + 1.35, 0],
-    [X(888), 1.55, Z(88) + 0.06 + W, 0],
-    [X(950) - 0.3, Z(88) + 0.35, 0],
-    P(888, 200, 2.6), [X(935), Z(88) + 1.6]);
-  // 個室 B
+  // 個室 B（写真：シャンプー一体型チェア・楕円ミラー・ロッカー・スツール）
   salonRoom(room,
     [X(758), Z(127) + 1.3, 0],
     [X(758), 1.55, Z(127) + 0.06 + W, 0],
@@ -684,16 +678,16 @@ function buildRooms(room) {
     [X(460) + 0.06 + W, 1.55, Z(285), Math.PI / 2],
     [X(680) - 0.3, Z(212) + 0.33, 0],
     P(560, 280, 2.6), [X(460) + 1.6, Z(232)]);
-  // 個室 R2（鏡は手前の壁）
-  salonRoom(room,
-    [X(600), Z(930) - 1.4, Math.PI],
-    [X(600), 1.55, Z(930) - 0.06 - W, Math.PI],
-    [X(705) - 0.3, Z(560) + 0.35, 0],
-    P(590, 760, 2.6), [X(670), Z(930) - 1.7]);
 
-  // トリートメントルーム R1（写真：ベッド・シンク・デスク・丸い椅子・棚・ロッカー）
+  // R1・R2：写真がまだないので、家具を置かず空の部屋にしている
+  for (const [px, py] of [[1140, 215], [590, 760]]) {
+    const l = new THREE.PointLight(0xfff1dc, 2.4, 0, 2); l.position.copy(P(px, py, 2.6)); room.add(l);
+  }
+
+  // 個室 A（写真：施術ベッド・シンク・デスク・丸い椅子・棚・ロッカー）
   {
-    const bed = place(room, X(1080), Z(170), Math.PI / 2);
+    const L0 = X(833) + 0.05; // 左の壁の内側
+    const bed = place(room, L0 + 0.37, Z(88) + 2.15, 0);
     rbox(0.62, 0.16, 1.85, 0.05, mats.burgundy, 0, 0.66, 0, bed);
     box(0.6, 0.02, 0.01, mats.black, 0, 0.66, -0.3, bed);
     const hole = new THREE.Mesh(new THREE.TorusGeometry(0.09, 0.02, 8, 24), mats.burgundy);
@@ -701,24 +695,23 @@ function buildRooms(room) {
     box(0.5, 0.42, 1.6, mats.burgundy, 0, 0.37, 0, bed);
     for (const sz of [-0.7, 0.7]) box(0.08, 0.2, 0.08, mats.black, 0, 0.1, sz, bed);
     contactShadow(1.0, 2.4, 0, 0, bed, 0.55);
-    // デスク・シンク・棚（右の壁沿い）
-    const d = place(room, X(1322) - 0.3, Z(230), -Math.PI / 2);
-    box(1.1, 0.04, 0.5, mats.black, 0.2, 0.76, 0, d);
-    box(1.1, 0.72, 0.04, mats.black, 0.2, 0.38, -0.22, d);
-    box(0.5, 0.25, 0.42, mats.steel, -0.65, 0.75, 0, d);
-    cyl(0.01, 0.01, 0.3, mats.chrome, -0.65, 1.0, -0.15, d, 8);
-    box(1.6, 0.03, 0.26, mats.black, -0.1, 1.45, -0.12, d);
-    for (const bx of [-0.55, -0.2]) box(0.3, 0.16, 0.22, mats.basket, bx, 1.55, -0.12, d);
-    box(0.32, 0.2, 0.24, mats.black, 0.35, 1.565, -0.12, d);
-    const ch = place(room, X(1322) - 0.85, Z(215), Math.PI / 2);
-    const seat = new THREE.Mesh(new THREE.SphereGeometry(0.28, 24, 12, 0, Math.PI * 2, Math.PI / 2, Math.PI / 2), mats.velvet);
-    seat.scale.set(1, 0.6, 1); seat.position.y = 0.6; ch.add(seat);
-    const backC = new THREE.Mesh(new THREE.CylinderGeometry(0.28, 0.26, 0.4, 24, 1, true, Math.PI * 0.75, Math.PI * 1.5), mats.velvet);
-    backC.material = mats.velvet.clone(); backC.material.side = THREE.DoubleSide;
-    backC.position.y = 0.78; ch.add(backC);
-    for (const [sx, sz] of [[-0.18, -0.18], [0.18, -0.18], [-0.18, 0.18], [0.18, 0.18]]) cyl(0.012, 0.008, 0.45, mats.gold, sx, 0.22, sz, ch, 6);
-    locker(room, X(1250) - 0.25, Z(88) + 0.3, 0, mats.black);
-    const l = new THREE.PointLight(0xfff1dc, 5, 0, 2); l.position.copy(P(1140, 215, 2.6)); room.add(l);
+    // 奥の壁：シンク・デスク・棚
+    const d = place(room, L0 + 0.85, Z(88) + 0.3, 0);
+    box(0.6, 0.04, 0.5, mats.black, 0, 0.76, 0, d);
+    box(0.6, 0.72, 0.04, mats.black, 0, 0.38, -0.22, d);
+    box(0.45, 0.25, 0.42, mats.steel, -0.55, 0.75, 0, d);
+    cyl(0.01, 0.01, 0.3, mats.chrome, -0.55, 1.0, -0.15, d, 8);
+    box(1.1, 0.03, 0.26, mats.black, -0.25, 1.45, -0.12, d);
+    for (const bx of [-0.6, -0.3]) box(0.26, 0.16, 0.22, mats.basket, bx, 1.55, -0.12, d);
+    box(0.3, 0.2, 0.24, mats.black, 0.05, 1.565, -0.12, d);
+    const ch = place(room, L0 + 0.85, Z(88) + 0.85, Math.PI);
+    const seat = new THREE.Mesh(new THREE.SphereGeometry(0.26, 24, 12, 0, Math.PI * 2, Math.PI / 2, Math.PI / 2), mats.velvet);
+    seat.scale.set(1, 0.6, 1); seat.position.y = 0.58; ch.add(seat);
+    const backC = new THREE.Mesh(new THREE.CylinderGeometry(0.26, 0.24, 0.38, 24, 1, true, Math.PI * 0.75, Math.PI * 1.5), mats.velvet.clone());
+    backC.material.side = THREE.DoubleSide; backC.position.y = 0.75; ch.add(backC);
+    for (const [sx, sz] of [[-0.17, -0.17], [0.17, -0.17], [-0.17, 0.17], [0.17, 0.17]]) cyl(0.012, 0.008, 0.43, mats.gold, sx, 0.21, sz, ch, 6);
+    locker(room, X(962) - 0.29, Z(88) + 0.3, 0, mats.black);
+    const l = new THREE.PointLight(0xfff1dc, 2.4, 0, 2); l.position.copy(P(897, 215, 2.6)); room.add(l);
   }
 
   // 個室 D（写真：ネイルテーブル・ライト・チェア・グレーのロッカー・ワゴン）
