@@ -1,12 +1,13 @@
 /*
-  シェアサロンJAM 仙台店 — バーチャル店舗案内（three.js）
+  シェアサロン J.A.M 仙台店 — バーチャル店舗案内（three.js）
 
-  流れ： 外観（FV） → カーソルを動かすほど入口へ近づき、扉が開いて店内へ
-        → 上からフロア全体を見渡す → ブースをクリックするとズームイン
+  流れ： 外観（FV） → カーソルを動かすほど入口へ近づき、扉が開いて中へ
+        → 上からフロア全体を見渡す → 部屋をクリックするとズームイン
 
-  店内は写真ではなく、コードで組んだ3Dモデルです（実店舗の図面ではありません）。
-  配置を実際に合わせるときは、下の LAYOUT と build〜 関数の数値を直してください。
-  単位はメートル。x：左右（右が＋） / y：高さ / z：奥行き（店の奥がマイナス）。
+  店内はいただいた間取り図をもとに、コードで組んだ3Dモデルです。
+  間取り図の画像（1536×1024px）の座標をそのまま使っているので、
+  直すときは PLAN の数字を間取り図の位置に合わせて書き換えてください。
+  3Dでの単位はメートル。x：左右 / y：高さ / z：手前（＋）〜奥（−）
 */
 import * as THREE from 'three';
 import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
@@ -18,44 +19,64 @@ import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.j
 import { SPOTS, STORE } from './spots.js';
 
 /* ================================================================
-   基本の寸法と配置
+   間取り（間取り図のピクセル座標）
    ================================================================ */
-const ROOM = { halfW: 7, depth: 22, h: 4.2, front: -0.4 }; // 店内：x −7〜7、z −0.4〜−22
-const BOOTH = { w: 3.2, d: 2.8, h: 2.6 };
-const BOOTH_Z = [-7.6, -11.1, -14.6];
+const PX = 0.0135; // 間取り図 1px = 1.35cm（個室Aの幅 ≒ 1.7m から逆算）
+const ORIGIN = [1195, 538]; // 入口（▲）の位置を 3D の原点にする
+const X = (px) => (px - ORIGIN[0]) * PX;
+const Z = (py) => (py - ORIGIN[1]) * PX;
+const P = (px, py, y = 0) => new THREE.Vector3(X(px), y, Z(py));
 
-// rotY：その場所の「正面」の向き（0＝入口側 +z を向く）
+const H_CEIL = 3.6; // 天井（むき出しの躯体）
+const H_ROOM = 2.7; // 個室の壁の高さ（上は天井まで抜けている）
+const H_WAIN = 1.0; // 腰壁（木目）の高さ
+
+const PLAN = {
+  bounds: [105, 88, 1325, 930],
+  // 外周の壁 [x1, y1, x2, y2]
+  outer: [
+    [105, 88, 1325, 88], [1322, 88, 1322, 538], [1250, 538, 1325, 538], [583, 538, 1140, 538],
+    [717, 538, 717, 930], [105, 930, 717, 930], [105, 88, 105, 930],
+  ],
+  // 個室・小部屋の壁
+  walls: [
+    [695, 127, 695, 345], [695, 345, 768, 345, 'glass'], // B
+    [833, 88, 833, 342], [833, 342, 893, 342, 'glass'], // A
+    [962, 88, 962, 342], [1040, 342, 1322, 342], // R1
+    [460, 212, 695, 212], [460, 212, 460, 345], [460, 345, 620, 345, 'glass'], // C
+    [460, 412, 460, 420], [460, 420, 498, 420], [498, 420, 498, 605], [405, 605, 498, 605],
+    [405, 605, 405, 823], [405, 823, 462, 823], [462, 823, 462, 930], // R2 の左側
+    [583, 420, 645, 420], [705, 420, 762, 420], [583, 420, 583, 538], [762, 420, 762, 492], // 小部屋
+    [836, 420, 938, 420], [938, 420, 938, 538], [1010, 420, 1115, 420, 'glass'], [1115, 420, 1115, 538], // D
+  ],
+  // 柱
+  pillars: [[685, 88, 762, 127], [1258, 88, 1322, 138], [1255, 497, 1322, 538], [685, 492, 762, 538]],
+  // 開き戸（蝶番の位置, 扉の先端の位置）
+  doors: [[965, 342, 1040, 342], [460, 345, 460, 412], [500, 478, 575, 478]],
+  // 左側の広いスペース（図にラベルがないので、暗く表示してクリック不可）
+  unlabeled: [[105, 88, 460, 930], [460, 88, 695, 212]],
+};
+
+// クリックできる場所。rect：部屋の範囲 / cam・look：ズームしたときの視点（px, px, 高さm）
 const LAYOUT = {
-  reception: {
-    pos: [4.6, 0, -3.1], rotY: -Math.PI / 2, anchorY: 1.9, hit: [2.8, 2, 1.6],
-    cam: [0.6, 1.75, -5.0], look: [5.6, 1.15, -2.9],
-  },
-  booth01: { pos: [-4.2, 0, BOOTH_Z[0]], rotY: Math.PI / 2, booth: true },
-  booth02: { pos: [-4.2, 0, BOOTH_Z[1]], rotY: Math.PI / 2, booth: true },
-  booth03: { pos: [-4.2, 0, BOOTH_Z[2]], rotY: Math.PI / 2, booth: true },
-  booth04: { pos: [4.2, 0, BOOTH_Z[0]], rotY: -Math.PI / 2, booth: true },
-  booth05: { pos: [4.2, 0, BOOTH_Z[1]], rotY: -Math.PI / 2, booth: true },
-  booth06: { pos: [4.2, 0, BOOTH_Z[2]], rotY: -Math.PI / 2, booth: true },
-  lounge: {
-    pos: [0, 0, -11.1], rotY: 0, anchorY: 1.6, hit: [4.2, 1.4, 5.2],
-    cam: [0.0, 2.3, -5.6], look: [0, 0.55, -11.6],
-  },
-  shampoo: {
-    pos: [0, 0, -19.6], rotY: 0, anchorY: 2.1, hit: [7.6, 2, 4.6],
-    cam: [-2.0, 2.1, -14.6], look: [0.6, 0.85, -20.8],
-  },
+  entrance: { rect: [1115, 342, 1322, 538], cam: [1196, 640, 1.7], look: [1170, 345, 1.45], fov: 54 },
+  roomR1: { rect: [962, 88, 1322, 342], cam: [1005, 330, 1.75], look: [1190, 140, 0.9], fov: 64 },
+  roomA: { rect: [833, 88, 962, 342], cam: [928, 395, 2.35], look: [888, 120, 0.85], fov: 62 },
+  roomB: { rect: [695, 127, 833, 345], cam: [800, 398, 2.35], look: [758, 150, 0.85], fov: 62 },
+  roomC: { rect: [460, 212, 695, 345], cam: [668, 392, 2.35], look: [480, 265, 0.85], fov: 62 },
+  roomR2: { rect: [462, 538, 717, 930], cam: [545, 545, 1.85], look: [600, 900, 0.95], fov: 62 },
+  roomD: { rect: [938, 420, 1115, 538], cam: [972, 405, 2.0], look: [1075, 525, 0.75], fov: 64 },
+  backyard: { rect: [583, 420, 762, 538], cam: [745, 432, 3.1], look: [608, 505, 0.5], fov: 64 },
 };
 
-// 外観 → 入口 → 店内 のカメラの通り道（進み具合 0〜1）
+// 外観 → ビルの入口 → J.A.M の入口 のカメラの通り道（進み具合 0〜1）
+const FACADE_Z = 7.2;
 const STREET_PATH = {
-  pos: [[0.6, 1.75, 17], [0.2, 1.7, 9.5], [0, 1.66, 3.2], [0, 1.64, 0.2], [0, 1.66, -3.0]],
-  look: [[0, 2.5, 0], [0, 2.2, 0], [0, 1.85, -2], [0, 1.7, -8], [0, 1.55, -12]],
+  pos: [[-1.2, 1.7, 26], [-0.4, 1.7, 16], [0, 1.66, 9.6], [0, 1.64, FACADE_Z - 0.6], [0, 1.65, 3.4], [0, 1.65, 0.9]],
+  look: [[-3.5, 5.6, FACADE_Z], [-1.5, 4.2, FACADE_Z], [0, 2.0, 0], [0, 1.75, -1], [0, 1.6, -2.4], [0, 1.5, -3]],
 };
-const OVERVIEW = { pos: new THREE.Vector3(5.4, 13.2, 6.2), look: new THREE.Vector3(0, 0, -10.6), fov: 42 };
-const OVERVIEW_LOOK_PORTRAIT = new THREE.Vector3(0, 0, -11.2);
-const OVERVIEW_LOOK_WIDE = new THREE.Vector3(0.3, 0, -9.6);
-const STREET_FOV = 38;
-const BOOTH_FOV = 46;
+const OVERVIEW = { pos: new THREE.Vector3(), look: new THREE.Vector3(), fov: 42 };
+const STREET_FOV = 40;
 
 /* ================================================================
    状態
@@ -66,14 +87,14 @@ const isSmall = () => window.innerWidth <= 760;
 
 const state = {
   mode: 'street', // street → entering → floor ⇄ booth
-  progress: 0, // 外観の進み具合（表示用、なめらか）
-  progressTarget: 0, // 入力で増える目標値
+  progress: 0,
+  progressTarget: 0,
   rewinding: false,
   hover: null,
   active: null,
-  mouse: new THREE.Vector2(0, 0), // −1〜1
+  mouse: new THREE.Vector2(0, 0),
   mouseSmooth: new THREE.Vector2(0, 0),
-  panelShift: 0, // ブース詳細を開いたとき、画面の中心を左へずらす量
+  panelShift: 0,
 };
 
 const $ = (s) => document.querySelector(s);
@@ -94,56 +115,66 @@ function canvasTex(w, h, draw, { repeat = [1, 1], srgb = true, aniso = 8 } = {})
   return t;
 }
 
-// 乱数を固定して、毎回同じ模様にする
 let seed = 7;
 const rnd = () => ((seed = (seed * 16807) % 2147483647) / 2147483647);
 
-function marbleTex({ base, vein, veins = 26, tiles = 2, repeat }) {
+// 床：ベージュの石目調タイル（写真の床）
+function travertineTex(repeat) {
   return canvasTex(1024, 1024, (g, w, h) => {
-    g.fillStyle = base; g.fillRect(0, 0, w, h);
-    // 雲のようなむら
-    g.filter = 'blur(40px)';
-    for (let i = 0; i < 30; i++) {
-      g.fillStyle = `rgba(${rnd() > .5 ? '255,255,255' : '120,100,80'},${0.04 + rnd() * 0.06})`;
-      g.beginPath(); g.arc(rnd() * w, rnd() * h, 60 + rnd() * 200, 0, Math.PI * 2); g.fill();
-    }
-    // 石目
-    for (let i = 0; i < veins; i++) {
-      const thick = rnd() < 0.2;
-      g.filter = thick ? 'blur(3px)' : 'blur(0.6px)';
-      g.strokeStyle = vein.replace('A', (thick ? 0.18 : 0.25 + rnd() * 0.35).toFixed(2));
-      g.lineWidth = thick ? 4 + rnd() * 8 : 0.6 + rnd() * 1.8;
-      let x = rnd() * w, y = rnd() * h, a = rnd() * Math.PI * 2;
-      g.beginPath(); g.moveTo(x, y);
-      for (let s = 0; s < 80; s++) {
-        a += (rnd() - 0.5) * 0.7; x += Math.cos(a) * 14; y += Math.sin(a) * 14;
-        g.lineTo(x, y);
+    g.fillStyle = '#d6c2a8'; g.fillRect(0, 0, w, h);
+    const tiles = 2, ts = w / tiles;
+    for (let ty = 0; ty < tiles; ty++) for (let tx = 0; tx < tiles; tx++) {
+      g.save();
+      g.beginPath(); g.rect(tx * ts, ty * ts, ts, ts); g.clip();
+      g.fillStyle = `rgba(${rnd() > .5 ? '255,245,230' : '150,120,90'},${0.06 + rnd() * 0.08})`;
+      g.fillRect(tx * ts, ty * ts, ts, ts);
+      // 流れるような石目
+      const a0 = (rnd() - 0.5) * 0.5;
+      for (let i = 0; i < 70; i++) {
+        g.strokeStyle = rnd() > 0.5 ? `rgba(255,248,236,${0.12 + rnd() * 0.2})` : `rgba(140,108,78,${0.08 + rnd() * 0.14})`;
+        g.lineWidth = 1 + rnd() * 6;
+        g.filter = `blur(${(rnd() * 2).toFixed(1)}px)`;
+        let x = tx * ts - 40, y = ty * ts + rnd() * ts;
+        g.beginPath(); g.moveTo(x, y);
+        for (let s = 0; s < 12; s++) { x += ts / 10; y += Math.sin(s * 0.8 + i) * 8 + a0 * 30; g.lineTo(x, y); }
+        g.stroke();
       }
-      g.stroke();
+      g.filter = 'none';
+      g.restore();
     }
-    g.filter = 'none';
-    // 目地
-    if (tiles > 1) {
-      g.strokeStyle = 'rgba(40,30,20,.35)'; g.lineWidth = 2;
-      for (let i = 1; i < tiles; i++) {
-        const p = (i / tiles) * w;
-        g.beginPath(); g.moveTo(p, 0); g.lineTo(p, h); g.moveTo(0, p); g.lineTo(w, p); g.stroke();
-      }
+    g.strokeStyle = 'rgba(120,96,70,.35)'; g.lineWidth = 2;
+    for (let i = 0; i <= tiles; i++) {
+      const p = i * ts;
+      g.beginPath(); g.moveTo(p, 0); g.lineTo(p, h); g.moveTo(0, p); g.lineTo(w, p); g.stroke();
     }
   }, { repeat });
 }
 
-function woodTex({ base = '#3d2618', repeat = [1, 1], vertical = true }) {
+function marbleTex({ base, vein, veins = 26, repeat = [1, 1] }) {
   return canvasTex(512, 512, (g, w, h) => {
     g.fillStyle = base; g.fillRect(0, 0, w, h);
-    for (let i = 0; i < 260; i++) {
-      const p = rnd() * w;
-      const l = rnd() > 0.5;
-      g.strokeStyle = l ? `rgba(255,220,180,${0.03 + rnd() * 0.05})` : `rgba(0,0,0,${0.08 + rnd() * 0.12})`;
-      g.lineWidth = 0.5 + rnd() * 2.5;
+    for (let i = 0; i < veins; i++) {
+      g.strokeStyle = vein.replace('A', (0.2 + rnd() * 0.35).toFixed(2));
+      g.lineWidth = 0.6 + rnd() * 1.8;
+      let x = rnd() * w, y = rnd() * h, a = rnd() * Math.PI * 2;
+      g.beginPath(); g.moveTo(x, y);
+      for (let s = 0; s < 50; s++) { a += (rnd() - 0.5) * 0.7; x += Math.cos(a) * 10; y += Math.sin(a) * 10; g.lineTo(x, y); }
+      g.stroke();
+    }
+  }, { repeat });
+}
+
+// 木目（腰壁は細かい縦の木目）
+function woodTex({ base, repeat = [1, 1], vertical = true, lines = 320 }) {
+  return canvasTex(512, 512, (g, w, h) => {
+    g.fillStyle = base; g.fillRect(0, 0, w, h);
+    for (let i = 0; i < lines; i++) {
+      const p = rnd() * w, l = rnd() > 0.5;
+      g.strokeStyle = l ? `rgba(255,220,180,${0.03 + rnd() * 0.05})` : `rgba(0,0,0,${0.06 + rnd() * 0.12})`;
+      g.lineWidth = 0.5 + rnd() * 2;
       g.beginPath();
       for (let s = 0; s <= 16; s++) {
-        const q = (s / 16) * h, wob = Math.sin(s * 0.7 + p) * 3;
+        const q = (s / 16) * h, wob = Math.sin(s * 0.5 + p) * 1.5;
         vertical ? (s ? g.lineTo(p + wob, q) : g.moveTo(p + wob, q)) : (s ? g.lineTo(q, p + wob) : g.moveTo(q, p + wob));
       }
       g.stroke();
@@ -151,22 +182,64 @@ function woodTex({ base = '#3d2618', repeat = [1, 1], vertical = true }) {
   }, { repeat });
 }
 
-function noiseTex({ base, dots = 9000, light = 18, repeat, grid = 0 }) {
+function noiseTex({ base, dots = 9000, light = 18, repeat = [1, 1], grid = null }) {
   return canvasTex(512, 512, (g, w, h) => {
     g.fillStyle = base; g.fillRect(0, 0, w, h);
     for (let i = 0; i < dots; i++) {
       const v = rnd() > 0.5 ? 255 : 0;
       g.fillStyle = `rgba(${v},${v},${v},${rnd() * light / 255})`;
-      g.fillRect(rnd() * w, rnd() * h, 1 + rnd() * 2, 1 + rnd() * 2);
+      g.fillRect(rnd() * w, rnd() * h, 1 + rnd() * 1.6, 1 + rnd() * 1.6);
     }
     if (grid) {
-      g.strokeStyle = 'rgba(0,0,0,.55)'; g.lineWidth = 3;
-      for (let i = 0; i <= grid; i++) {
-        const p = (i / grid) * w;
-        g.beginPath(); g.moveTo(p, 0); g.lineTo(p, h); g.moveTo(0, p); g.lineTo(w, p); g.stroke();
-      }
+      const [cols, rows, col] = grid;
+      g.strokeStyle = col || 'rgba(0,0,0,.45)'; g.lineWidth = 2.5;
+      for (let i = 0; i <= cols; i++) { const p = (i / cols) * w; g.beginPath(); g.moveTo(p, 0); g.lineTo(p, h); g.stroke(); }
+      for (let i = 0; i <= rows; i++) { const p = (i / rows) * h; g.beginPath(); g.moveTo(0, p); g.lineTo(w, p); g.stroke(); }
     }
   }, { repeat });
+}
+
+// ビル1階の黒い丸模様のパネル
+function circlePanelTex(repeat) {
+  return canvasTex(512, 512, (g, w, h) => {
+    g.fillStyle = '#0d0d0e'; g.fillRect(0, 0, w, h);
+    const n = 4, s = w / n;
+    for (let y = 0; y < n; y++) for (let x = 0; x < n; x++) {
+      const cx = x * s + s / 2, cy = y * s + s / 2;
+      const gr = g.createRadialGradient(cx - s * 0.12, cy - s * 0.12, s * 0.05, cx, cy, s * 0.46);
+      gr.addColorStop(0, 'rgba(90,90,96,.55)'); gr.addColorStop(0.7, 'rgba(25,25,28,.4)'); gr.addColorStop(1, 'rgba(0,0,0,0)');
+      g.fillStyle = gr; g.beginPath(); g.arc(cx, cy, s * 0.46, 0, Math.PI * 2); g.fill();
+      g.strokeStyle = 'rgba(140,140,150,.25)'; g.lineWidth = 2;
+      g.beginPath(); g.arc(cx, cy, s * 0.4, 0, Math.PI * 2); g.stroke();
+      g.strokeStyle = 'rgba(0,0,0,.6)'; g.strokeRect(x * s, y * s, s, s);
+    }
+  }, { repeat });
+}
+
+// ガラスブロック
+function glassBlockTex(repeat) {
+  return canvasTex(128, 128, (g, w, h) => {
+    g.fillStyle = '#b9c4c6'; g.fillRect(0, 0, w, h);
+    const gr = g.createLinearGradient(0, 0, w, h);
+    gr.addColorStop(0, 'rgba(255,255,255,.7)'); gr.addColorStop(0.5, 'rgba(160,175,178,.2)'); gr.addColorStop(1, 'rgba(255,255,255,.5)');
+    g.fillStyle = gr; g.fillRect(6, 6, w - 12, h - 12);
+    g.strokeStyle = 'rgba(255,255,255,.9)'; g.lineWidth = 3;
+    for (let i = 0; i < 4; i++) { g.beginPath(); g.moveTo(14 + i * 28, 14); g.bezierCurveTo(30 + i * 24, 50, 4 + i * 30, 80, 20 + i * 28, h - 14); g.stroke(); }
+    g.strokeStyle = 'rgba(230,230,225,1)'; g.lineWidth = 6; g.strokeRect(0, 0, w, h);
+  }, { repeat, aniso: 4 });
+}
+
+// 2階の窓の奥に見える照明（写真のライン照明）
+function lineLightTex() {
+  return canvasTex(512, 256, (g, w, h) => {
+    g.fillStyle = '#20262b'; g.fillRect(0, 0, w, h);
+    for (let i = 0; i < 9; i++) {
+      const y = 18 + i * 26;
+      g.fillStyle = 'rgba(235,245,255,.95)';
+      g.fillRect(30 + (i % 2) * 20, y, w - 80, 3);
+    }
+    g.fillStyle = 'rgba(200,215,225,.15)'; g.fillRect(0, 0, w, h);
+  }, { aniso: 1 });
 }
 
 function glowTex(inner = 'rgba(255,255,255,1)', outer = 'rgba(255,255,255,0)') {
@@ -177,22 +250,19 @@ function glowTex(inner = 'rgba(255,255,255,1)', outer = 'rgba(255,255,255,0)') {
   }, { aniso: 1 });
 }
 
-function windowsTex(cols, rows, litRatio) {
-  return canvasTex(256, 512, (g, w, h) => {
-    g.fillStyle = '#000'; g.fillRect(0, 0, w, h);
-    const cw = w / cols, ch = h / rows;
-    for (let r = 0; r < rows; r++) for (let c = 0; c < cols; c++) {
-      if (rnd() > litRatio) continue;
-      const warm = rnd() > 0.35;
-      g.fillStyle = warm ? `rgba(255,${190 + rnd() * 40 | 0},${120 + rnd() * 40 | 0},${0.35 + rnd() * 0.5})` : `rgba(170,200,255,${0.2 + rnd() * 0.3})`;
-      g.fillRect(c * cw + cw * 0.18, r * ch + ch * 0.2, cw * 0.64, ch * 0.55);
-    }
+// ミラーの裏から漏れる光（リング状）
+function haloTex() {
+  return canvasTex(256, 256, (g, w, h) => {
+    const gr = g.createRadialGradient(w / 2, h / 2, w * 0.3, w / 2, h / 2, w / 2);
+    gr.addColorStop(0, 'rgba(255,214,150,1)'); gr.addColorStop(0.25, 'rgba(255,200,130,.55)'); gr.addColorStop(1, 'rgba(255,190,120,0)');
+    g.fillStyle = gr; g.fillRect(0, 0, w, h);
   }, { aniso: 1 });
 }
 
-function textTex(lines, { w = 1024, h = 256, color = '#ecd6a2' } = {}) {
+function textTex(lines, { w = 1024, h = 256, color = '#ecd6a2', bg = null } = {}) {
   return canvasTex(w, h, (g) => {
     g.clearRect(0, 0, w, h);
+    if (bg) { g.fillStyle = bg; g.fillRect(0, 0, w, h); }
     g.fillStyle = color; g.textAlign = 'center'; g.textBaseline = 'middle';
     for (const l of lines) {
       g.font = l.font;
@@ -201,6 +271,10 @@ function textTex(lines, { w = 1024, h = 256, color = '#ecd6a2' } = {}) {
     }
   }, { aniso: 4 });
 }
+const LOGO_LINES = [
+  { text: 'J.A.M', font: '500 150px "Cormorant Garamond", serif', y: 100, spacing: '18px', dx: 9 },
+  { text: 'Share salon', font: '400 40px "Cormorant Garamond", serif', y: 205, spacing: '14px', dx: 7 },
+];
 
 /* ================================================================
    three.js の準備
@@ -214,11 +288,11 @@ try {
 
 const stage = $('#stage');
 const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(STREET_FOV, innerWidth / innerHeight, 0.05, 160);
+const camera = new THREE.PerspectiveCamera(STREET_FOV, innerWidth / innerHeight, 0.05, 200);
 let composer, bloom;
 
 const cam = { pos: new THREE.Vector3(), look: new THREE.Vector3(), fov: STREET_FOV };
-const spotObjects = {}; // id → { hit, glow, anchor, view }
+const spotObjects = {};
 const hitMeshes = [];
 const groups = {};
 const mats = {};
@@ -226,35 +300,45 @@ const mats = {};
 function std(params) { return new THREE.MeshStandardMaterial(params); }
 
 function makeMaterials() {
-  const envLow = 0.35;
-  mats.floor = std({ map: marbleTex({ base: '#c4baab', vein: 'rgba(92,78,64,A)', tiles: 2, repeat: [ROOM.halfW * 2 / 2.4, ROOM.depth / 2.4] }), roughness: 0.16, metalness: 0, envMapIntensity: 0.6 });
-  mats.marbleDark = std({ map: marbleTex({ base: '#17140f', vein: 'rgba(214,196,160,A)', tiles: 1, veins: 34, repeat: [1, 1] }), roughness: 0.12, envMapIntensity: 0.8 });
-  mats.marbleLight = std({ map: marbleTex({ base: '#e6dfd3', vein: 'rgba(90,80,70,A)', tiles: 1, repeat: [1, 1] }), roughness: 0.14, envMapIntensity: 0.7 });
-  mats.walnut = std({ map: woodTex({ base: '#3a2416', repeat: [1, 1] }), roughness: 0.52, envMapIntensity: envLow });
-  mats.walnutH = std({ map: woodTex({ base: '#3a2416', repeat: [2, 1], vertical: false }), roughness: 0.5, envMapIntensity: envLow });
-  mats.plaster = std({ map: noiseTex({ base: '#4a4038', light: 14, repeat: [4, 2] }), roughness: 0.95, envMapIntensity: 0.2 });
-  mats.plasterDark = std({ map: noiseTex({ base: '#221d19', light: 12, repeat: [4, 2] }), roughness: 0.95, envMapIntensity: 0.2 });
-  mats.ceiling = std({ color: 0x1b1714, roughness: 0.9, side: THREE.FrontSide, envMapIntensity: 0.1 });
-  mats.stone = std({ map: noiseTex({ base: '#1d1c1a', light: 20, repeat: [6, 4], grid: 2 }), roughness: 0.7, envMapIntensity: 0.3 });
-  mats.stoneUpper = std({ map: noiseTex({ base: '#171615', light: 16, repeat: [6, 8], grid: 2 }), roughness: 0.75, envMapIntensity: 0.25 });
-  mats.brass = std({ color: 0xc9a46a, metalness: 1, roughness: 0.28, envMapIntensity: 1.1 });
-  mats.brassDark = std({ color: 0x8c6c3e, metalness: 1, roughness: 0.38, envMapIntensity: 0.9 });
-  mats.chrome = std({ color: 0xdedede, metalness: 1, roughness: 0.12, envMapIntensity: 1.2 });
-  mats.leather = std({ color: 0x141211, roughness: 0.42, metalness: 0, envMapIntensity: 0.6 });
-  mats.leatherTan = std({ color: 0x6b4a32, roughness: 0.5, envMapIntensity: 0.5 });
-  mats.boucle = std({ map: noiseTex({ base: '#cfc4b3', dots: 30000, light: 40, repeat: [3, 3] }), roughness: 1, envMapIntensity: 0.3 });
-  mats.mirror = std({ color: 0x6f7378, metalness: 1, roughness: 0.04, envMapIntensity: 0.75 });
-  mats.glass = std({ color: 0x1c2228, metalness: 0.9, roughness: 0.04, transparent: true, opacity: 0.22, envMapIntensity: 1.6, depthWrite: false });
-  mats.black = std({ color: 0x0c0b0a, roughness: 0.25, envMapIntensity: 0.6 });
-  mats.ceramic = std({ color: 0x0f0f10, roughness: 0.08, envMapIntensity: 1, side: THREE.DoubleSide });
-  mats.plant = std({ color: 0x2c3a22, roughness: 0.8, flatShading: true, envMapIntensity: 0.2 });
-  mats.plant2 = std({ color: 0x40502c, roughness: 0.8, flatShading: true, envMapIntensity: 0.2 });
-  mats.pot = std({ color: 0x2a2622, roughness: 0.6, envMapIntensity: 0.4 });
-  mats.rug = std({ map: noiseTex({ base: '#3b3129', dots: 40000, light: 26, repeat: [2, 2] }), roughness: 1, envMapIntensity: 0.1 });
-  mats.sidewalk = std({ map: noiseTex({ base: '#2b2a28', light: 26, repeat: [16, 10], grid: 1 }), roughness: 0.32, metalness: 0.25, envMapIntensity: 0.5 });
-  mats.asphalt = std({ map: noiseTex({ base: '#121212', light: 30, repeat: [20, 10] }), roughness: 0.38, metalness: 0.3, envMapIntensity: 0.4 });
+  const [x0, y0, x1, y1] = PLAN.bounds;
+  const fw = (x1 - x0) * PX, fd = (y1 - y0) * PX;
+  mats.floor = std({ map: travertineTex([fw / 1.8, fd / 1.8]), roughness: 0.48, envMapIntensity: 0.4 });
+  mats.wain = std({ map: woodTex({ base: '#4a3324', repeat: [3, 1] }), roughness: 0.55, envMapIntensity: 0.3 });
+  mats.cream = std({ map: noiseTex({ base: '#e9e1d2', light: 10, repeat: [3, 2] }), roughness: 0.92, envMapIntensity: 0.25 });
+  mats.ceiling = std({ color: 0xdcd6cc, roughness: 0.9, envMapIntensity: 0.15 });
+  mats.beam = std({ color: 0xd2ccc1, roughness: 0.9, envMapIntensity: 0.15 });
+  mats.pillar = std({ color: 0xece6db, roughness: 0.85, envMapIntensity: 0.2 });
+  mats.glassBlock = std({ map: glassBlockTex([1, 1]), color: 0xd4dcdd, roughness: 0.1, metalness: 0.1, transparent: true, opacity: 0.7, envMapIntensity: 0.6 });
+  mats.steel = std({ color: 0xc9cbcc, metalness: 1, roughness: 0.32, envMapIntensity: 1 });
+  mats.chrome = std({ color: 0xe2e2e2, metalness: 1, roughness: 0.12, envMapIntensity: 1.2 });
+  mats.gold = std({ color: 0xc9a46a, metalness: 1, roughness: 0.3, envMapIntensity: 1.1 });
+  mats.doorWood = std({ map: woodTex({ base: '#6a4b35', repeat: [1, 1] }), roughness: 0.5, envMapIntensity: 0.35 });
+  mats.leather = std({ color: 0x111111, roughness: 0.42, envMapIntensity: 0.6 });
+  mats.black = std({ color: 0x141414, roughness: 0.5, envMapIntensity: 0.4 });
+  mats.lockerGray = std({ color: 0xc9c5bd, roughness: 0.5, metalness: 0.3, envMapIntensity: 0.4 });
+  mats.porcelain = std({ color: 0xc4c1bb, roughness: 0.22, envMapIntensity: 0.3 });
+  mats.basin = std({ color: 0xbfbcb7, roughness: 0.2, envMapIntensity: 0.6 });
+  mats.mirror = std({ color: 0x7c8084, metalness: 1, roughness: 0.04, envMapIntensity: 0.8 });
+  mats.velvet = std({ color: 0xd8ccb6, roughness: 1, envMapIntensity: 0.2 });
+  mats.burgundy = std({ color: 0x3e1f22, roughness: 0.45, envMapIntensity: 0.4 });
+  mats.marbleTop = std({ map: marbleTex({ base: '#d9d9d6', vein: 'rgba(120,120,125,A)' }), roughness: 0.25, envMapIntensity: 0.4 });
+  mats.whiteMetal = std({ color: 0xcfcfcb, roughness: 0.4, metalness: 0.2, envMapIntensity: 0.4 });
+  mats.brownWagon = std({ color: 0x3a221a, roughness: 0.35, metalness: 0.3 });
+  mats.basket = std({ color: 0xb59c7a, roughness: 0.9 });
+  mats.plant = std({ color: 0x2c3d24, roughness: 0.85, flatShading: true, envMapIntensity: 0.2 });
+  mats.plant2 = std({ color: 0x46592f, roughness: 0.85, flatShading: true, envMapIntensity: 0.2 });
+  mats.concrete = std({ map: noiseTex({ base: '#9b9993', light: 30, repeat: [3, 1] }), roughness: 0.9, envMapIntensity: 0.2 });
+  mats.granite = std({ map: noiseTex({ base: '#4f4d4a', dots: 26000, light: 46, repeat: [5, 4], grid: [4, 8, 'rgba(30,30,30,.55)'] }), roughness: 0.75, envMapIntensity: 0.3 });
+  mats.frosted = std({ color: 0x5f6b68, roughness: 0.6, metalness: 0.2, emissive: 0x4d5c58, emissiveIntensity: 0.05, envMapIntensity: 0.2 });
+  mats.circlePanel = std({ map: circlePanelTex([3, 3]), roughness: 0.4, metalness: 0.5, envMapIntensity: 0.6 });
+  mats.curtain = std({ color: 0x16202a, metalness: 0.9, roughness: 0.05, transparent: true, opacity: 0.25, envMapIntensity: 1.6, depthWrite: false });
+  mats.mullion = std({ color: 0x8e9194, metalness: 0.8, roughness: 0.35, envMapIntensity: 0.45 });
+  mats.lobbyFloor = std({ map: noiseTex({ base: '#8f8b84', light: 24, repeat: [6, 4], grid: [2, 2, 'rgba(60,60,60,.4)'] }), roughness: 0.3, envMapIntensity: 0.5 });
+  mats.sidewalk = std({ map: noiseTex({ base: '#5d5b57', light: 26, repeat: [16, 4], grid: [1, 1] }), roughness: 0.4, metalness: 0.15, envMapIntensity: 0.4 });
+  mats.asphalt = std({ map: noiseTex({ base: '#1a1a1a', light: 30, repeat: [20, 10] }), roughness: 0.4, metalness: 0.25, envMapIntensity: 0.4 });
   mats.warmLight = new THREE.MeshStandardMaterial({ color: 0x000000, emissive: 0xffd7a0, emissiveIntensity: 2.6 });
-  mats.warmSoft = new THREE.MeshStandardMaterial({ color: 0x000000, emissive: 0xffc98a, emissiveIntensity: 1.3 });
+  mats.coolLight = new THREE.MeshStandardMaterial({ color: 0x000000, emissive: 0xeef4ff, emissiveIntensity: 2.2 });
+  mats.halo = new THREE.MeshBasicMaterial({ map: haloTex(), transparent: true, opacity: 0.5, blending: THREE.AdditiveBlending, depthWrite: false, color: 0xffd9a8 });
   mats.shadow = new THREE.MeshBasicMaterial({ map: glowTex('rgba(0,0,0,.75)', 'rgba(0,0,0,0)'), transparent: true, depthWrite: false });
   mats.hit = new THREE.MeshBasicMaterial({ visible: false });
 }
@@ -272,7 +356,7 @@ function rbox(w, h, d, r, mat, x = 0, y = 0, z = 0, parent) {
   parent && parent.add(m);
   return m;
 }
-function cyl(rt, rb, h, mat, x = 0, y = 0, z = 0, parent, seg = 32) {
+function cyl(rt, rb, h, mat, x = 0, y = 0, z = 0, parent, seg = 24) {
   const m = new THREE.Mesh(new THREE.CylinderGeometry(rt, rb, h, seg), mat);
   m.position.set(x, y, z);
   parent && parent.add(m);
@@ -283,423 +367,425 @@ function plane(w, h, mat, parent) {
   parent && parent.add(m);
   return m;
 }
-function contactShadow(w, d, x, z, parent, o = 0.55) {
+function contactShadow(w, d, x, z, parent, o = 0.5) {
   const m = plane(w, d, mats.shadow.clone(), parent);
   m.material.opacity = o;
   m.rotation.x = -Math.PI / 2; m.position.set(x, 0.004, z);
   m.renderOrder = 1;
   return m;
 }
-function plantCluster(x, z, scale, parent) {
+// 家具を置くためのグループ（ローカルの +z が正面）
+function place(parent, x, z, rotY = 0) {
   const g = new THREE.Group();
-  cyl(0.28, 0.22, 0.62, mats.pot, 0, 0.31, 0, g);
-  cyl(0.02, 0.03, 1.1, mats.walnut, 0, 1.05, 0, g, 6);
-  for (let i = 0; i < 22; i++) {
-    const s = 0.13 + rnd() * 0.16;
-    const m = new THREE.Mesh(new THREE.IcosahedronGeometry(s, 0), rnd() > 0.5 ? mats.plant : mats.plant2);
-    const a = rnd() * Math.PI * 2, r = rnd() * 0.42;
-    m.position.set(Math.cos(a) * r, 1.25 + rnd() * 0.95, Math.sin(a) * r);
-    m.rotation.set(rnd() * 3, rnd() * 3, rnd() * 3);
-    g.add(m);
-  }
-  contactShadow(1.1, 1.1, 0, 0, g, 0.6);
-  g.scale.setScalar(scale);
-  g.position.set(x, 0, z);
+  g.position.set(x, 0, z); g.rotation.y = rotY;
   parent.add(g);
   return g;
 }
-
-/* ================================================================
-   外観
-   ================================================================ */
-function buildStreet() {
-  const street = new THREE.Group(); // 店の外まわり（フロア表示では隠す）
-  const front = new THREE.Group(); // 店の正面（ガラス・扉・看板。フロア表示でも残す）
-  groups.street = street; groups.front = front;
-  scene.add(street, front);
-
-  // 歩道と車道
-  const walk = plane(60, 9, mats.sidewalk, street);
-  walk.rotation.x = -Math.PI / 2; walk.position.set(0, 0, 4.5);
-  const road = plane(120, 60, mats.asphalt, street);
-  road.rotation.x = -Math.PI / 2; road.position.set(0, -0.12, 39);
-  box(60, 0.12, 0.25, mats.stone, 0, -0.06, 9.0, street); // 縁石
-  // 横断歩道風の白線
-  for (let i = 0; i < 8; i++) box(0.5, 0.01, 4, std({ color: 0x8a8a86, roughness: 0.5 }), -14 + i * 1.1, -0.115, 15, street);
-
-  // 正面の壁（入口まわり、高さ ROOM.h まで）
-  const t = 0.4, zc = -t / 2;
-  box(5, ROOM.h, t, mats.stone, -6.5, ROOM.h / 2, zc, front);
-  box(5, ROOM.h, t, mats.stone, 6.5, ROOM.h / 2, zc, front);
-  box(8, ROOM.h - 3.3, t, mats.stone, 0, 3.3 + (ROOM.h - 3.3) / 2, zc, front);
-  // 真鍮の枠
-  box(8.2, 0.08, 0.12, mats.brass, 0, 3.3, 0.02, front);
-  box(0.08, 3.3, 0.12, mats.brass, -4.04, 1.65, 0.02, front);
-  box(0.08, 3.3, 0.12, mats.brass, 4.04, 1.65, 0.02, front);
-  box(8.2, 0.06, 0.5, mats.brass, 0, 0.03, 0.05, front); // 敷居
-
-  // 看板
-  const sign = textTex([
-    { text: 'JAM', font: '500 150px "Cormorant Garamond", serif', y: 104, spacing: '60px', dx: 30 },
-    { text: 'SHARE SALON  —  SENDAI', font: '400 30px "Cormorant Garamond", serif', y: 210, spacing: '14px', dx: 7 },
-  ]);
-  const signMat = new THREE.MeshStandardMaterial({ map: sign, emissiveMap: sign, emissive: 0xffffff, emissiveIntensity: 1.5, transparent: true, color: 0x000000, depthWrite: false });
-  const signMesh = plane(3.6, 0.9, signMat, front);
-  signMesh.position.set(0, 3.76, 0.012);
-
-  // ガラスと扉
-  const glassH = 3.24;
-  const fixL = plane(2.8, glassH, mats.glass, front); fixL.position.set(-2.6, glassH / 2 + 0.03, -0.22);
-  const fixR = plane(2.8, glassH, mats.glass, front); fixR.position.set(2.6, glassH / 2 + 0.03, -0.22);
-  const transom = plane(2.4, 0.5, mats.glass, front); transom.position.set(0, 3.03, -0.22);
-  box(2.4, 0.06, 0.1, mats.brass, 0, 2.76, -0.2, front);
-  for (const x of [-1.2, 1.2]) box(0.06, 3.26, 0.1, mats.brass, x, 1.63, -0.2, front);
-
-  const doors = [];
-  for (const side of [-1, 1]) {
-    const d = new THREE.Group();
-    const g = plane(1.18, 2.7, mats.glass, d); g.position.set(0, 1.38, 0);
-    box(1.2, 0.05, 0.06, mats.brass, 0, 0.05, 0, d);
-    box(1.2, 0.05, 0.06, mats.brass, 0, 2.72, 0, d);
-    box(0.05, 2.7, 0.06, mats.brass, -0.58, 1.38, 0, d);
-    box(0.05, 2.7, 0.06, mats.brass, 0.58, 1.38, 0, d);
-    // 取っ手
-    const hx = -side * 0.42;
-    cyl(0.018, 0.018, 1.3, mats.brass, hx, 1.2, 0.09, d, 12);
-    box(0.02, 0.02, 0.09, mats.brass, hx, 1.75, 0.045, d);
-    box(0.02, 0.02, 0.09, mats.brass, hx, 0.65, 0.045, d);
-    d.position.set(side * 0.6, 0, -0.1);
-    d.userData.home = side * 0.6;
-    d.userData.side = side;
-    front.add(d);
-    doors.push(d);
+function shrubs(parent, x, z, w, d, h, n) {
+  for (let i = 0; i < n; i++) {
+    const s = 0.14 + rnd() * 0.22;
+    const m = new THREE.Mesh(new THREE.IcosahedronGeometry(s, 0), rnd() > 0.5 ? mats.plant : mats.plant2);
+    m.position.set(x + (rnd() - 0.5) * w, h * (0.3 + rnd() * 0.7), z + (rnd() - 0.5) * d);
+    m.rotation.set(rnd() * 3, rnd() * 3, rnd() * 3);
+    parent.add(m);
   }
-  groups.doors = doors;
-
-  // 外壁の照明（縦のライン）
-  for (const x of [-6.6, 6.6]) {
-    box(0.06, 1.0, 0.06, mats.warmLight, x, 2.3, 0.04, front);
-    box(0.16, 1.1, 0.04, mats.brassDark, x, 2.3, 0.01, front);
+}
+function tree(parent, x, z, h) {
+  cyl(0.06, 0.09, h * 0.6, std({ color: 0x3b3025, roughness: 0.9 }), x, h * 0.3 + 0.7, z, parent, 8);
+  for (let i = 0; i < 26; i++) {
+    const s = 0.3 + rnd() * 0.4;
+    const m = new THREE.Mesh(new THREE.IcosahedronGeometry(s, 0), rnd() > 0.4 ? mats.plant : mats.plant2);
+    const a = rnd() * Math.PI * 2, r = rnd() * 1.3;
+    m.position.set(x + Math.cos(a) * r, 0.7 + h * (0.55 + rnd() * 0.45), z + Math.sin(a) * r);
+    parent.add(m);
   }
-  // 入口マット
-  box(2.6, 0.02, 1.2, std({ color: 0x141210, roughness: 1 }), 0, 0.01, 0.75, street);
-  box(2.66, 0.022, 0.03, mats.brass, 0, 0.011, 0.15, street);
-  box(2.66, 0.022, 0.03, mats.brass, 0, 0.011, 1.35, street);
-
-  plantCluster(-5.2, 1.1, 1.25, street);
-  plantCluster(5.2, 1.1, 1.25, street);
-
-  // 上の階
-  const upper = new THREE.Group();
-  street.add(upper);
-  box(18, 10, 22.4, mats.stoneUpper, 0, ROOM.h + 5, -11.2, upper);
-  box(18.4, 0.14, 0.5, mats.brass, 0, ROOM.h + 0.07, 0.05, upper);
-  box(18.4, 0.5, 0.6, mats.stone, 0, ROOM.h + 0.35, 0.0, upper);
-  const win = windowsTex(6, 6, 0.38);
-  const winMat = new THREE.MeshStandardMaterial({ color: 0x0a0c10, metalness: 0.8, roughness: 0.15, emissiveMap: win, emissive: 0xffffff, emissiveIntensity: 0.9, envMapIntensity: 1 });
-  const upWin = plane(16, 9, winMat, upper); upWin.position.set(0, ROOM.h + 5.3, 0.01);
-  for (let i = 0; i < 7; i++) box(0.12, 9.2, 0.3, mats.stone, -8 + i * (16 / 6), ROOM.h + 5.2, 0.12, upper);
-
-  // 隣のビル
-  const nb = [[-15.5, 12, -1.0], [-25, 17, -2.5], [15.5, 9, -0.8], [25, 15, -2]];
-  for (const [x, h, z] of nb) {
-    box(12.6, h, 20, std({ color: 0x0f0f11, roughness: 0.8 }), x, h / 2, z - 10, street);
-    const wt = windowsTex(5, Math.round(h / 1.6), 0.28);
-    const m = new THREE.MeshStandardMaterial({ color: 0x050506, emissiveMap: wt, emissive: 0xffffff, emissiveIntensity: 0.6, roughness: 0.3, metalness: 0.6 });
-    const p = plane(11, h - 1.5, m, street); p.position.set(x, h / 2 + 0.6, z + 0.01);
-  }
-
-  // 街灯
-  const pole = new THREE.Group();
-  cyl(0.06, 0.08, 5.2, mats.black, 0, 2.6, 0, pole, 12);
-  box(0.9, 0.06, 0.12, mats.black, -0.4, 5.2, 0, pole);
-  box(0.5, 0.05, 0.24, mats.warmLight, -0.7, 5.15, 0, pole);
-  pole.position.set(9.6, 0, 7.8);
-  street.add(pole);
-  const lamp = new THREE.PointLight(0xffc98a, 40, 18, 2);
-  lamp.position.set(9, 5, 7.8);
-  street.add(lamp);
-
-  // 入口を照らす光
-  const doorLight = new THREE.SpotLight(0xffd6a6, 60, 12, Math.PI / 4.5, 0.7, 2);
-  doorLight.position.set(0, 4.8, 2.6);
-  doorLight.target.position.set(0, 0, 1.0);
-  street.add(doorLight, doorLight.target);
-  const signLight = new THREE.PointLight(0xffd4a0, 4, 4, 2);
-  signLight.position.set(0, 3.0, 1.0);
-  front.add(signLight);
-
-  // 月明かり
-  const moon = new THREE.DirectionalLight(0x9db0d8, 0.5);
-  moon.position.set(-6, 14, 12);
-  street.add(moon);
 }
 
 /* ================================================================
-   店内
+   外観（いただいたビルの写真がモチーフ。他テナントの看板は入れない）
    ================================================================ */
+function buildStreet() {
+  const street = new THREE.Group();
+  groups.street = street;
+  scene.add(street);
+  const F = FACADE_Z;
+
+  // 歩道・車道
+  const walk = plane(80, 8, mats.sidewalk, street);
+  walk.rotation.x = -Math.PI / 2; walk.position.set(0, 0, F + 4);
+  const road = plane(140, 60, mats.asphalt, street);
+  road.rotation.x = -Math.PI / 2; road.position.set(0, -0.12, F + 38);
+  box(80, 0.12, 0.25, mats.concrete, 0, -0.06, F + 8, street);
+
+  // ビル本体（石張りの外壁）
+  const bx0 = -18, bx1 = 6, top = 17;
+  const bw = bx1 - bx0, bcx = (bx0 + bx1) / 2;
+  box(bw, top - 7.6, 0.6, mats.granite, bcx, 7.6 + (top - 7.6) / 2, F - 0.3, street);
+  // すりガラスの帯（写真の横のライン）
+  box(bw + 0.02, 0.9, 0.62, mats.frosted, bcx, 11.8, F - 0.3, street);
+  box(bw + 0.4, 0.3, 0.9, mats.granite, bcx, top + 0.15, F - 0.3, street);
+  // 1階：丸模様の黒いパネル（左） / ガラスのカーテンウォール（中央） / 石張り（右）
+  box(-5 - bx0, 7.6, 0.6, mats.circlePanel, (bx0 - 5) / 2, 3.8, F - 0.3, street);
+  box(bx1 - 5, 7.6, 0.6, mats.granite, (bx1 + 5) / 2, 3.8, F - 0.3, street);
+  const curtain = plane(10, 7.6, mats.curtain, street);
+  curtain.position.set(0, 3.8, F);
+  for (let i = 0; i <= 7; i++) box(0.09, 7.6, 0.16, mats.mullion, -5 + i * (10 / 7), 3.8, F, street);
+  box(10, 0.12, 0.18, mats.mullion, 0, 3.6, F, street);
+  box(10, 0.14, 0.18, mats.mullion, 0, 7.55, F, street);
+  // 2階の奥の明かり
+  const ll = plane(10, 3.8, new THREE.MeshStandardMaterial({ color: 0x000000, emissiveMap: lineLightTex(), emissive: 0xffffff, emissiveIntensity: 0.32 }), street);
+  ll.position.set(0, 5.6, F - 1.2);
+  box(10, 0.2, 1.2, mats.granite, 0, 3.66, F - 0.6, street);
+
+  // 入口の自動ドア
+  const doors = [];
+  for (const side of [-1, 1]) {
+    const d = new THREE.Group();
+    const g = plane(1.18, 2.6, mats.curtain, d); g.position.set(0, 1.32, 0);
+    box(1.2, 0.05, 0.06, mats.mullion, 0, 0.04, 0, d);
+    box(1.2, 0.05, 0.06, mats.mullion, 0, 2.62, 0, d);
+    box(0.05, 2.6, 0.06, mats.mullion, -0.58, 1.32, 0, d);
+    box(0.05, 2.6, 0.06, mats.mullion, 0.58, 1.32, 0, d);
+    d.position.set(side * 0.6, 0, F + 0.12);
+    d.userData.home = side * 0.6; d.userData.side = side;
+    street.add(d); doors.push(d);
+  }
+  groups.doors = doors;
+
+  // J.A.M の案内サイン（入口の横）
+  const sign = textTex(LOGO_LINES);
+  const stand = new THREE.Group();
+  box(0.9, 1.5, 0.08, mats.black, 0, 0.95, 0, stand);
+  const sm = plane(0.8, 0.2, new THREE.MeshStandardMaterial({ map: sign, emissiveMap: sign, emissive: 0xffffff, emissiveIntensity: 1.4, transparent: true, color: 0x000000, depthWrite: false }), stand);
+  sm.position.set(0, 1.42, 0.045);
+  box(0.6, 0.02, 0.02, mats.gold, 0, 1.24, 0.045, stand);
+  stand.position.set(2.0, 0, F + 1.0);
+  stand.rotation.y = -0.25;
+  street.add(stand);
+
+  // コンクリートのプランターと植栽（写真の植え込み）
+  for (const [x0, x1] of [[-13, -2.2], [2.2, 5.6]]) {
+    const w = x1 - x0, cx = (x0 + x1) / 2;
+    box(w, 0.75, 1.6, mats.concrete, cx, 0.375, F + 2.2, street);
+    shrubs(street, cx, F + 2.2, w - 0.3, 1.3, 1.4, Math.round(w * 9));
+  }
+  tree(street, -9.5, F + 2.2, 4.2);
+  tree(street, -4.0, F + 2.1, 3.6);
+  tree(street, 4.2, F + 2.3, 3.8);
+
+  // 隣のビル
+  for (const [x, h, z] of [[-28, 12, F - 1.5], [16, 14, F - 1.2], [27, 9, F - 2.5]]) {
+    box(10, h, 18, std({ color: 0x1a1b1e, roughness: 0.8 }), x, h / 2, z - 9, street);
+  }
+
+  // ビルのロビー（ビルの入口から J.A.M の入口まで）
+  const lobby = plane(12, F, mats.lobbyFloor, street);
+  lobby.rotation.x = -Math.PI / 2; lobby.position.set(-1, 0.001, F / 2);
+  box(0.2, H_CEIL, F, mats.pillar, 5, H_CEIL / 2, F / 2, street);
+  box(5 - X(1325), H_CEIL, 0.2, mats.pillar, (5 + X(1325)) / 2, H_CEIL / 2, -0.1, street); // ロビー奥（J.A.M の右）
+  box(0.2, H_CEIL, F - Z(930), mats.pillar, -7, H_CEIL / 2, (F + Z(930)) / 2, street); // ロビー左
+  const lc = plane(12, F, mats.ceiling, street);
+  lc.rotation.x = Math.PI / 2; lc.position.set(-1, H_CEIL, F / 2);
+  for (let z = 1.5; z < F; z += 1.6) box(2.4, 0.03, 0.05, mats.warmLight, 0, H_CEIL - 0.02, z, street);
+
+  // 光
+  const lamp = new THREE.PointLight(0xfff0dd, 9, 12, 2); lamp.position.set(0, 3.2, F - 2.5); street.add(lamp);
+  const out = new THREE.SpotLight(0xffe2bf, 18, 14, Math.PI / 5, 0.8, 2);
+  out.position.set(0, 6.8, F + 3); out.target.position.set(0, 0, F + 1.5);
+  street.add(out, out.target);
+  const moon = new THREE.DirectionalLight(0xa9b8d8, 0.55); moon.position.set(-8, 16, 20); street.add(moon);
+}
+
+/* ================================================================
+   店内（間取り図から）
+   ================================================================ */
+// 2色の壁（下：木目の腰壁 / 上：アイボリー）
+function wall(parent, x1, y1, x2, y2, h, opts = {}) {
+  const a = P(x1, y1), b = P(x2, y2);
+  const len = a.distanceTo(b);
+  if (len < 0.01) return;
+  const t = opts.t || 0.1;
+  const g = new THREE.Group();
+  g.position.copy(a).lerp(b, 0.5);
+  g.rotation.y = -Math.atan2(b.z - a.z, b.x - a.x);
+  box(len + t, H_WAIN, t + 0.006, mats.wain, 0, H_WAIN / 2, 0, g);
+  box(len + t, h - H_WAIN, t, mats.cream, 0, H_WAIN + (h - H_WAIN) / 2, 0, g);
+  parent.add(g);
+  // 写真のように、部屋の入口の端にガラスブロックの柱
+  if (opts.glass) {
+    const gb = box(0.2, h, 0.2, mats.glassBlock, 0, h / 2, 0, parent);
+    gb.position.set(b.x, h / 2, b.z);
+    gb.material = mats.glassBlock.clone();
+    gb.material.map = mats.glassBlock.map.clone();
+    gb.material.map.repeat.set(1, h / 0.2);
+    gb.material.map.needsUpdate = true;
+  }
+}
+
 function buildInterior() {
   const room = new THREE.Group();
   const ceiling = new THREE.Group();
   groups.room = room; groups.ceiling = ceiling;
   scene.add(room, ceiling);
-  const W = ROOM.halfW, D = ROOM.depth, H = ROOM.h;
+  const [bx0, by0, bx1, by1] = PLAN.bounds;
 
-  // 床
-  const floor = plane(W * 2, D, mats.floor, room);
-  floor.rotation.x = -Math.PI / 2; floor.position.set(0, 0, -D / 2);
+  // 床（外周の形どおりに切り出す）
+  const shape = new THREE.Shape();
+  const outline = [[105, 88], [1325, 88], [1325, 538], [717, 538], [717, 930], [105, 930]];
+  outline.forEach(([px, py], i) => (i ? shape.lineTo(X(px), -Z(py)) : shape.moveTo(X(px), -Z(py))));
+  const fg = new THREE.ShapeGeometry(shape);
+  // UV をメートル基準にしてタイルの大きさをそろえる
+  const uv = fg.attributes.uv, pos = fg.attributes.position;
+  for (let i = 0; i < uv.count; i++) uv.setXY(i, pos.getX(i) / 1.8, pos.getY(i) / 1.8);
+  mats.floor.map.repeat.set(1, 1);
+  const floor = new THREE.Mesh(fg, mats.floor);
+  floor.rotation.x = -Math.PI / 2;
+  room.add(floor);
+
+  // 図にラベルのない場所は暗く
+  for (const [x0, y0, x1, y1] of PLAN.unlabeled) {
+    const m = plane((x1 - x0) * PX, (y1 - y0) * PX, new THREE.MeshBasicMaterial({ color: 0x000000, transparent: true, opacity: 0.55, depthWrite: false }), room);
+    m.rotation.x = -Math.PI / 2;
+    m.position.set(X((x0 + x1) / 2), 0.008, Z((y0 + y1) / 2));
+  }
 
   // 壁
-  box(0.3, H, D, mats.plaster, -W - 0.15, H / 2, -D / 2, room);
-  box(0.3, H, D, mats.plaster, W + 0.15, H / 2, -D / 2, room);
-  box(W * 2 + 0.6, H, 0.3, mats.plasterDark, 0, H / 2, -D - 0.15, room);
-  // 幅木（真鍮）
-  box(0.02, 0.06, D, mats.brassDark, -W + 0.01, 0.03, -D / 2, room);
-  box(0.02, 0.06, D, mats.brassDark, W - 0.01, 0.03, -D / 2, room);
-
-  // 天井（下向きの面だけなので、上から見ると透けて見える）
-  const ceil = plane(W * 2, D, mats.ceiling, ceiling);
-  ceil.rotation.x = Math.PI / 2; ceil.position.set(0, H, -D / 2);
-  // ライン照明
-  for (const x of [-2.6, 2.6]) {
-    box(0.05, 0.03, D - 3, mats.warmLight, x, H - 0.02, -D / 2 - 0.5, ceiling);
+  // 外周の壁は、見下ろすときだけ低くして中を見せる
+  const outerG = new THREE.Group(); room.add(outerG); groups.outer = outerG;
+  for (const w of PLAN.outer) wall(outerG, w[0], w[1], w[2], w[3], H_CEIL, { t: 0.18 });
+  for (const w of PLAN.walls) wall(room, w[0], w[1], w[2], w[3], H_ROOM, { glass: w[4] === 'glass' });
+  for (const [x0, y0, x1, y1] of PLAN.pillars) {
+    box((x1 - x0) * PX, H_CEIL, (y1 - y0) * PX, mats.pillar, X((x0 + x1) / 2), H_CEIL / 2, Z((y0 + y1) / 2), room);
   }
-  // 天井の照明
-  const lightSpots = [
-    [-5.6, BOOTH_Z[0]], [-5.6, BOOTH_Z[1]], [-5.6, BOOTH_Z[2]],
-    [5.6, BOOTH_Z[0]], [5.6, BOOTH_Z[1]], [5.6, BOOTH_Z[2]],
-    [0, -3.2], [0, -11.1], [0, -19.6],
-  ];
-  for (const [x, z] of lightSpots) {
-    const l = new THREE.PointLight(0xffcf98, x === 0 ? 10 : 8, 0, 2);
-    l.position.set(x, H - 0.5, z);
-    room.add(l);
-    cyl(0.09, 0.09, 0.02, mats.warmLight, x, H - 0.01, z, ceiling, 20);
+  // 開き戸（開いた状態）
+  for (const [hx, hy, ex, ey] of PLAN.doors) {
+    const a = P(hx, hy), b = P(ex, ey);
+    const len = a.distanceTo(b);
+    const g = new THREE.Group();
+    g.position.copy(a);
+    const ang = Math.atan2(b.z - a.z, b.x - a.x);
+    g.rotation.y = -ang - Math.PI / 2 * 0.92; // ほぼ90°開いた扉
+    box(len, 2.15, 0.04, mats.doorWood, len / 2, 1.075, 0, g);
+    box(0.02, 2.15, 0.05, mats.steel, len - 0.01, 1.075, 0, g);
+    box(0.03, 0.14, 0.06, mats.steel, len - 0.1, 1.0, 0, g);
+    room.add(g);
+    // 枠
+    box(0.06, 2.2, 0.14, mats.steel, a.x, 1.1, a.z, room);
+    box(0.06, 2.2, 0.14, mats.steel, a.x + (b.x - a.x), 1.1, a.z + (b.z - a.z), room);
   }
-  room.add(new THREE.HemisphereLight(0xfff0dc, 0x2a2018, 0.45));
 
-  buildReception(room);
-  buildRetail(room);
-  for (const id of ['booth01', 'booth02', 'booth03', 'booth04', 'booth05', 'booth06']) buildBooth(id, room);
-  buildLounge(room);
-  buildShampoo(room);
+  // むき出しの天井（梁とライティングレール）
+  const [cx0, cz0, cx1, cz1] = [X(bx0), Z(by0), X(bx1), Z(by1)];
+  const ceil = plane(cx1 - cx0, cz1 - cz0, mats.ceiling, ceiling);
+  ceil.rotation.x = Math.PI / 2; ceil.position.set((cx0 + cx1) / 2, H_CEIL, (cz0 + cz1) / 2);
+  for (let x = cx0 + 0.6; x < cx1; x += 1.2) box(0.12, 0.35, cz1 - cz0, mats.beam, x, H_CEIL - 0.18, (cz0 + cz1) / 2, ceiling);
+  for (const z of [Z(382), Z(250)]) {
+    box(cx1 - cx0 - 6, 0.04, 0.04, mats.black, (cx0 + cx1) / 2 + 3, H_CEIL - 0.5, z, ceiling);
+    for (let x = cx0 + 6.5; x < cx1 - 0.5; x += 1.6) {
+      cyl(0.04, 0.05, 0.16, mats.black, x, H_CEIL - 0.6, z, ceiling, 10);
+      cyl(0.035, 0.035, 0.01, mats.warmLight, x, H_CEIL - 0.685, z, ceiling, 10);
+    }
+  }
 
-  plantCluster(-6.3, -17.6, 1.3, room);
-  plantCluster(6.3, -17.6, 1.3, room);
-  plantCluster(-2.6, -1.2, 1.05, room);
+  // 照明
+  room.add(new THREE.HemisphereLight(0xfff3e4, 0x3a2e24, 0.6));
+  for (const [px, py, i] of [[1200, 450, 7], [900, 382, 6], [620, 382, 6], [250, 500, 2]]) {
+    const l = new THREE.PointLight(0xffe0b8, i, 0, 2);
+    l.position.set(X(px), H_CEIL - 0.7, Z(py)); room.add(l);
+  }
+
+  // エントランスのロゴ（R1 の壁）
+  const logo = textTex(LOGO_LINES, { color: '#b38a4e' });
+  const lm = plane(1.7, 0.42, new THREE.MeshStandardMaterial({ map: logo, transparent: true, metalness: 0.7, roughness: 0.3, color: 0xffffff, emissiveMap: logo, emissive: 0xffcc88, emissiveIntensity: 0.25, depthWrite: false }), room);
+  lm.position.set(X(1180), 1.75, Z(342) + 0.06);
+  box(1.9, 0.02, 0.03, mats.gold, X(1180), 1.46, Z(342) + 0.06, room);
+
+  buildRooms(room);
 }
 
-// スポット（クリックできる場所）の共通部分
-function registerSpot(id, group, { hit = [BOOTH.w, BOOTH.h, BOOTH.d], hitCenter, anchorY = BOOTH.h + 0.5, glowSize } = {}) {
-  const L = LAYOUT[id];
-  group.position.set(...L.pos);
-  group.rotation.y = L.rotY;
+/* ---------- 家具 ---------- */
+// シャンプー一体型チェア（写真の黒いチェア＋白いボウル）。ローカル −z が鏡の方向
+function salonChair(parent, x, z, rotY) {
+  const g = place(parent, x, z, rotY);
+  rbox(0.66, 0.42, 0.95, 0.03, mats.leather, 0, 0.21, 0, g); // 本体
+  rbox(0.5, 0.12, 0.55, 0.05, mats.leather, 0, 0.48, -0.05, g); // 座面
+  for (const s of [-1, 1]) rbox(0.14, 0.3, 0.86, 0.05, mats.leather, s * 0.33, 0.57, 0, g); // ひじ掛け
+  const back = rbox(0.52, 0.5, 0.16, 0.05, mats.leather, 0, 0.8, 0.3, g);
+  back.rotation.x = 0.1;
+  rbox(0.34, 0.15, 0.12, 0.05, mats.leather, 0, 1.12, 0.34, g); // ヘッドレスト
+  box(0.16, 0.06, 0.03, mats.chrome, 0, 1.1, 0.41, g);
+  // シャンプーボウル（背中側）
+  box(0.6, 0.62, 0.42, mats.black, 0, 0.31, 0.75, g);
+  rbox(0.66, 0.24, 0.52, 0.06, mats.porcelain, 0, 0.74, 0.76, g);
+  const basin = plane(0.5, 0.34, mats.basin, g);
+  basin.rotation.x = -Math.PI / 2; basin.position.set(0, 0.865, 0.78);
+  cyl(0.012, 0.012, 0.2, mats.black, 0.22, 0.95, 0.92, g, 8);
+  contactShadow(1.0, 1.7, 0, 0.3, g, 0.6);
+  return g;
+}
+// 楕円の LED ミラー（裏から光る）。ローカル +z が鏡の正面
+function ovalMirror(parent, x, y, z, rotY, w = 0.85, h = 1.05) {
+  const g = new THREE.Group();
+  g.position.set(x, y, z); g.rotation.y = rotY;
+  const halo = plane(w * 1.6, h * 1.6, mats.halo, g); halo.position.z = 0.008;
+  const geo = new THREE.CircleGeometry(0.5, 64);
+  const m = new THREE.Mesh(geo, mats.mirror); m.scale.set(w, h, 1); m.position.z = 0.02;
+  g.add(m);
+  const ring = new THREE.Mesh(new THREE.RingGeometry(0.49, 0.505, 64), mats.warmLight);
+  ring.scale.set(w, h, 1); ring.position.z = 0.012;
+  g.add(ring);
+  parent.add(g);
+  return g;
+}
+function locker(parent, x, z, rotY, mat = mats.black, h = 1.85) {
+  const g = place(parent, x, z, rotY);
+  box(0.45, h, 0.5, mat, 0, h / 2, 0, g);
+  box(0.43, 0.006, 0.01, mats.black, 0, h * 0.62, 0.252, g);
+  box(0.03, 0.08, 0.01, mats.steel, 0.16, h * 0.75, 0.255, g);
+  box(0.03, 0.08, 0.01, mats.steel, 0.16, h * 0.4, 0.255, g);
+  contactShadow(0.8, 0.8, 0, 0, g, 0.4);
+  return g;
+}
+function stool(parent, x, z) {
+  const g = place(parent, x, z);
+  cyl(0.17, 0.17, 0.07, mats.leather, 0, 0.6, 0, g, 24);
+  cyl(0.022, 0.022, 0.42, mats.chrome, 0, 0.36, 0, g, 10);
+  for (let i = 0; i < 5; i++) { const a = (i / 5) * Math.PI * 2; const leg = box(0.26, 0.03, 0.04, mats.black, Math.cos(a) * 0.13, 0.06, Math.sin(a) * 0.13, g); leg.rotation.y = -a; }
+  contactShadow(0.6, 0.6, 0, 0, g, 0.35);
+  return g;
+}
+function salonRoom(parent, chair, mirror, lockerAt, lightAt, stoolAt) {
+  salonChair(parent, ...chair);
+  if (stoolAt) stool(parent, ...stoolAt);
+  ovalMirror(parent, ...mirror);
+  locker(parent, ...lockerAt);
+  const l = new THREE.PointLight(0xffd6a6, 2.4, 0, 2);
+  l.position.copy(lightAt); parent.add(l);
+}
 
-  const hc = hitCenter || [0, hit[1] / 2, -hit[2] / 2];
-  const hb = box(hit[0], hit[1], hit[2], mats.hit, hc[0], hc[1], hc[2], group);
+function buildRooms(room) {
+  const W = 0.06; // 壁の内側へのオフセット
+
+  // 個室 A（鏡は奥の壁）
+  salonRoom(room,
+    [X(888), Z(88) + 1.35, 0],
+    [X(888), 1.55, Z(88) + 0.06 + W, 0],
+    [X(950) - 0.3, Z(88) + 0.35, 0],
+    P(888, 200, 2.6), [X(935), Z(88) + 1.6]);
+  // 個室 B
+  salonRoom(room,
+    [X(758), Z(127) + 1.3, 0],
+    [X(758), 1.55, Z(127) + 0.06 + W, 0],
+    [X(690) + 0.3, Z(127) + 0.35, 0],
+    P(760, 220, 2.6), [X(810), Z(127) + 1.7]);
+  // 個室 C（鏡は左の壁）
+  salonRoom(room,
+    [X(460) + 1.3, Z(285), Math.PI / 2],
+    [X(460) + 0.06 + W, 1.55, Z(285), Math.PI / 2],
+    [X(680) - 0.3, Z(212) + 0.33, 0],
+    P(560, 280, 2.6), [X(460) + 1.6, Z(232)]);
+  // 個室 R2（鏡は手前の壁）
+  salonRoom(room,
+    [X(600), Z(930) - 1.4, Math.PI],
+    [X(600), 1.55, Z(930) - 0.06 - W, Math.PI],
+    [X(705) - 0.3, Z(560) + 0.35, 0],
+    P(590, 760, 2.6), [X(670), Z(930) - 1.7]);
+
+  // トリートメントルーム R1（写真：ベッド・シンク・デスク・丸い椅子・棚・ロッカー）
+  {
+    const bed = place(room, X(1080), Z(170), Math.PI / 2);
+    rbox(0.62, 0.16, 1.85, 0.05, mats.burgundy, 0, 0.66, 0, bed);
+    box(0.6, 0.02, 0.01, mats.black, 0, 0.66, -0.3, bed);
+    const hole = new THREE.Mesh(new THREE.TorusGeometry(0.09, 0.02, 8, 24), mats.burgundy);
+    hole.rotation.x = Math.PI / 2; hole.position.set(0, 0.75, -0.75); bed.add(hole);
+    box(0.5, 0.42, 1.6, mats.burgundy, 0, 0.37, 0, bed);
+    for (const sz of [-0.7, 0.7]) box(0.08, 0.2, 0.08, mats.black, 0, 0.1, sz, bed);
+    contactShadow(1.0, 2.4, 0, 0, bed, 0.55);
+    // デスク・シンク・棚（右の壁沿い）
+    const d = place(room, X(1322) - 0.3, Z(230), -Math.PI / 2);
+    box(1.1, 0.04, 0.5, mats.black, 0.2, 0.76, 0, d);
+    box(1.1, 0.72, 0.04, mats.black, 0.2, 0.38, -0.22, d);
+    box(0.5, 0.25, 0.42, mats.steel, -0.65, 0.75, 0, d);
+    cyl(0.01, 0.01, 0.3, mats.chrome, -0.65, 1.0, -0.15, d, 8);
+    box(1.6, 0.03, 0.26, mats.black, -0.1, 1.45, -0.12, d);
+    for (const bx of [-0.55, -0.2]) box(0.3, 0.16, 0.22, mats.basket, bx, 1.55, -0.12, d);
+    box(0.32, 0.2, 0.24, mats.black, 0.35, 1.565, -0.12, d);
+    const ch = place(room, X(1322) - 0.85, Z(215), Math.PI / 2);
+    const seat = new THREE.Mesh(new THREE.SphereGeometry(0.28, 24, 12, 0, Math.PI * 2, Math.PI / 2, Math.PI / 2), mats.velvet);
+    seat.scale.set(1, 0.6, 1); seat.position.y = 0.6; ch.add(seat);
+    const backC = new THREE.Mesh(new THREE.CylinderGeometry(0.28, 0.26, 0.4, 24, 1, true, Math.PI * 0.75, Math.PI * 1.5), mats.velvet);
+    backC.material = mats.velvet.clone(); backC.material.side = THREE.DoubleSide;
+    backC.position.y = 0.78; ch.add(backC);
+    for (const [sx, sz] of [[-0.18, -0.18], [0.18, -0.18], [-0.18, 0.18], [0.18, 0.18]]) cyl(0.012, 0.008, 0.45, mats.gold, sx, 0.22, sz, ch, 6);
+    locker(room, X(1250) - 0.25, Z(88) + 0.3, 0, mats.black);
+    const l = new THREE.PointLight(0xfff1dc, 5, 0, 2); l.position.copy(P(1140, 215, 2.6)); room.add(l);
+  }
+
+  // 個室 D（写真：ネイルテーブル・ライト・チェア・グレーのロッカー・ワゴン）
+  {
+    const t = place(room, X(1075), Z(538) - 0.4, Math.PI);
+    box(0.9, 0.03, 0.45, mats.marbleTop, 0, 0.72, 0, t);
+    for (const [sx, sz] of [[-0.42, -0.2], [0.42, -0.2], [-0.42, 0.2], [0.42, 0.2]]) box(0.02, 0.72, 0.02, mats.whiteMetal, sx, 0.36, sz, t);
+    box(0.86, 0.02, 0.4, mats.whiteMetal, 0, 0.2, 0, t);
+    const arc = new THREE.Mesh(new THREE.TorusGeometry(0.28, 0.018, 8, 40, Math.PI), mats.whiteMetal);
+    arc.position.set(-0.05, 0.74, 0.05); t.add(arc);
+    rbox(0.32, 0.08, 0.16, 0.04, mats.porcelain, -0.05, 0.78, 0.0, t);
+    contactShadow(1.2, 0.8, 0, 0, t, 0.45);
+    const ch = place(room, X(1075), Z(538) - 0.95, 0);
+    const seat = new THREE.Mesh(new THREE.SphereGeometry(0.26, 24, 12, 0, Math.PI * 2, Math.PI / 2, Math.PI / 2), mats.velvet);
+    seat.scale.set(1, 0.55, 1); seat.position.y = 0.5; ch.add(seat);
+    const backC = new THREE.Mesh(new THREE.CylinderGeometry(0.26, 0.24, 0.36, 24, 1, true, Math.PI * 0.75, Math.PI * 1.5), mats.velvet.clone());
+    backC.material.side = THREE.DoubleSide; backC.position.y = 0.68; ch.add(backC);
+    for (const [sx, sz] of [[-0.17, -0.17], [0.17, -0.17], [-0.17, 0.17], [0.17, 0.17]]) cyl(0.01, 0.007, 0.4, mats.gold, sx, 0.2, sz, ch, 6);
+    locker(room, X(1115) - 0.3, Z(420) + 0.35, -Math.PI / 2, mats.lockerGray, 1.8);
+    const wg = place(room, X(940) + 0.32, Z(538) - 0.4, Math.PI / 2);
+    for (const y of [0.25, 0.5, 0.78]) box(0.6, 0.02, 0.38, mats.brownWagon, 0, y, 0, wg);
+    for (const [sx, sz] of [[-0.29, -0.18], [0.29, -0.18], [-0.29, 0.18], [0.29, 0.18]]) box(0.015, 0.8, 0.015, mats.brownWagon, sx, 0.4, sz, wg);
+    const l = new THREE.PointLight(0xfff1dc, 1.4, 0, 2); l.position.copy(P(1025, 480, 2.5)); room.add(l);
+  }
+
+  // 共用バックヤード（写真：ロッカー・カウンター・冷蔵庫・電子レンジ・スツール）
+  {
+    const lk = place(room, X(617), Z(538) - 0.3, Math.PI);
+    for (const sx of [-0.23, 0.23]) {
+      box(0.44, 1.9, 0.5, mats.black, sx, 0.95, 0, lk);
+      for (let i = 1; i < 5; i++) box(0.42, 0.008, 0.01, mats.leather, sx, i * 0.38, 0.252, lk);
+    }
+    contactShadow(1.2, 0.9, 0, 0, lk, 0.45);
+    const ct = place(room, X(613), Z(420) + 0.3, 0);
+    box(0.8, 0.04, 0.5, mats.black, 0, 0.76, 0, ct);
+    const fr = place(room, X(667), Z(538) - 0.3, Math.PI);
+    box(0.48, 0.85, 0.5, mats.black, 0, 0.425, 0, fr);
+    box(0.44, 0.26, 0.34, mats.black, 0, 0.98, 0, fr);
+    stool(room, X(625), Z(470));
+    const l = new THREE.PointLight(0xfff4e6, 2, 0, 2); l.position.copy(P(660, 480, 2.5)); room.add(l);
+  }
+
+  // スポット登録
+  for (const id of Object.keys(LAYOUT)) registerSpot(id, room);
+}
+
+// スポット（クリックできる場所）
+function registerSpot(id, parent) {
+  const L = LAYOUT[id];
+  const [x0, y0, x1, y1] = L.rect;
+  const w = (x1 - x0) * PX, d = (y1 - y0) * PX;
+  const c = P((x0 + x1) / 2, (y0 + y1) / 2);
+  const hb = box(w, H_ROOM, d, mats.hit, c.x, H_ROOM / 2, c.z, parent);
   hb.userData.spot = id;
   hitMeshes.push(hb);
 
-  const gs = glowSize || [hit[0] + 0.8, hit[2] + 0.8];
   const glowMat = new THREE.MeshBasicMaterial({ map: glowTex('rgba(236,200,140,.9)', 'rgba(236,200,140,0)'), transparent: true, opacity: 0, blending: THREE.AdditiveBlending, depthWrite: false });
-  const glow = plane(gs[0], gs[1], glowMat, group);
-  glow.rotation.x = -Math.PI / 2; glow.position.set(hc[0], 0.02, hc[2]);
+  const glow = plane(w + 0.6, d + 0.6, glowMat, parent);
+  glow.rotation.x = -Math.PI / 2; glow.position.set(c.x, 0.02, c.z);
   glow.renderOrder = 2;
 
   const anchor = new THREE.Object3D();
-  anchor.position.set(hc[0], anchorY, hc[2]);
-  group.add(anchor);
+  anchor.position.set(c.x, H_ROOM + 0.5, c.z);
+  parent.add(anchor);
 
-  // ズームしたときのカメラ位置（向きから自動で計算。LAYOUTに cam / look があればそちらを優先）
-  const n = new THREE.Vector3(Math.sin(L.rotY), 0, Math.cos(L.rotY));
-  const o = new THREE.Vector3(...L.pos);
-  const view = {
-    pos: L.cam ? new THREE.Vector3(...L.cam) : o.clone().addScaledVector(n, 2.25).add(new THREE.Vector3(0, 1.62, 0)),
-    look: L.look ? new THREE.Vector3(...L.look) : o.clone().addScaledVector(n, -1.7).add(new THREE.Vector3(0, 1.2, 0)),
-  };
-  spotObjects[id] = { group, glow, anchor, view, level: 0 };
-}
-
-function buildBooth(id, parent) {
-  const g = new THREE.Group();
-  parent.add(g);
-  const { w, d, h } = BOOTH;
-  const no = id.slice(-2);
-
-  // 床（木）
-  const fl = plane(w - 0.1, d, mats.walnutH, g);
-  fl.rotation.x = -Math.PI / 2; fl.position.set(0, 0.006, -d / 2);
-  // 仕切り
-  for (const s of [-1, 1]) {
-    box(0.08, h, d, mats.walnut, s * (w / 2), h / 2, -d / 2, g);
-    box(0.1, 0.03, d + 0.02, mats.brass, s * (w / 2), h + 0.015, -d / 2, g);
-    box(0.1, h + 0.03, 0.03, mats.brass, s * (w / 2), (h + 0.03) / 2, 0.0, g); // 先端の真鍮
-  }
-  // 奥の壁
-  box(w - 0.08, h, 0.06, mats.plasterDark, 0, h / 2, -d + 0.03, g);
-  // 鏡（裏から光る）
-  box(1.12, 1.82, 0.02, mats.warmSoft, 0, 1.52, -d + 0.075, g);
-  const mirror = plane(1.0, 1.7, mats.mirror, g);
-  mirror.position.set(0, 1.52, -d + 0.1);
-  // 番号
-  const num = textTex([{ text: no, font: '400 150px "Cormorant Garamond", serif', y: 128 }], { w: 256, h: 256 });
-  const numMesh = plane(0.32, 0.32, new THREE.MeshStandardMaterial({ map: num, transparent: true, color: 0xd4b47a, metalness: 0.6, roughness: 0.35, emissiveMap: num, emissive: 0xffd8a0, emissiveIntensity: 0.25 }), g);
-  numMesh.position.set(0, 2.62, -d + 0.07);
-  // カウンター
-  box(1.9, 0.05, 0.42, mats.marbleDark, 0, 0.86, -d + 0.27, g);
-  box(1.9, 0.02, 0.43, mats.brass, 0, 0.83, -d + 0.27, g);
-  box(1.86, 0.32, 0.38, mats.walnutH, 0, 0.66, -d + 0.27, g);
-  // 棚
-  box(0.5, 0.03, 0.2, mats.brass, 1.15, 1.7, -d + 0.16, g);
-  for (let i = 0; i < 3; i++) cyl(0.03, 0.03, 0.16 + i * 0.03, [mats.black, mats.marbleLight, mats.brassDark][i], 1.0 + i * 0.13, 1.79 + i * 0.015, -d + 0.16, g, 16);
-
-  // セット椅子
-  const chair = new THREE.Group();
-  cyl(0.32, 0.34, 0.04, mats.chrome, 0, 0.02, 0, chair, 40);
-  cyl(0.06, 0.07, 0.42, mats.chrome, 0, 0.24, 0, chair, 20);
-  rbox(0.62, 0.16, 0.6, 0.06, mats.leather, 0, 0.5, 0, chair);
-  const back = rbox(0.56, 0.62, 0.12, 0.05, mats.leather, 0, 0.88, 0.3, chair);
-  back.rotation.x = 0.12;
-  for (const s of [-1, 1]) {
-    rbox(0.08, 0.06, 0.5, 0.03, mats.leather, s * 0.34, 0.7, 0.02, chair);
-    box(0.03, 0.14, 0.03, mats.chrome, s * 0.34, 0.62, 0.18, chair);
-  }
-  box(0.36, 0.03, 0.18, mats.chrome, 0, 0.18, -0.42, chair); // 足置き
-  chair.position.set(0, 0, -d + 1.2); // 座ると鏡の方（−z）を向く
-  g.add(chair);
-  contactShadow(1.0, 1.0, 0, -d + 1.2, g, 0.6);
-
-  // ワゴン
-  const wagon = new THREE.Group();
-  rbox(0.42, 0.72, 0.36, 0.02, mats.black, 0, 0.42, 0, wagon);
-  for (let i = 0; i < 3; i++) box(0.3, 0.012, 0.01, mats.brass, 0, 0.22 + i * 0.22, 0.185, wagon);
-  for (const sx of [-1, 1]) for (const sz of [-1, 1]) cyl(0.03, 0.03, 0.05, mats.chrome, sx * 0.16, 0.03, sz * 0.13, wagon, 10);
-  wagon.position.set(-1.05, 0, -d + 1.05);
-  g.add(wagon);
-  contactShadow(0.7, 0.6, -1.05, -d + 1.05, g, 0.5);
-
-  registerSpot(id, g, { anchorY: h + 0.55 });
-}
-
-function buildReception(parent) {
-  const g = new THREE.Group();
-  parent.add(g);
-  // 正面が −x（通路側）を向く。ローカルでは +z が正面。
-  rbox(2.6, 1.04, 0.62, 0.04, mats.walnut, 0, 0.52, -0.7, g);
-  for (let i = 0; i < 9; i++) box(0.012, 0.9, 0.01, mats.brass, -1.12 + i * 0.28, 0.5, -0.385, g);
-  box(2.76, 0.06, 0.78, mats.marbleDark, 0, 1.07, -0.72, g);
-  box(2.78, 0.012, 0.8, mats.brass, 0, 1.035, -0.72, g);
-  // 花
-  cyl(0.08, 0.06, 0.3, mats.ceramic, 0.9, 1.25, -0.75, g, 20);
-  for (let i = 0; i < 7; i++) {
-    const m = new THREE.Mesh(new THREE.SphereGeometry(0.06 + rnd() * 0.04, 10, 8), std({ color: rnd() > 0.5 ? 0xe8e0d0 : 0xb89a7a, roughness: 0.8 }));
-    m.position.set(0.9 + (rnd() - 0.5) * 0.24, 1.46 + rnd() * 0.18, -0.75 + (rnd() - 0.5) * 0.24);
-    g.add(m);
-  }
-  // 背面のロゴ壁
-  box(3.4, 3.2, 0.08, mats.walnut, 0, 1.6, -2.36, g);
-  box(3.0, 0.02, 0.02, mats.warmLight, 0, 3.15, -2.3, g);
-  const logo = textTex([
-    { text: 'JAM', font: '500 150px "Cormorant Garamond", serif', y: 104, spacing: '60px', dx: 30 },
-    { text: 'SHARE SALON  —  SENDAI', font: '400 30px "Cormorant Garamond", serif', y: 210, spacing: '14px', dx: 7 },
-  ]);
-  const lm = plane(2.2, 0.55, new THREE.MeshStandardMaterial({ map: logo, emissiveMap: logo, emissive: 0xffffff, emissiveIntensity: 1.1, transparent: true, color: 0x000000, depthWrite: false }), g);
-  lm.position.set(0, 2.1, -2.31);
-  contactShadow(3.4, 1.4, 0, -0.7, g, 0.5);
-  registerSpot('reception', g, { hit: LAYOUT.reception.hit, hitCenter: [0, 1, -1.0], anchorY: LAYOUT.reception.anchorY + 0.4 });
-}
-
-function buildRetail(parent) {
-  // 入口左手の商品棚（スポットではない飾り）
-  const g = new THREE.Group();
-  box(0.06, 2.6, 2.6, mats.walnut, -0.15, 1.3, 0, g);
-  for (let r = 0; r < 4; r++) {
-    box(0.32, 0.025, 2.4, mats.brass, 0.02, 0.5 + r * 0.55, 0, g);
-    for (let i = 0; i < 9; i++) {
-      const hgt = 0.12 + rnd() * 0.12;
-      cyl(0.035, 0.035, hgt, [mats.black, mats.marbleLight, mats.brassDark, mats.leatherTan][(i + r) % 4], 0.04, 0.52 + r * 0.55 + hgt / 2, -1.0 + i * 0.25, g, 14);
-    }
-  }
-  g.position.set(-6.8, 0, -3.1);
-  parent.add(g);
-  // ベンチ
-  rbox(1.6, 0.42, 0.5, 0.06, mats.leatherTan, -5.6, 0.21, -3.1, parent).rotation.y = Math.PI / 2;
-  contactShadow(1.0, 2.0, -5.6, -3.1, parent, 0.45);
-}
-
-function buildLounge(parent) {
-  const g = new THREE.Group();
-  parent.add(g);
-  const rug = new THREE.Mesh(new THREE.CircleGeometry(2.3, 64), mats.rug);
-  rug.rotation.x = -Math.PI / 2; rug.position.y = 0.008;
-  g.add(rug);
-  const ring = new THREE.Mesh(new THREE.RingGeometry(2.26, 2.3, 64), mats.brass);
-  ring.rotation.x = -Math.PI / 2; ring.position.y = 0.01;
-  g.add(ring);
-  // ソファ（向かい合わせ）
-  for (const s of [-1, 1]) {
-    const so = new THREE.Group();
-    rbox(2.2, 0.42, 0.9, 0.12, mats.boucle, 0, 0.26, 0, so);
-    rbox(2.2, 0.55, 0.26, 0.12, mats.boucle, 0, 0.62, -0.36, so);
-    for (const a of [-1, 1]) rbox(0.24, 0.6, 0.9, 0.1, mats.boucle, a * 1.12, 0.32, 0, so);
-    box(2.0, 0.04, 0.8, mats.brassDark, 0, 0.03, 0, so);
-    so.position.z = s * 1.45;
-    so.rotation.y = s > 0 ? Math.PI : 0;
-    // ↑ 正面を中央のテーブルへ向ける
-    g.add(so);
-    contactShadow(2.8, 1.4, 0, s * 1.45, g, 0.55);
-  }
-  // テーブル
-  cyl(0.62, 0.62, 0.05, mats.marbleDark, 0, 0.42, 0, g, 64);
-  cyl(0.22, 0.3, 0.4, mats.brass, 0, 0.2, 0, g, 32);
-  cyl(0.06, 0.05, 0.28, mats.ceramic, 0.18, 0.58, 0.1, g, 16);
-  contactShadow(1.6, 1.6, 0, 0, g, 0.5);
-  // ペンダント照明（天井側）
-  const pend = new THREE.Mesh(new THREE.TorusGeometry(0.9, 0.03, 12, 80), mats.brass);
-  pend.rotation.x = Math.PI / 2; pend.position.y = 3.0;
-  g.add(pend);
-  const pendL = new THREE.Mesh(new THREE.TorusGeometry(0.86, 0.012, 8, 80), mats.warmLight);
-  pendL.rotation.x = Math.PI / 2; pendL.position.y = 2.975;
-  g.add(pendL);
-  for (const a of [0, 2.09, 4.19]) cyl(0.004, 0.004, ROOM.h - 3.0, mats.brass, Math.cos(a) * 0.9, 3.0 + (ROOM.h - 3.0) / 2, Math.sin(a) * 0.9, g, 4);
-
-  registerSpot('lounge', g, { hit: LAYOUT.lounge.hit, hitCenter: [0, 0.7, 0], anchorY: LAYOUT.lounge.anchorY, glowSize: [5.2, 5.2] });
-}
-
-function buildShampoo(parent) {
-  const g = new THREE.Group();
-  parent.add(g);
-  const backZ = -(ROOM.depth + LAYOUT.shampoo.pos[2]) + 0.0; // 店の奥の壁までの距離（ローカル）
-  // 奥のアクセント壁
-  box(9, ROOM.h, 0.08, mats.walnut, 0, ROOM.h / 2, backZ + 0.05, g);
-  for (let i = 0; i < 15; i++) box(0.02, ROOM.h - 0.4, 0.02, mats.brass, -4.2 + i * 0.6, ROOM.h / 2, backZ + 0.1, g);
-  box(9, 0.03, 0.06, mats.warmLight, 0, 0.08, backZ + 0.12, g);
-  box(9, 0.03, 0.06, mats.warmLight, 0, ROOM.h - 0.15, backZ + 0.12, g);
-  // 3台
-  for (const x of [-2.5, 0, 2.5]) {
-    const u = new THREE.Group();
-    // ボウル
-    cyl(0.14, 0.18, 0.78, mats.ceramic, 0, 0.39, -0.1, u, 24);
-    const bowl = new THREE.Mesh(new THREE.SphereGeometry(0.3, 32, 16, 0, Math.PI * 2, Math.PI / 2, Math.PI / 2), mats.ceramic);
-    bowl.position.set(0, 0.98, -0.1); bowl.scale.set(1, 0.6, 0.9);
-    u.add(bowl);
-    cyl(0.012, 0.012, 0.32, mats.chrome, 0, 1.12, -0.38, u, 10);
-    // 椅子（ボウル側へ倒れた背もたれ）
-    rbox(0.66, 0.42, 0.7, 0.06, mats.black, 0, 0.21, 0.7, u);
-    rbox(0.62, 0.14, 0.62, 0.06, mats.leather, 0, 0.5, 0.72, u);
-    const bk = rbox(0.6, 0.12, 0.72, 0.06, mats.leather, 0, 0.7, 0.2, u);
-    bk.rotation.x = 0.55;
-    rbox(0.58, 0.1, 0.55, 0.05, mats.leather, 0, 0.44, 1.32, u).rotation.x = -0.25; // 足元
-    // 仕切り
-    box(0.05, 1.5, 1.9, mats.walnut, 1.25, 0.75, 0.55, u);
-    box(0.07, 0.025, 1.92, mats.brass, 1.25, 1.51, 0.55, u);
-    contactShadow(1.2, 2.2, 0, 0.55, u, 0.55);
-    u.position.set(x, 0, backZ + 0.75);
-    g.add(u);
-  }
-  box(0.05, 1.5, 1.9, mats.walnut, -3.75, 0.75, backZ + 1.3, g);
-  box(0.07, 0.025, 1.92, mats.brass, -3.75, 1.51, backZ + 1.3, g);
-  registerSpot('shampoo', g, { hit: LAYOUT.shampoo.hit, hitCenter: [0, 1, backZ + 1.6], anchorY: LAYOUT.shampoo.anchorY + 0.6, glowSize: [8.6, 4.2] });
+  const view = { pos: P(L.cam[0], L.cam[1], L.cam[2]), look: P(L.look[0], L.look[1], L.look[2]), fov: L.fov || 60 };
+  spotObjects[id] = { glow, anchor, view, level: 0 };
 }
 
 /* ================================================================
@@ -713,9 +799,8 @@ const smooth = (a, b, x) => { const t = Math.min(1, Math.max(0, (x - a) / (b - a
 let tween = null;
 function flyTo(pos, look, fov, dur, done) {
   const from = { pos: cam.pos.clone(), look: cam.look.clone(), fov: cam.fov };
-  // 弧を描いて移動（上から降りてくる／隣のブースへ回り込む）
   const mid = from.pos.clone().lerp(pos, 0.5);
-  mid.y = Math.max(from.pos.y, pos.y) + Math.min(2.5, from.pos.distanceTo(pos) * 0.18);
+  mid.y = Math.max(from.pos.y, pos.y) + Math.min(3, from.pos.distanceTo(pos) * 0.2);
   tween = { from, to: { pos: pos.clone(), look: look.clone(), fov }, mid, t: 0, dur: reduceMotion ? 0.001 : dur, done };
 }
 function updateTween(dt) {
@@ -723,7 +808,6 @@ function updateTween(dt) {
   tween.t = Math.min(1, tween.t + dt / tween.dur);
   const k = ease(tween.t);
   const { from, to, mid } = tween;
-  // 2次ベジェ
   const a = from.pos.clone().lerp(mid, k), b = mid.clone().lerp(to.pos, k);
   cam.pos.copy(a.lerp(b, k));
   cam.look.copy(from.look).lerp(to.look, k);
@@ -763,8 +847,7 @@ function backToStreet() {
   state.active = null;
   setMode('entering');
   if (!renderer) { setMode('street'); return; }
-  const p = pathPos.getPoint(1), l = pathLook.getPoint(1);
-  flyTo(p, l, STREET_FOV, 2.2, () => {
+  flyTo(pathPos.getPoint(1), pathLook.getPoint(1), STREET_FOV + 10, 2.2, () => {
     state.rewinding = true;
     state.progressTarget = 0;
     setMode('street');
@@ -774,28 +857,26 @@ function backToStreet() {
 function focusSpot(id) {
   const i = SPOTS.findIndex((s) => s.id === id);
   if (i < 0) return;
-  const s = SPOTS[i];
   state.active = id;
-  fillPanel(s, i);
+  fillPanel(SPOTS[i], i);
   setMode('booth');
   if (renderer) {
     const v = spotObjects[id].view;
-    flyTo(v.pos, v.look, BOOTH_FOV, 2.2);
+    // 縦長の画面では少し広く映す
+    const fov = innerHeight > innerWidth ? Math.min(78, v.fov + 12) : v.fov;
+    flyTo(v.pos, v.look, fov, 2.2);
   }
 }
 
 function stepSpot(dir) {
   const i = SPOTS.findIndex((s) => s.id === state.active);
-  const n = SPOTS[(i + dir + SPOTS.length) % SPOTS.length];
-  focusSpot(n.id);
+  focusSpot(SPOTS[(i + dir + SPOTS.length) % SPOTS.length].id);
 }
 
 /* ================================================================
    HTML側（パネル・一覧・マーカー・アクセス）
    ================================================================ */
 const pad2 = (n) => String(n).padStart(2, '0');
-// マーカーの表示：ブースは番号（店内の番号プレートと同じ）、それ以外は頭文字
-const code = (s) => (s.id.startsWith('booth') ? s.id.slice(-2) : s.en[0]);
 
 function fillPanel(s, i) {
   $('#pNum').textContent = pad2(i + 1);
@@ -804,6 +885,8 @@ function fillPanel(s, i) {
   $('#pJa').textContent = s.ja;
   $('#pCatch').textContent = s.catch;
   $('#pBody').textContent = s.body;
+  const ph = $('#pPhoto');
+  if (s.photo) { ph.src = s.photo; ph.alt = s.ja; ph.hidden = false; } else { ph.hidden = true; ph.removeAttribute('src'); }
   const dl = $('#pSpecs');
   dl.replaceChildren();
   for (const [k, v] of s.specs || []) {
@@ -811,6 +894,7 @@ function fillPanel(s, i) {
     const dd = document.createElement('dd'); dd.textContent = v;
     dl.append(dt, dd);
   }
+  $('#panel').scrollTop = 0;
 }
 
 const markerEls = {};
@@ -818,11 +902,12 @@ const guideEls = {};
 function buildUI() {
   const markers = $('#markers');
   const list = $('#guideList');
-  SPOTS.forEach((s, i) => {
+  SPOTS.forEach((s) => {
     const m = document.createElement('button');
     m.type = 'button';
     m.className = 'marker';
-    m.innerHTML = `<span class="marker__dot">${code(s)}</span><span class="marker__label"></span>`;
+    m.innerHTML = '<span class="marker__dot"></span><span class="marker__label"></span>';
+    m.querySelector('.marker__dot').textContent = s.code;
     m.querySelector('.marker__label').textContent = s.en;
     m.setAttribute('aria-label', `${s.ja}を見る`);
     m.addEventListener('click', () => focusSpot(s.id));
@@ -834,7 +919,8 @@ function buildUI() {
     const li = document.createElement('li');
     const b = document.createElement('button');
     b.type = 'button'; b.className = 'guide__item';
-    b.innerHTML = `<b>${code(s)}</b><span></span>`;
+    b.innerHTML = '<b></b><span></span>';
+    b.querySelector('b').textContent = s.code;
     b.querySelector('span').textContent = s.en;
     b.setAttribute('aria-label', s.ja);
     b.addEventListener('click', () => focusSpot(s.id));
@@ -846,7 +932,6 @@ function buildUI() {
     guideEls[s.id] = b;
   });
 
-  // 店舗情報
   $('#drawerTitle').textContent = STORE.name;
   const info = $('#storeInfo');
   for (const [k, v] of [['住所', STORE.address], ['アクセス', STORE.access], ['営業時間', STORE.hours], ['定休日', STORE.holiday], ['電話', STORE.tel]]) {
@@ -861,7 +946,6 @@ function buildUI() {
     if (STORE.reserveUrl) { a.href = STORE.reserveUrl; a.target = '_blank'; a.rel = 'noopener'; }
     else { a.removeAttribute('href'); a.classList.add('is-disabled'); a.setAttribute('aria-disabled', 'true'); a.title = '準備中'; }
   });
-  // ヘッダーの Reserve は準備中でも押せる見た目のままアクセスを開く
   const rh = $('#reserveHead');
   if (!STORE.reserveUrl) { rh.classList.remove('is-disabled'); rh.removeAttribute('aria-disabled'); rh.href = '#'; rh.addEventListener('click', (e) => { e.preventDefault(); openDrawer(); }); }
 
@@ -915,7 +999,7 @@ function cursorLabel(t) {
   cursorEl.classList.toggle('is-active', !!t);
 }
 
-const ENTER_DISTANCE = 2600; // カーソルをこれだけ動かすと店内に着く（px）
+const ENTER_DISTANCE = 2600; // カーソルをこれだけ動かすと中に着く（px）
 let last = null;
 let down = null;
 const raycaster = new THREE.Raycaster();
@@ -926,24 +1010,26 @@ function addProgress(v) {
   state.progressTarget = Math.min(1, Math.max(0, state.progressTarget + v));
 }
 
+function pick(e) {
+  ndc.set((e.clientX / innerWidth) * 2 - 1, -(e.clientY / innerHeight) * 2 + 1);
+  raycaster.setFromCamera(ndc, camera);
+  const hit = raycaster.intersectObjects(hitMeshes, false)[0];
+  return hit ? hit.object.userData.spot : null;
+}
+
 function onPointerMove(e) {
   state.mouse.set((e.clientX / innerWidth) * 2 - 1, -(e.clientY / innerHeight) * 2 + 1);
   cursorPos.x = e.clientX; cursorPos.y = e.clientY;
   if (e.pointerType === 'mouse' && finePointer) body.classList.add('has-cursor');
   if (last) {
     const dist = Math.hypot(e.clientX - last.x, e.clientY - last.y);
-    // タッチは指でなぞった分だけ（少し多めに）進む
     addProgress(dist / (e.pointerType === 'mouse' ? ENTER_DISTANCE : ENTER_DISTANCE * 0.6));
   }
   last = { x: e.clientX, y: e.clientY };
 
-  if (state.mode === 'floor' && renderer && e.target.closest('#stage')) {
-    ndc.set((e.clientX / innerWidth) * 2 - 1, -(e.clientY / innerHeight) * 2 + 1);
-    raycaster.setFromCamera(ndc, camera);
-    const hit = raycaster.intersectObjects(hitMeshes, false)[0];
-    setHover(hit ? hit.object.userData.spot : null);
-  } else if (state.mode === 'floor' && e.target.closest('#stage') === null && !e.target.closest('.marker, .guide__item')) {
-    setHover(null);
+  if (state.mode === 'floor' && renderer) {
+    if (e.target.closest('#stage')) setHover(pick(e));
+    else if (!e.target.closest('.marker, .guide__item')) setHover(null);
   }
 }
 
@@ -955,10 +1041,8 @@ function initInput() {
     if (!down || Math.hypot(e.clientX - down.x, e.clientY - down.y) > 8) return;
     if (!e.target.closest('#stage')) return;
     if (state.mode === 'floor' && renderer) {
-      ndc.set((e.clientX / innerWidth) * 2 - 1, -(e.clientY / innerHeight) * 2 + 1);
-      raycaster.setFromCamera(ndc, camera);
-      const hit = raycaster.intersectObjects(hitMeshes, false)[0];
-      if (hit) focusSpot(hit.object.userData.spot);
+      const id = pick(e);
+      if (id) focusSpot(id);
     }
   });
   document.addEventListener('pointerleave', () => { body.classList.remove('has-cursor'); last = null; });
@@ -988,12 +1072,10 @@ function frame() {
   const dt = Math.min(clock.getDelta(), 0.05);
   const t = clock.elapsedTime;
 
-  // カーソル（少し遅れてついてくる）
   cursorPos.sx += (cursorPos.x - cursorPos.sx) * Math.min(1, dt * 14);
   cursorPos.sy += (cursorPos.y - cursorPos.sy) * Math.min(1, dt * 14);
   cursorEl.style.transform = `translate3d(${cursorPos.sx}px, ${cursorPos.sy}px, 0)`;
 
-  // 外観の進み具合
   if (state.mode === 'street') {
     if (state.rewinding && state.progress < 0.02) state.rewinding = false;
     const k = reduceMotion ? 1 : Math.min(1, dt * (state.rewinding ? 1.6 : 2.4));
@@ -1010,42 +1092,41 @@ function frame() {
   if (state.mode === 'street') {
     pathPos.getPoint(p, cam.pos);
     pathLook.getPoint(p, cam.look);
-    cam.fov = STREET_FOV + p * 10;
+    cam.fov = (innerHeight > innerWidth ? 54 : STREET_FOV) + p * 10;
   }
   updateTween(dt);
 
-  // 扉：入口に近づくと左右に開く
-  const open = state.mode === 'street' ? smooth(0.32, 0.66, p) : 1;
+  // ビルの自動ドア：近づくと左右に開く
+  const open = state.mode === 'street' ? smooth(0.3, 0.58, p) : 1;
   for (const d of groups.doors) d.position.x = d.userData.home + d.userData.side * 1.16 * open;
 
-  // 店の外は、フロア表示では消す（上から見下ろすため）
-  groups.street.visible = state.mode === 'street' || (state.mode === 'entering' && cam.pos.y < 6);
-  groups.ceiling.visible = cam.pos.y < ROOM.h - 0.05;
+  // 外観は、フロア表示では消す（上から見下ろすため）
+  groups.street.visible = state.mode === 'street' || (state.mode === 'entering' && cam.pos.y < 5);
+  groups.ceiling.visible = cam.pos.y < H_CEIL - 0.05;
+  const os = cam.pos.y > H_CEIL ? 0.62 : 1;
+  groups.outer.scale.y += (os - groups.outer.scale.y) * Math.min(1, dt * 3);
 
-  // 光るハイライト
   for (const id in spotObjects) {
     const o = spotObjects[id];
-    const target = id === state.hover && state.mode === 'floor' ? 1 : id === state.active && state.mode === 'booth' ? 0.35 : 0;
+    const target = id === state.hover && state.mode === 'floor' ? 1 : id === state.active && state.mode === 'booth' ? 0.3 : 0;
     o.level += (target - o.level) * Math.min(1, dt * 6);
     o.glow.material.opacity = o.level * (0.75 + Math.sin(t * 3) * 0.08);
   }
 
-  // マウスで少しだけ視点が揺れる（奥行きを感じさせる）
   state.mouseSmooth.lerp(state.mouse, Math.min(1, dt * 3));
-  const amp = state.mode === 'street' ? [0.9, 0.35] : state.mode === 'booth' ? [0.22, 0.1] : [1.6, 0.8];
+  const amp = state.mode === 'street' ? [0.9, 0.35] : state.mode === 'booth' ? [0.12, 0.06] : [1.4, 0.7];
   camera.position.copy(cam.pos);
   tmpV.subVectors(cam.look, cam.pos).normalize();
   right.crossVectors(tmpV, camera.up).normalize();
   up.crossVectors(right, tmpV).normalize();
   camera.position.addScaledVector(right, state.mouseSmooth.x * amp[0]).addScaledVector(up, state.mouseSmooth.y * amp[1]);
-  // ゆっくり呼吸するような揺れ
-  if (!reduceMotion) camera.position.y += Math.sin(t * 0.6) * 0.03;
+  if (!reduceMotion) camera.position.y += Math.sin(t * 0.6) * 0.02;
   camera.lookAt(cam.look);
   if (Math.abs(camera.fov - cam.fov) > 0.001) { camera.fov = cam.fov; camera.updateProjectionMatrix(); }
 
-  // 詳細パネルが出ているときは、画面の中心を左へずらしてブースを見せる
-  const wantShift = state.mode === 'booth' && !isSmall() ? 1 : 0;
-  state.panelShift += (wantShift - state.panelShift) * Math.min(1, dt * 2.5);
+  // 詳細パネルが出ているときは、3Dの見える範囲をパネルの外に寄せる
+  // （PC：右にパネル → 左へ / スマホ：下にパネル → 上へ）
+  state.panelShift += ((state.mode === 'booth' ? 1 : 0) - state.panelShift) * Math.min(1, dt * 2.5);
   applyViewOffset();
 
   composer.render();
@@ -1055,9 +1136,11 @@ function frame() {
 
 function applyViewOffset() {
   const w = innerWidth, h = innerHeight;
-  const shift = state.panelShift * Math.min(230, w * 0.16);
-  if (shift < 0.5) { if (camera.view && camera.view.enabled) { camera.clearViewOffset(); } return; }
-  camera.setViewOffset(w, h, shift, 0, w, h);
+  const s = state.panelShift;
+  const ox = isSmall() ? 0 : s * Math.min(230, w * 0.16);
+  const oy = isSmall() ? s * h * 0.24 : 0;
+  if (ox < 0.5 && oy < 0.5) { if (camera.view && camera.view.enabled) camera.clearViewOffset(); return; }
+  camera.setViewOffset(w, h, ox, oy, w, h);
 }
 
 function updateMarkers() {
@@ -1067,24 +1150,33 @@ function updateMarkers() {
     const el = markerEls[id];
     spotObjects[id].anchor.getWorldPosition(tmpV);
     tmpV.project(camera);
-    const behind = tmpV.z > 1;
-    el.classList.toggle('is-hidden', behind);
+    el.classList.toggle('is-hidden', tmpV.z > 1);
     el.style.transform = `translate3d(${((tmpV.x + 1) / 2) * w}px, ${((1 - tmpV.y) / 2) * h}px, 0)`;
+  }
+}
+
+// 見下ろし視点：横長の画面は手前斜めから、縦長の画面は右（入口側）から見て間取りを縦に収める
+function setOverview() {
+  const portrait = innerHeight > innerWidth;
+  const c = P(715, 509); // 間取りの中心
+  if (portrait) {
+    OVERVIEW.pos.set(c.x + 11, 22.5, c.z + 0.6);
+    OVERVIEW.look.set(c.x - 0.6, 0, c.z);
+    OVERVIEW.fov = 50;
+  } else {
+    OVERVIEW.pos.set(c.x + 2.6, 15.5, c.z + 10.5);
+    OVERVIEW.look.set(c.x, 0, c.z - 0.2);
+    OVERVIEW.fov = 44;
   }
 }
 
 function onResize() {
   const w = innerWidth, h = innerHeight;
   camera.aspect = w / h;
-  // 縦長の画面ではフロア全体が入るように少し引く
   camera.updateProjectionMatrix();
   renderer.setSize(w, h);
   composer.setSize(w, h);
-  bloom.setSize(w, h);
-  const portrait = h > w;
-  OVERVIEW.pos.set(portrait ? 2.4 : 5.6, portrait ? 19 : 14.2, portrait ? 7 : 8.2);
-  OVERVIEW.look.copy(portrait ? OVERVIEW_LOOK_PORTRAIT : OVERVIEW_LOOK_WIDE);
-  OVERVIEW.fov = portrait ? 50 : 42;
+  setOverview();
   if (state.mode === 'floor' && !tween) { cam.pos.copy(OVERVIEW.pos); cam.look.copy(OVERVIEW.look); cam.fov = OVERVIEW.fov; }
 }
 
@@ -1102,7 +1194,6 @@ async function start() {
   loaderProgress(12);
 
   if (!renderer) {
-    // 3Dが使えない環境：一覧と詳細だけで案内する
     body.classList.add('no-webgl');
     $('#nogl').hidden = false;
     body.classList.remove('is-loading');
@@ -1112,11 +1203,10 @@ async function start() {
     return;
   }
 
-  // 看板の文字にフォントを使うので、読み込みを待つ（最大2.5秒）
   await Promise.race([
     Promise.all([
       document.fonts.load('500 150px "Cormorant Garamond"'),
-      document.fonts.load('400 30px "Cormorant Garamond"'),
+      document.fonts.load('400 40px "Cormorant Garamond"'),
     ]).catch(() => {}),
     new Promise((r) => setTimeout(r, 2500)),
   ]);
@@ -1125,19 +1215,20 @@ async function start() {
   renderer.setPixelRatio(Math.min(devicePixelRatio, isSmall() ? 1.5 : 1.75));
   renderer.setSize(innerWidth, innerHeight);
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
-  renderer.toneMappingExposure = 1.05;
+  renderer.toneMappingExposure = 1.0;
   renderer.outputColorSpace = THREE.SRGBColorSpace;
   stage.append(renderer.domElement);
 
   const pmrem = new THREE.PMREMGenerator(renderer);
   scene.environment = pmrem.fromScene(new RoomEnvironment(renderer), 0.04).texture;
+  // 夕暮れの空（写真の空の色）
   scene.background = canvasTex(4, 512, (g, w, h) => {
     const gr = g.createLinearGradient(0, 0, 0, h);
-    gr.addColorStop(0, '#030407'); gr.addColorStop(0.55, '#0b0d14'); gr.addColorStop(0.8, '#1a1714'); gr.addColorStop(1, '#0b0a09');
+    gr.addColorStop(0, '#0a0e1a'); gr.addColorStop(0.45, '#1d2438'); gr.addColorStop(0.72, '#4a3b45'); gr.addColorStop(0.86, '#8a5f4c'); gr.addColorStop(1, '#2a2420');
     g.fillStyle = gr; g.fillRect(0, 0, w, h);
   }, { aniso: 1 });
   scene.background.wrapS = scene.background.wrapT = THREE.ClampToEdgeWrapping;
-  scene.fog = new THREE.FogExp2(0x07080b, 0.022);
+  scene.fog = new THREE.FogExp2(0x0d0f16, 0.014);
 
   makeMaterials();
   loaderProgress(52);
@@ -1147,7 +1238,7 @@ async function start() {
 
   composer = new EffectComposer(renderer);
   composer.addPass(new RenderPass(scene, camera));
-  bloom = new UnrealBloomPass(new THREE.Vector2(innerWidth, innerHeight), 0.5, 0.6, 0.92);
+  bloom = new UnrealBloomPass(new THREE.Vector2(innerWidth, innerHeight), 0.45, 0.6, 0.92);
   composer.addPass(bloom);
   composer.addPass(new OutputPass());
 

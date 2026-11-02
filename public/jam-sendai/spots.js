@@ -1,14 +1,16 @@
 /*
-  シェアサロンJAM 仙台店 — 文章と店舗情報
+  シェアサロン J.A.M 仙台店 — 文章と店舗情報
 
-  サイトの文章はこのファイルだけで直せます（3Dの配置は jam.js の LAYOUT）。
-  〔記入待ち〕 は実際の情報に差し替えてください。事実（料金・設備・営業時間など）は
-  こちらでは作っていません。
+  サイトの文章はこのファイルだけで直せます（3Dの配置は jam.js の PLAN）。
+  〔記入待ち〕〔要確認〕 は実際の情報に差し替えてください。
+  設備は、いただいた写真に写っているものから書いています。どの部屋がどの写真かは推測なので確認してください。
+
+  photo：写真を出したいときは public/jam-sendai/img/ に置いてファイル名を書く（例：'img/room-a.jpg'）
 */
 
 export const STORE = {
-  name: 'シェアサロン JAM 仙台店',
-  nameEn: 'SHARE SALON JAM — SENDAI',
+  name: 'シェアサロン J.A.M 仙台店',
+  nameEn: 'J.A.M Share salon — Sendai',
   address: '〔記入待ち〕 宮城県仙台市…',
   access: '〔記入待ち〕 最寄り駅から徒歩◯分',
   hours: '〔記入待ち〕',
@@ -20,64 +22,69 @@ export const STORE = {
   mapUrl: '',
 };
 
-/*
-  id は jam.js の LAYOUT と対応しています。並び順＝フロアガイドの順番。
-  specs は [見出し, 内容] の組。増やしても減らしてもかまいません。
-*/
-const BOOTH_BODY =
-  '壁で仕切られたプライベートブース。鏡の前に座ったお客さまの視界には、あなたと鏡だけ。' +
-  '周りの気配を気にせず、施術とカウンセリングに集中できます。';
+const SALON_BODY =
+  '扉で仕切られた完全個室。シャンプー台と一体になったチェアなので、' +
+  'カットからシャンプー、仕上げまで、お客さまを移動させずに一部屋で完結できます。';
 
-const BOOTH_SPECS = [
-  ['設備', '〔記入待ち〕 セット椅子／ミラー／ワゴン など'],
+const SALON_SPECS = [
+  ['設備', 'シャンプー一体型チェア／LEDミラー／ロッカー 〔要確認〕'],
   ['広さ', '〔記入待ち〕'],
   ['利用料金', '〔記入待ち〕'],
 ];
 
+// code：マーカーと一覧に出す記号（間取り図の表記に合わせる）
 export const SPOTS = [
   {
-    id: 'reception',
-    en: 'Reception',
-    ja: 'レセプション',
+    id: 'entrance', code: 'E',
+    en: 'Entrance', ja: 'エントランス',
     catch: '扉を開けた瞬間から、特別な一日が始まる。',
-    body:
-      'お客さまを最初にお迎えする場所。チェックインからお見送りまで、' +
-      'ホテルのような落ち着いた対応でサロンの印象を整えます。',
-    specs: [
-      ['受付時間', '〔記入待ち〕'],
-      ['お支払い', '〔記入待ち〕'],
-    ],
-  },
-  { id: 'booth01', en: 'Booth 01', ja: 'プライベートブース 01', catch: '光を味方にする、窓際の一席。', body: BOOTH_BODY, specs: BOOTH_SPECS },
-  { id: 'booth02', en: 'Booth 02', ja: 'プライベートブース 02', catch: '仕上がりを、いちばん正直に映す鏡。', body: BOOTH_BODY, specs: BOOTH_SPECS },
-  { id: 'booth03', en: 'Booth 03', ja: 'プライベートブース 03', catch: '奥まった静けさを、指名の理由に。', body: BOOTH_BODY, specs: BOOTH_SPECS },
-  { id: 'booth04', en: 'Booth 04', ja: 'プライベートブース 04', catch: 'あなたの名前で迎える、自分だけのサロン。', body: BOOTH_BODY, specs: BOOTH_SPECS },
-  { id: 'booth05', en: 'Booth 05', ja: 'プライベートブース 05', catch: '会話も、沈黙も、心地よい距離で。', body: BOOTH_BODY, specs: BOOTH_SPECS },
-  { id: 'booth06', en: 'Booth 06', ja: 'プライベートブース 06', catch: 'いちばん奥の、とっておきの一席。', body: BOOTH_BODY, specs: BOOTH_SPECS },
-  {
-    id: 'lounge',
-    en: 'Lounge',
-    ja: 'ラウンジ',
-    catch: '待つ時間まで、記憶に残る体験に。',
-    body:
-      'フロア中央のラウンジ。カラーの放置時間や、施術前のひとときを' +
-      'ゆったり過ごしていただくための空間です。',
-    specs: [
-      ['席数', '〔記入待ち〕'],
-      ['ドリンク', '〔記入待ち〕'],
-    ],
+    body: 'J.A.M の入口。ここから各個室へ、廊下をまっすぐ進みます。',
+    specs: [['営業時間', '〔記入待ち〕']],
+    photo: '',
   },
   {
-    id: 'shampoo',
-    en: 'Shampoo',
-    ja: 'シャンプーエリア',
-    catch: '目を閉じた先まで、上質であること。',
+    id: 'roomR1', code: 'R1',
+    en: 'Room R1', ja: 'トリートメントルーム R1',
+    catch: '施術のためだけに整えた、いちばん広い個室。',
     body:
-      'フロアの最奥、照明を落としたシャンプーエリア。' +
-      'ブースから少し歩くだけの、ご褒美のような時間をつくります。',
+      '施術ベッドとシンク、カウンセリング用のデスクを備えた個室。' +
+      'ヘッドスパやエステなど、横になってもらうメニューに。',
     specs: [
-      ['台数', '〔記入待ち〕'],
-      ['設備', '〔記入待ち〕'],
+      ['設備', '施術ベッド／シンク／デスク／ロッカー 〔要確認〕'],
+      ['広さ', '〔記入待ち〕'],
+      ['利用料金', '〔記入待ち〕'],
     ],
+    photo: '',
+  },
+  { id: 'roomA', code: 'A', en: 'Room A', ja: '個室 A', catch: '仕上がりを、いちばん正直に映す鏡。', body: SALON_BODY, specs: SALON_SPECS, photo: '' },
+  { id: 'roomB', code: 'B', en: 'Room B', ja: '個室 B', catch: 'あなたの名前で迎える、自分だけのサロン。', body: SALON_BODY, specs: SALON_SPECS, photo: '' },
+  { id: 'roomC', code: 'C', en: 'Room C', ja: '個室 C', catch: '会話も、沈黙も、心地よい距離で。', body: SALON_BODY, specs: SALON_SPECS, photo: '' },
+  {
+    id: 'roomR2', code: 'R2',
+    en: 'Room R2', ja: '個室 R2',
+    catch: 'いちばん奥の、とっておきの一室。',
+    body: SALON_BODY,
+    specs: [['設備', 'シャンプー一体型チェア／ミラー／ロッカー 〔要確認〕'], ['広さ', '〔記入待ち〕'], ['利用料金', '〔記入待ち〕']],
+    photo: '',
+  },
+  {
+    id: 'backyard', code: 'S',
+    en: 'Backyard', ja: '共用バックヤード',
+    catch: '施術の合間に、ひと息つける場所。',
+    body: 'ロッカーとカウンター、冷蔵庫や電子レンジを備えた共用スペース。荷物の管理や休憩に使えます。',
+    specs: [['設備', 'ロッカー／カウンター／冷蔵庫／電子レンジ／ウォーターサーバー 〔要確認〕']],
+    photo: '',
+  },
+  {
+    id: 'roomD', code: 'D',
+    en: 'Room D', ja: '個室 D',
+    catch: '指先まで、上質であること。',
+    body: 'ネイルテーブルとライト、チェアを備えたコンパクトな個室。ネイルやまつげなど、手元の施術に。',
+    specs: [
+      ['設備', 'ネイルテーブル／ライト／チェア／ロッカー／ワゴン 〔要確認〕'],
+      ['広さ', '〔記入待ち〕'],
+      ['利用料金', '〔記入待ち〕'],
+    ],
+    photo: '',
   },
 ];

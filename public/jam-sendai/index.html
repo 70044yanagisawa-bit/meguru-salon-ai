@@ -3,12 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>シェアサロン JAM 仙台店｜バーチャル店舗案内</title>
-<meta name="description" content="シェアサロンJAM仙台店のバーチャル店舗案内。外観から店内へ入り、各ブースを3Dでご覧いただけます。">
+<title>シェアサロン J.A.M 仙台店｜バーチャル店舗案内</title>
+<meta name="description" content="シェアサロン J.A.M 仙台店のバーチャル店舗案内。外観から店内へ入り、各ブースを3Dでご覧いただけます。">
 <meta name="theme-color" content="#0b0a09">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <meta property="og:type" content="website">
-<meta property="og:title" content="シェアサロン JAM 仙台店｜バーチャル店舗案内">
+<meta property="og:title" content="シェアサロン J.A.M 仙台店｜バーチャル店舗案内">
 <meta property="og:description" content="外観から店内へ。各ブースを3Dでご覧いただけます。">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -29,8 +29,8 @@
 
 <!-- ローディング -->
 <div class="loader" id="loader" aria-hidden="true">
-  <div class="loader__mark">JAM</div>
-  <div class="loader__sub">SHARE SALON — SENDAI</div>
+  <div class="loader__mark">J.A.M</div>
+  <div class="loader__sub">Share salon — Sendai</div>
   <div class="loader__bar"><span id="loaderBar"></span></div>
   <div class="loader__num" id="loaderNum">0</div>
 </div>
@@ -41,8 +41,8 @@
 <!-- ヘッダー -->
 <header class="head">
   <button class="brand" type="button" data-action="street" aria-label="外観に戻る">
-    <span class="brand__mark">JAM</span>
-    <span class="brand__sub">SHARE SALON<br>SENDAI</span>
+    <span class="brand__mark">J.A.M</span>
+    <span class="brand__sub">Share salon<br>Sendai</span>
   </button>
   <nav class="head__nav" aria-label="サイト内">
     <button type="button" class="head__link" data-action="floor">Floor Guide</button>
@@ -56,7 +56,7 @@
   <p class="hero__kicker">Virtual Salon Tour</p>
   <h1 class="hero__title" id="heroTitle">
     <span class="hero__en">The Art of<br><em>Being Yours.</em></span>
-    <span class="hero__ja">シェアサロン JAM 仙台店</span>
+    <span class="hero__ja">シェアサロン J.A.M 仙台店</span>
   </h1>
   <div class="hero__enter">
     <p class="hero__hint"><span class="hero__hint-pc">カーソルを動かして、店内へ</span><span class="hero__hint-sp">画面をなぞって、店内へ</span></p>
@@ -70,7 +70,7 @@
 
 <!-- フロアガイド（一覧） -->
 <nav class="guide" id="guide" aria-label="フロアガイド">
-  <p class="guide__title">Floor Guide <span>— 見たい場所を選んでください</span></p>
+  <p class="guide__title">Floor Guide <span>— 見たい部屋を選んでください</span></p>
   <ol class="guide__list" id="guideList"></ol>
 </nav>
 
@@ -78,6 +78,7 @@
 <aside class="panel" id="panel" aria-live="polite" aria-hidden="true">
   <div class="panel__inner">
     <p class="panel__count"><span id="pNum">01</span> / <span id="pTotal">09</span></p>
+    <img class="panel__photo" id="pPhoto" alt="" hidden>
     <h2 class="panel__title"><span class="panel__en" id="pEn"></span><span class="panel__ja" id="pJa"></span></h2>
     <p class="panel__catch" id="pCatch"></p>
     <p class="panel__body" id="pBody"></p>
