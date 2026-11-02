@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>シェアサロン JAM 仙台店｜バーチャル店舗案内</title>
+<meta name="description" content="シェアサロンJAM仙台店のバーチャル店舗案内。外観から店内へ入り、各ブースを3Dでご覧いただけます。">
+<meta name="theme-color" content="#0b0a09">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<meta property="og:type" content="website">
+<meta property="og:title" content="シェアサロン JAM 仙台店｜バーチャル店舗案内">
+<meta property="og:description" content="外観から店内へ。各ブースを3Dでご覧いただけます。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=Shippori+Mincho:wght@400;500&display=swap">
+<link rel="stylesheet" href="jam.css">
+<!-- three.js は vendor/ に同梱（CDNが落ちても表示できるように） -->
+<script type="importmap">
+{
+  "imports": {
+    "three": "./vendor/three/build/three.module.min.js",
+    "three/addons/": "./vendor/three/addons/"
+  }
+}
+</script>
+<script type="module" src="jam.js"></script>
+</head>
+<body class="is-loading">
+
+<!-- ローディング -->
+<div class="loader" id="loader" aria-hidden="true">
+  <div class="loader__mark">JAM</div>
+  <div class="loader__sub">SHARE SALON — SENDAI</div>
+  <div class="loader__bar"><span id="loaderBar"></span></div>
+  <div class="loader__num" id="loaderNum">0</div>
+</div>
+
+<!-- 3D -->
+<div class="stage" id="stage" aria-hidden="true"></div>
+
+<!-- ヘッダー -->
+<header class="head">
+  <button class="brand" type="button" data-action="street" aria-label="外観に戻る">
+    <span class="brand__mark">JAM</span>
+    <span class="brand__sub">SHARE SALON<br>SENDAI</span>
+  </button>
+  <nav class="head__nav" aria-label="サイト内">
+    <button type="button" class="head__link" data-action="floor">Floor Guide</button>
+    <button type="button" class="head__link" data-action="access">Access</button>
+    <a class="head__cta" id="reserveHead" href="#" data-reserve>Reserve</a>
+  </nav>
+</header>
+
+<!-- FV：外観 -->
+<section class="hero" id="hero" aria-labelledby="heroTitle">
+  <p class="hero__kicker">Virtual Salon Tour</p>
+  <h1 class="hero__title" id="heroTitle">
+    <span class="hero__en">The Art of<br><em>Being Yours.</em></span>
+    <span class="hero__ja">シェアサロン JAM 仙台店</span>
+  </h1>
+  <div class="hero__enter">
+    <p class="hero__hint"><span class="hero__hint-pc">カーソルを動かして、店内へ</span><span class="hero__hint-sp">画面をなぞって、店内へ</span></p>
+    <div class="hero__progress" aria-hidden="true"><span id="enterBar"></span></div>
+    <button type="button" class="hero__skip" data-action="enter">Enter <span aria-hidden="true">→</span></button>
+  </div>
+</section>
+
+<!-- フロア：ホットスポット（3D上の位置に追従） -->
+<div class="markers" id="markers"></div>
+
+<!-- フロアガイド（一覧） -->
+<nav class="guide" id="guide" aria-label="フロアガイド">
+  <p class="guide__title">Floor Guide <span>— 見たい場所を選んでください</span></p>
+  <ol class="guide__list" id="guideList"></ol>
+</nav>
+
+<!-- ブース詳細 -->
+<aside class="panel" id="panel" aria-live="polite" aria-hidden="true">
+  <div class="panel__inner">
+    <p class="panel__count"><span id="pNum">01</span> / <span id="pTotal">09</span></p>
+    <h2 class="panel__title"><span class="panel__en" id="pEn"></span><span class="panel__ja" id="pJa"></span></h2>
+    <p class="panel__catch" id="pCatch"></p>
+    <p class="panel__body" id="pBody"></p>
+    <dl class="panel__specs" id="pSpecs"></dl>
+    <a class="panel__cta" href="#" data-reserve>このスペースを予約する</a>
+    <div class="panel__nav">
+      <button type="button" data-action="prev" aria-label="前の場所へ">←<span>Prev</span></button>
+      <button type="button" class="panel__back" data-action="floor">Back to Floor</button>
+      <button type="button" data-action="next" aria-label="次の場所へ"><span>Next</span>→</button>
+    </div>
+  </div>
+</aside>
+
+<!-- アクセス -->
+<div class="drawer" id="drawer" role="dialog" aria-modal="true" aria-labelledby="drawerTitle" aria-hidden="true">
+  <div class="drawer__inner">
+    <button type="button" class="drawer__close" data-action="close" aria-label="閉じる">Close</button>
+    <p class="drawer__kicker">Access</p>
+    <h2 class="drawer__title" id="drawerTitle"></h2>
+    <dl class="drawer__list" id="storeInfo"></dl>
+    <div class="drawer__links">
+      <a class="panel__cta" href="#" data-reserve>予約・お問い合わせ</a>
+      <a class="drawer__link" id="mapLink" href="#" target="_blank" rel="noopener">Google Map</a>
+      <a class="drawer__link" id="igLink" href="#" target="_blank" rel="noopener">Instagram</a>
+    </div>
+  </div>
+</div>
+
+<!-- カーソル -->
+<div class="cursor" id="cursor" aria-hidden="true">
+  <svg viewBox="0 0 60 60"><circle class="cursor__track" cx="30" cy="30" r="26"/><circle class="cursor__ring" id="cursorRing" cx="30" cy="30" r="26"/></svg>
+  <span class="cursor__dot"></span>
+  <span class="cursor__label" id="cursorLabel"></span>
+</div>
+
+<noscript><p class="nojs">このページの表示にはJavaScriptが必要です。</p></noscript>
+<p class="nogl" id="nogl" hidden>お使いの環境では3D表示ができないため、一覧でご案内しています。</p>
+</body>
+</html>
