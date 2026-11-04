@@ -79,6 +79,9 @@ HTML内に `TODO` と `〔記入待ち〕` で印をつけてあります。検�
 2. `public/index.html` の `src="assets/img/hero.svg"` を `hero.jpg` に書き換える
 3. あわせて `alt=""` の説明文も実際の写真の内容に直す
 
+撮影が間に合わないときは、`tools/image-gen/` の画像生成ツール（OpenAI / Gemini、自動切り替え付き）で
+イメージ写真を作れます。使い方は `tools/image-gen/README.md` を参照してください。
+
 横幅は 1600px 程度まで縮小し、JPEG品質は80前後で十分です。
 （WebPにするとさらに軽くなります。対応していないブラウザはほぼありません）
 
