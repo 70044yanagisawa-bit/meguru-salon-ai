@@ -117,7 +117,7 @@ update_option( 'timezone_string', 'Asia/Tokyo' );
 update_option( 'date_format', 'Y年n月j日' );
 
 /* ---------- メニュー(ページ内リンクのみ) ---------- */
-$items = array( array( '最新記事', '#latest' ), array( 'おすすめ', '#recommend' ), array( 'プロフィール', '#profile' ) );
+$items = array( array( '新着記事', '#latest' ), array( 'おすすめ', '#recommend' ), array( 'プロフィール', '#profile' ) );
 $make_menu = function ( $name ) use ( $items ) {
 	$m = wp_get_nav_menu_object( $name );
 	if ( $m ) { return $m->term_id; }
