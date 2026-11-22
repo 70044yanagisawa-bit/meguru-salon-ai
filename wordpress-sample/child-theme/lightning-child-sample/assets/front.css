@@ -140,3 +140,15 @@ strong, b, .wp-block-post-title, .wp-block-post-title a { font-weight: 700; }
 
 /* 見出しは太めにして、読みやすさを保つ */
 .sample-section-title, .sample-profile h3, .site-footer h3 { font-weight: 700; }
+
+/* メインビジュアル: キャッチコピーは1行・中央・小さめで細く(参考サイトの雰囲気)。高さも低めに */
+.sample-hero { min-height: clamp(380px, 56vh, 600px) !important; }
+.sample-hero .wp-block-cover__inner-container { display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; max-width: 1000px; }
+.sample-hero h2 { font-size: clamp(1.15rem, 2.3vw, 1.9rem); font-weight: 400; letter-spacing: .22em; line-height: 1.8; margin: 0; }
+.sample-hero h2 br { display: none; }
+.sample-hero p { font-size: .9rem; letter-spacing: .1em; margin: 1.1em 0 0; }
+.sample-hero .wp-block-buttons { margin-top: 1.4em; }
+.sample-hero .wp-block-button__link { padding: .7em 1.8em; font-size: .9rem; }
+@media (max-width: 781px) { .sample-hero h2 { letter-spacing: .14em; } }
+/* PC: 下に説明文とボタンがあっても、キャッチコピー自体が写真の中央に来るよう上に余白を足す */
+@media (min-width: 782px) { .sample-hero .wp-block-cover__inner-container { padding-top: 8rem; } }
