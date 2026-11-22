@@ -71,12 +71,8 @@ a:focus-visible, button:focus-visible, .wp-block-button__link:focus-visible {
 
 /* ページ内リンクがヘッダーに隠れないように */
 .sample-front [id] { scroll-margin-top: 90px; }
-.site-footer h2, .site-footer h3, .site-footer p { color: #fff; }
 
 /* フッター */
-.site-footer { background: var(--sample-navy); color: #e6ecf8; }
-.site-footer a, .site-footer .nav a, .site-footer .widget a { color: #fff; }
-.site-footer .site-footer-copyright, .site-footer .site-footer-copyright p { color: #cbd5e8; }
 
 @media (max-width: 781px) {
 	.sample-hero { min-height: 56vh; }
@@ -203,3 +199,23 @@ strong, b, .wp-block-post-title, .wp-block-post-title a { font-weight: 700; }
 	.sample-front .sample-profile .wp-block-column:last-child { padding: 20px; }
 	.sample-profile .wp-block-column:first-child { text-align: left; }
 }
+
+/* ===== フッター: 明るい背景・中央寄せ・縦線で区切った小さなリンク・小さな著作権表記(参考サイトの構成) ===== */
+body .site-footer { background: #fcfcfc; color: #333; border-top: 1px solid #ececec; padding: 56px 0 32px; text-align: center; }
+body .site-footer a, body .site-footer .nav a { color: #333; text-decoration: none; }
+body .site-footer a:hover { text-decoration: underline; }
+body .site-footer .footer-nav { background: transparent; border: 0; padding: 0; }
+body .site-footer .footer-nav-list { display: flex; flex-wrap: wrap; justify-content: center; margin: 0; padding: 0; border: 0; }
+body .site-footer .footer-nav-list > li { border: 0; margin: 0; }
+body .site-footer .footer-nav-list > li > a { display: block; border: 0; border-left: 1px solid #333; padding: 2px 12px; font-size: 13px; line-height: 1.4; }
+body .site-footer .footer-nav-list > li:last-child > a { border-right: 1px solid #333; }
+body .site-footer .site-footer-content { padding: 28px 0 0; }
+body .site-footer .site-footer-content .row { justify-content: center; }
+body .site-footer .site-footer-content .row > div { flex: 0 1 auto; width: auto; max-width: none; }
+body .site-footer .site-footer-content .row > div:empty { display: none; }
+body .site-footer h3 { color: #333; font-size: 1rem; margin: 0 0 .3em; }
+body .site-footer p, body .site-footer .widget p { color: #333; font-size: 13px; margin: 0; }
+body .site-footer .site-footer-copyright { padding-top: 20px; }
+body .site-footer .site-footer-copyright, body .site-footer .site-footer-copyright p { color: #555; font-size: 12px; }
+body .site-footer .footer-nav-list > li, body .site-footer .footer-nav-list > li > a { padding-left: 0; padding-right: 0; }
+body .site-footer .footer-nav-list > li > a { padding: 2px 14px; }
