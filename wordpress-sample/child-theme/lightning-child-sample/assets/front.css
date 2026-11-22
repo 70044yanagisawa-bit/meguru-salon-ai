@@ -97,3 +97,36 @@ a:focus-visible, button:focus-visible, .wp-block-button__link:focus-visible {
 /* Lightning の見出し装飾(下線)を、プロフィールとフッターでは消す */
 .sample-front .entry-body h3, .site-footer h3 { border: 0; padding-left: 0; padding-right: 0; }
 .sample-front .entry-body h3::after, .sample-front .entry-body h3::before, .site-footer h3::after, .site-footer h3::before { display: none; }
+
+/* ===== 参考サイト風の調整(構成・雰囲気のみ。画像・文章・コードは流用しない) ===== */
+:root {
+	--sample-navy: #0b1f5c;
+	--sample-navy-soft: #1f3a8a;
+	--vk-color-primary: #0b1f5c;
+	--vk-color-primary-dark: #071540;
+	--vk-color-primary-vivid: #1f3a8a;
+}
+body { font-family: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Noto Sans JP", "Yu Gothic", Meiryo, sans-serif; }
+
+/* ヘッダー最上部の細い帯 + 余裕のある白いヘッダー */
+.site-header::before { content: ""; display: block; height: 22px; background: var(--sample-navy); }
+.site-header { border-bottom: 0; }
+.site-header-container { padding-top: 14px; padding-bottom: 14px; }
+.global-nav-name { font-weight: 500; letter-spacing: .06em; }
+.global-nav-description { display: block; margin-top: 2px; font-size: .68rem; font-weight: 400; letter-spacing: .08em; color: var(--sample-muted); text-align: center; }
+
+/* メインビジュアル: 細めの文字をゆったり配置 */
+.sample-hero { min-height: min(78vh, 700px); }
+.sample-hero h2 { font-weight: 400; letter-spacing: .14em; text-shadow: 0 1px 14px rgba(0,0,0,.35); }
+.sample-hero .wp-block-cover__background { opacity: .42; }
+
+/* 記事カード: 枠なし・角丸の写真 + 下にタイトルと日付 */
+.sample-cards .wp-block-post { border: 0; background: transparent; }
+.sample-cards .wp-block-post-featured-image img { border-radius: 10px; }
+.sample-cards .sample-card-body { padding: 14px 2px 8px; }
+.sample-cards .wp-block-post-title { font-size: 1rem; font-weight: 700; }
+.sample-cards .wp-block-post-excerpt { display: none; }
+.sample-recommend .wp-block-post { background: #fff; border-radius: 12px; overflow: hidden; }
+.sample-recommend .wp-block-post-featured-image img { border-radius: 0; }
+.sample-recommend .sample-card-body { padding: 14px 16px 18px; }
+.sample-recommend .wp-block-post-excerpt { display: block; }

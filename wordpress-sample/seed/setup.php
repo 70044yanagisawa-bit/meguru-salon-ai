@@ -117,16 +117,27 @@ update_option( 'timezone_string', 'Asia/Tokyo' );
 update_option( 'date_format', 'Y年n月j日' );
 
 /* ---------- メニュー(ページ内リンクのみ) ---------- */
-$items = array( array( '新着記事', '#latest' ), array( 'おすすめ', '#recommend' ), array( 'プロフィール', '#profile' ) );
+$items = array( array( '新着記事', '#latest', 'New' ), array( 'おすすめ', '#recommend', 'Pickup' ), array( 'プロフィール', '#profile', 'Profile' ) );
 $make_menu = function ( $name ) use ( $items ) {
 	$m = wp_get_nav_menu_object( $name );
 	if ( $m ) { return $m->term_id; }
 	$id = wp_create_nav_menu( $name );
 	foreach ( $items as $it ) {
-		wp_update_nav_menu_item( $id, 0, array( 'menu-item-title' => $it[0], 'menu-item-url' => home_url( '/' ) . $it[1], 'menu-item-type' => 'custom', 'menu-item-status' => 'publish' ) );
+		wp_update_nav_menu_item( $id, 0, array( 'menu-item-title' => $it[0], 'menu-item-url' => home_url( '/' ) . $it[1], 'menu-item-description' => $it[2], 'menu-item-type' => 'custom', 'menu-item-status' => 'publish' ) );
 	}
 	return $id;
 };
+// 既存メニューで説明(英語の補足)が空の項目にだけ補う(自分で入れた説明は上書きしない)
+$desc = array( '#latest' => 'New', '#recommend' => 'Pickup', '#profile' => 'Profile' );
+foreach ( array( 'メインメニュー（試作）', 'フッターメニュー（試作）' ) as $mn ) {
+	foreach ( (array) wp_get_nav_menu_items( $mn ) as $mi ) {
+		foreach ( $desc as $anchor => $d ) {
+			if ( false !== strpos( $mi->url, $anchor ) && '' === trim( (string) $mi->description ) ) {
+				wp_update_post( array( 'ID' => $mi->db_id, 'post_content' => $d ) );
+			}
+		}
+	}
+}
 $loc = get_nav_menu_locations();
 $loc['global-nav'] = $make_menu( 'メインメニュー（試作）' );
 $loc['footer-nav'] = $make_menu( 'フッターメニュー（試作）' );
