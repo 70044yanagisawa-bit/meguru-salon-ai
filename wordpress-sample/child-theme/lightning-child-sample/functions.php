@@ -22,21 +22,23 @@ add_action(
 	20
 );
 
-// 新着記事スライダー(トップページだけ)
+// トップページ用の小さなスクリプト(新着記事スライダー / タブ)
 add_action(
 	'wp_enqueue_scripts',
 	function () {
 		if ( ! is_front_page() ) {
 			return;
 		}
-		$file = get_stylesheet_directory() . '/assets/slider.js';
-		wp_enqueue_script(
-			'lightning-child-sample-slider',
-			get_stylesheet_directory_uri() . '/assets/slider.js',
-			array(),
-			file_exists( $file ) ? filemtime( $file ) : '0.1.0',
-			array( 'in_footer' => true, 'strategy' => 'defer' )
-		);
+		foreach ( array( 'slider', 'tabs' ) as $name ) {
+			$file = get_stylesheet_directory() . '/assets/' . $name . '.js';
+			wp_enqueue_script(
+				'lightning-child-sample-' . $name,
+				get_stylesheet_directory_uri() . '/assets/' . $name . '.js',
+				array(),
+				file_exists( $file ) ? filemtime( $file ) : '0.1.0',
+				array( 'in_footer' => true, 'strategy' => 'defer' )
+			);
+		}
 	},
 	20
 );

@@ -52,10 +52,10 @@
 <!-- /wp:heading -->
 
 <!-- wp:paragraph {"className":"sample-lead"} -->
-<p class="sample-lead">カテゴリー「おすすめ」を付けた記事が自動で表示されます。</p>
+<p class="sample-lead">カテゴリー「おすすめ」を付けた記事が自動で表示されます。上のタブでカテゴリー別に絞り込めます。</p>
 <!-- /wp:paragraph -->
 
-<!-- wp:query {"queryId":2,"query":{"perPage":3,"pages":0,"offset":0,"postType":"post","order":"desc","orderBy":"date","author":"","search":"","exclude":[],"sticky":"","inherit":false,"taxQuery":{"category":[{{REC_CAT_ID}}]}}} -->
+<!-- wp:query {"queryId":2,"query":{"perPage":6,"pages":0,"offset":0,"postType":"post","order":"desc","orderBy":"date","author":"","search":"","exclude":[],"sticky":"","inherit":false,"taxQuery":{"category":[{{REC_CAT_ID}}]}}} -->
 <div class="wp-block-query"><!-- wp:post-template {"layout":{"type":"grid","columnCount":3}} -->
 <!-- wp:post-featured-image {"isLink":true,"sizeSlug":"medium_large"} /-->
 
@@ -90,14 +90,36 @@
 <!-- /wp:image --></div>
 <!-- /wp:column -->
 
-<!-- wp:column {"verticalAlignment":"center","width":"70%"} -->
-<div class="wp-block-column is-vertically-aligned-center" style="flex-basis:70%"><!-- wp:heading {"level":3} -->
-<h3 class="wp-block-heading">SAMPLE SITE（仮の屋号）</h3>
+<!-- wp:column {"verticalAlignment":"top","width":"70%"} -->
+<div class="wp-block-column is-vertically-aligned-top" style="flex-basis:70%"><!-- wp:group {"className":"sample-tab-panel","layout":{"type":"constrained"}} -->
+<div class="wp-block-group sample-tab-panel"><!-- wp:heading {"level":3,"className":"sample-tab-title"} -->
+<h3 class="wp-block-heading sample-tab-title">ごあいさつ</h3>
 <!-- /wp:heading -->
 
 <!-- wp:paragraph -->
-<p>ここに自己紹介文が入ります。活動内容や大切にしていること、これからやってみたいことなどを、管理画面から自由に書き換えられます。これは仮の文章です。</p>
-<!-- /wp:paragraph -->
+<p>ここにごあいさつの文章が入ります。活動内容や大切にしていること、これからやってみたいことなどを、管理画面から自由に書き換えられます。これは仮の文章です。</p>
+<!-- /wp:paragraph --></div>
+<!-- /wp:group -->
+
+<!-- wp:group {"className":"sample-tab-panel","layout":{"type":"constrained"}} -->
+<div class="wp-block-group sample-tab-panel"><!-- wp:heading {"level":3,"className":"sample-tab-title"} -->
+<h3 class="wp-block-heading sample-tab-title">プロフィール</h3>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>ここにプロフィールが入ります。屋号：SAMPLE SITE（仮）。名前・肩書き・得意なことなどを書く場所です。これは仮の文章です。</p>
+<!-- /wp:paragraph --></div>
+<!-- /wp:group -->
+
+<!-- wp:group {"className":"sample-tab-panel","layout":{"type":"constrained"}} -->
+<div class="wp-block-group sample-tab-panel"><!-- wp:heading {"level":3,"className":"sample-tab-title"} -->
+<h3 class="wp-block-heading sample-tab-title">経歴</h3>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>ここに経歴が入ります。これは仮の文章です。正式な内容は、事実を確認できるものだけを記載してください。</p>
+<!-- /wp:paragraph --></div>
+<!-- /wp:group -->
 
 <!-- wp:paragraph {"className":"sample-notice"} -->
 <p class="sample-notice">このページは制作の試作品です。人物・文章・画像はすべて仮のもので、実在の実績・資格・お客様の声は掲載していません。</p>

@@ -234,3 +234,26 @@ body .site-footer .footer-nav-list > li > a { padding: 2px 14px; }
 .sample-slider-prev, .sample-slider-next { width: 34px; height: 34px; border: 1px solid #c9cdd4; border-radius: 50%; background: #fff; color: var(--sample-navy); font-size: 20px; line-height: 1; cursor: pointer; padding: 0 0 3px; }
 .sample-slider-prev:disabled, .sample-slider-next:disabled { opacity: .35; cursor: default; }
 .sample-slider-dot:focus-visible, .sample-slider-prev:focus-visible, .sample-slider-next:focus-visible { outline: 3px solid #f2b705; outline-offset: 3px; }
+
+/* ===== タブ(おすすめ: カテゴリー絞り込み / プロフィール: 切り替え)。JSが動かないときは通常の表示のまま ===== */
+.sample-recommend [hidden], .sample-profile [hidden] { display: none !important; }
+
+/* おすすめ: 文字だけのタブ。選択中は濃い色+下線 */
+.sample-pickup-tabs { display: flex; flex-wrap: wrap; justify-content: center; gap: 4px 6px; border-bottom: 1px solid #d9dce2; margin: 0 0 24px; }
+.sample-pickup-tab { background: none; border: 0; border-bottom: 3px solid transparent; margin-bottom: -1px; padding: 10px 18px; font: inherit; font-size: .95rem; font-weight: 700; color: #666; cursor: pointer; }
+.sample-pickup-tab:hover { color: var(--sample-navy); }
+.sample-pickup-tab[aria-pressed="true"] { color: var(--sample-navy); border-bottom-color: var(--sample-navy); }
+.sample-pickup-tab:focus-visible, .sample-profile-tab:focus-visible { outline: 3px solid #f2b705; outline-offset: 2px; }
+
+/* プロフィール: 箱型のタブ。選択中は濃い背景に白文字。枠は文章のかたまり(パネル)につける */
+.sample-front .sample-profile .wp-block-column:last-child { background: none; border: 0; padding: 0; align-self: flex-start; }
+.sample-front .sample-profile .sample-tab-panel { background: rgba(255,255,255,.84); border: 1px solid #333; padding: 28px 32px; margin: 0 0 16px; }
+.sample-front .sample-profile .sample-tab-panel.is-tabbed { margin-bottom: 16px; }
+.sample-front .sample-profile .sample-tab-panel.is-tabbed .sample-tab-title { display: none; }
+.sample-front .sample-profile .sample-tab-title { margin-top: 0; }
+.sample-profile-tabs { display: flex; flex-wrap: wrap; gap: 0; margin: 0; }
+.sample-profile-tab { background: rgba(255,255,255,.55); border: 1px solid transparent; border-bottom: 0; padding: 9px 18px; font: inherit; font-size: .9rem; font-weight: 500; color: #444; cursor: pointer; }
+.sample-profile-tab[aria-selected="true"] { background: #333; color: #fff; }
+.sample-profile-tab:not([aria-selected="true"]):hover { background: rgba(255,255,255,.85); }
+.sample-front .sample-profile .sample-notice { background: rgba(243,246,251,.92); margin-top: 0; }
+@media (max-width: 781px) { .sample-front .sample-profile .sample-tab-panel { padding: 20px; } .sample-pickup-tab { padding: 9px 12px; } }
