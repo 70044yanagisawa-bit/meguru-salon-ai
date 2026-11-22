@@ -1,0 +1,99 @@
+/* SAMPLE SITE: 白 + 濃いネイビー。親テーマ(Lightning)の変数を上書きする */
+:root {
+	--sample-navy: #0e1f3f;
+	--sample-navy-soft: #1d3363;
+	--sample-text: #1f2937;
+	--sample-muted: #4b5563;
+	--sample-line: #e5e7eb;
+	--vk-color-primary: #0e1f3f;
+	--vk-color-primary-dark: #091630;
+	--vk-color-primary-vivid: #1d3363;
+}
+body { color: var(--sample-text); line-height: 1.9; }
+a { color: var(--sample-navy-soft); }
+
+/* キーボード操作: フォーカスを明確に */
+a:focus-visible, button:focus-visible, .wp-block-button__link:focus-visible {
+	outline: 3px solid #f2b705;
+	outline-offset: 3px;
+}
+
+/* ヘッダー: 白地 + 下線 */
+.site-header { background: #fff; border-bottom: 1px solid var(--sample-line); box-shadow: none; }
+.site-header-logo img { max-height: 48px; width: auto; }
+.global-nav-name { color: var(--sample-navy); font-weight: 600; }
+
+/* トップページ: 親テーマの余白・パンくず・タイトル帯を消し、全幅表示にする(Lightning 15 のクラス名) */
+.sample-front .page-header,
+.sample-front .breadcrumb,
+.sample-front .entry-header { display: none; }
+.sample-front .site-body-container.container { max-width: none; width: 100%; padding: 0; }
+.sample-front .main-section { max-width: none; width: 100%; flex: 0 0 100%; padding: 0; margin: 0; }
+.sample-front .entry-body { padding: 0; margin: 0; max-width: none; }
+.sample-front .entry-body > * { max-width: 1100px; margin-left: auto; margin-right: auto; }
+.sample-front .entry-body > .alignfull { max-width: none; width: 100%; margin-left: 0; margin-right: 0; }
+
+/* セクション見出し */
+.sample-section-title { border: 0; padding: 0; font-size: clamp(1.6rem, 3vw, 2.2rem); letter-spacing: .08em; margin: 0 0 .3em; color: var(--sample-navy); }
+.sample-section-title::after { content: ""; display: block; width: 48px; height: 3px; background: var(--sample-navy); margin-top: .6em; }
+.sample-recommend .sample-section-title, .sample-recommend .sample-section-title a { color: #fff; }
+.sample-recommend .sample-section-title::after { background: #fff; }
+.sample-lead { color: var(--sample-muted); }
+
+/* メインビジュアル */
+.sample-hero { min-height: min(72vh, 640px); }
+.sample-hero h2 { border: 0; padding: 0;  font-size: clamp(1.8rem, 4.6vw, 3.2rem); line-height: 1.5; letter-spacing: .06em; text-shadow: 0 1px 12px rgba(0,0,0,.45); }
+.sample-hero .wp-block-button__link { background: #fff; color: var(--sample-navy); font-weight: 700; border-radius: 2px; padding: .9em 2.2em; }
+.sample-hero .wp-block-button__link:hover { background: #e8edf7; }
+
+/* 記事カード(クエリループ) */
+.sample-cards .wp-block-post-template { gap: 28px; }
+.sample-cards .wp-block-post { background: #fff; border: 1px solid var(--sample-line); margin: 0; }
+.sample-cards .wp-block-post-featured-image { margin: 0; }
+.sample-cards .wp-block-post-featured-image img { width: 100%; aspect-ratio: 3 / 2; object-fit: cover; display: block; }
+.sample-cards .sample-card-body { padding: 16px 18px 20px; }
+.sample-cards .wp-block-post-title { font-size: 1.05rem; line-height: 1.6; margin: .3em 0; }
+.sample-cards .wp-block-post-title a { color: var(--sample-navy); text-decoration: none; }
+.sample-cards .wp-block-post-title a:hover { text-decoration: underline; }
+.sample-cards .wp-block-post-date, .sample-cards .wp-block-post-terms { font-size: .85rem; color: var(--sample-muted); }
+.sample-cards .wp-block-post-terms a { color: var(--sample-navy-soft); text-decoration: none; }
+.sample-cards .wp-block-post-excerpt { font-size: .92rem; color: var(--sample-muted); margin: 0; }
+
+/* おすすめ記事(背景画像の上は白カード) */
+.sample-recommend { color: #fff; }
+.sample-recommend .sample-lead { color: #dbe4f5; }
+.sample-recommend .wp-block-post { border-color: transparent; }
+.sample-recommend .wp-block-post-title a { color: var(--sample-navy); }
+
+/* プロフィール */
+.sample-profile img { border-radius: 50%; max-width: 280px; width: 100%; height: auto; aspect-ratio: 1; object-fit: cover; }
+.sample-notice { border-left: 4px solid var(--sample-navy); background: #f3f6fb; padding: .8em 1.1em; font-size: .92rem; color: var(--sample-text); }
+
+/* ページ内リンクがヘッダーに隠れないように */
+.sample-front [id] { scroll-margin-top: 90px; }
+.site-footer h2, .site-footer h3, .site-footer p { color: #fff; }
+
+/* フッター */
+.site-footer { background: var(--sample-navy); color: #e6ecf8; }
+.site-footer a, .site-footer .nav a, .site-footer .widget a { color: #fff; }
+.site-footer .site-footer-copyright, .site-footer .site-footer-copyright p { color: #cbd5e8; }
+
+@media (max-width: 781px) {
+	.sample-hero { min-height: 56vh; }
+	.sample-profile.wp-block-columns { gap: 20px; }
+	.sample-profile .wp-block-column:first-child { text-align: center; }
+}
+@media (prefers-reduced-motion: no-preference) { html { scroll-behavior: auto; } }
+
+/* セクションの余白と内側の幅 */
+.sample-latest, .sample-profile-wrap { padding: 72px 20px; }
+.sample-latest > *, .sample-profile-wrap > * { max-width: 1100px; margin-left: auto; margin-right: auto; }
+.sample-recommend { padding: 72px 20px; min-height: 0; color: #fff; }
+.sample-recommend .wp-block-cover__inner-container { width: 100%; max-width: 1100px; }
+.sample-hero { color: #fff; }
+.sample-hero .wp-block-cover__inner-container { max-width: 900px; padding: 0 20px; }
+@media (max-width: 781px) { .sample-latest, .sample-profile-wrap, .sample-recommend { padding: 48px 16px; } }
+
+/* Lightning の見出し装飾(下線)を、プロフィールとフッターでは消す */
+.sample-front .entry-body h3, .site-footer h3 { border: 0; padding-left: 0; padding-right: 0; }
+.sample-front .entry-body h3::after, .sample-front .entry-body h3::before, .site-footer h3::after, .site-footer h3::before { display: none; }
