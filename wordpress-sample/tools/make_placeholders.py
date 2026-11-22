@@ -6,11 +6,25 @@ import os, random
 from PIL import Image, ImageDraw, ImageFont, ImageFilter
 OUT = os.path.join(os.path.dirname(__file__), "..", "seed", "images")
 os.makedirs(OUT, exist_ok=True)
-FONT = "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf"
 NAVY = (14, 31, 63)
+# Linux / macOS / Windows のどれでも動くよう、見つかったフォントを使う(英数字ラベル用)
+FONT_CANDIDATES = [
+    "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf",
+    "/System/Library/Fonts/Supplemental/Arial Bold.ttf",
+    "/System/Library/Fonts/Supplemental/Arial.ttf",
+    "/System/Library/Fonts/Helvetica.ttc",
+    "/Library/Fonts/Arial Bold.ttf",
+    "C:/Windows/Fonts/arialbd.ttf",
+]
 
 def font(sz):
-    return ImageFont.truetype(FONT, sz)
+    for path in FONT_CANDIDATES:
+        if os.path.exists(path):
+            try:
+                return ImageFont.truetype(path, sz)
+            except OSError:
+                pass
+    return ImageFont.load_default(size=sz)  # Pillow 10.1 以上
 
 def gradient(w, h, c1, c2, diag=True):
     im = Image.new("RGB", (w, h), c1)
