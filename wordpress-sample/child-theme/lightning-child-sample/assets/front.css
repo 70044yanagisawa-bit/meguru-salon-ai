@@ -272,3 +272,5 @@ body .site-footer .footer-nav-list > li > a { padding: 2px 14px; }
 	.sample-hero { min-height: 480px !important; }
 	.sample-front .sample-hero .wp-block-cover__inner-container { justify-content: flex-start; padding-top: 44px; padding-bottom: 0; }
 }
+/* メインビジュアルの高さは「画面の幅」を基準にする(縦の長さが違っても、顔と文字の位置関係を保つため) */
+@media (min-width: 782px) { .sample-hero { min-height: clamp(460px, 44vw, 640px) !important; } }
