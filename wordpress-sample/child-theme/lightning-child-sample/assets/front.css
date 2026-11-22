@@ -219,3 +219,18 @@ body .site-footer .site-footer-copyright { padding-top: 20px; }
 body .site-footer .site-footer-copyright, body .site-footer .site-footer-copyright p { color: #555; font-size: 12px; }
 body .site-footer .footer-nav-list > li, body .site-footer .footer-nav-list > li > a { padding-left: 0; padding-right: 0; }
 body .site-footer .footer-nav-list > li > a { padding: 2px 14px; }
+
+/* ===== 新着記事スライダー: 横スクロール + スナップ。矢印と点は assets/slider.js が足す ===== */
+.sample-front .sample-latest .wp-block-post-template { display: flex !important; flex-wrap: nowrap; gap: 16px; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; padding: 0; margin: 0; list-style: none; -webkit-overflow-scrolling: touch; }
+.sample-front .sample-latest .wp-block-post-template::-webkit-scrollbar { display: none; }
+.sample-front .sample-latest .wp-block-post-template > .wp-block-post { flex: 0 0 calc((100% - 3 * 16px) / 4); scroll-snap-align: start; margin: 0; min-width: 0; }
+@media (max-width: 1023px) { .sample-front .sample-latest .wp-block-post-template > .wp-block-post { flex-basis: calc((100% - 2 * 16px) / 3); } }
+@media (max-width: 781px)  { .sample-front .sample-latest .wp-block-post-template > .wp-block-post { flex-basis: 72%; } }
+.sample-front .sample-latest .wp-block-post-template:focus-visible { outline: 3px solid #f2b705; outline-offset: 4px; }
+.sample-slider-controls { display: flex; align-items: center; justify-content: center; gap: 14px; margin-top: 22px; }
+.sample-slider-dots { display: flex; gap: 10px; }
+.sample-slider-dot { width: 10px; height: 10px; padding: 0; border: 0; border-radius: 50%; background: #c9cdd4; cursor: pointer; }
+.sample-slider-dot[aria-current="true"] { background: var(--sample-navy); }
+.sample-slider-prev, .sample-slider-next { width: 34px; height: 34px; border: 1px solid #c9cdd4; border-radius: 50%; background: #fff; color: var(--sample-navy); font-size: 20px; line-height: 1; cursor: pointer; padding: 0 0 3px; }
+.sample-slider-prev:disabled, .sample-slider-next:disabled { opacity: .35; cursor: default; }
+.sample-slider-dot:focus-visible, .sample-slider-prev:focus-visible, .sample-slider-next:focus-visible { outline: 3px solid #f2b705; outline-offset: 3px; }

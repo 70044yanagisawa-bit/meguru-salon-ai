@@ -22,6 +22,25 @@ add_action(
 	20
 );
 
+// 新着記事スライダー(トップページだけ)
+add_action(
+	'wp_enqueue_scripts',
+	function () {
+		if ( ! is_front_page() ) {
+			return;
+		}
+		$file = get_stylesheet_directory() . '/assets/slider.js';
+		wp_enqueue_script(
+			'lightning-child-sample-slider',
+			get_stylesheet_directory_uri() . '/assets/slider.js',
+			array(),
+			file_exists( $file ) ? filemtime( $file ) : '0.1.0',
+			array( 'in_footer' => true, 'strategy' => 'defer' )
+		);
+	},
+	20
+);
+
 // トップページ(固定ページ)だけに適用するクラス
 add_filter(
 	'body_class',
