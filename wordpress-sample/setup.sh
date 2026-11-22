@@ -18,9 +18,10 @@ unzip -q dl/lightning.zip -d site/wp-content/themes/
 cp -r "$HERE/child-theme/lightning-child-sample" site/wp-content/themes/
 P="$ROOT/site/wp-content/plugins/sqlite-database-integration"
 cp "$P/db.copy" site/wp-content/db.php
-sed -i "s#{SQLITE_IMPLEMENTATION_FOLDER_PATH}#$P#; s#{SQLITE_PLUGIN}#sqlite-database-integration/load.php#" site/wp-content/db.php
+sed -i.bak "s#{SQLITE_IMPLEMENTATION_FOLDER_PATH}#$P#; s#{SQLITE_PLUGIN}#sqlite-database-integration/load.php#" site/wp-content/db.php
 cp site/wp-config-sample.php site/wp-config.php
-sed -i "s/database_name_here/wp/;s/username_here/wp/;s/password_here/wp/" site/wp-config.php
+sed -i.bak "s/database_name_here/wp/;s/username_here/wp/;s/password_here/wp/" site/wp-config.php
+rm -f site/wp-content/db.php.bak site/wp-config.php.bak
 WP="php -d memory_limit=512M $ROOT/dl/wpcli.phar --path=$ROOT/site"
 $WP core install --url="http://localhost:$PORT" --title="SAMPLE SITE" --admin_user=admin --admin_password=admin-local-only --admin_email=admin@example.com --skip-email
 $WP theme activate lightning-child-sample
