@@ -257,3 +257,18 @@ body .site-footer .footer-nav-list > li > a { padding: 2px 14px; }
 .sample-profile-tab:not([aria-selected="true"]):hover { background: rgba(255,255,255,.85); }
 .sample-front .sample-profile .sample-notice { background: rgba(243,246,251,.92); margin-top: 0; }
 @media (max-width: 781px) { .sample-front .sample-profile .sample-tab-panel { padding: 20px; } .sample-pickup-tab { padding: 9px 12px; } }
+
+/* プロフィール写真は縦長(2:3)。顔が切れないよう上寄せで表示 */
+.sample-profile img { aspect-ratio: 2 / 3; object-position: 50% 15%; }
+
+/* メインビジュアル: 人物写真のとき顔に文字が重ならないよう、少し高くして文字を下寄せにする */
+.sample-hero { min-height: clamp(420px, 62vh, 620px) !important; }
+.sample-front .sample-hero .wp-block-cover__inner-container { justify-content: flex-end; padding-top: 0; padding-bottom: 48px; }
+@media (min-width: 782px) { .sample-front .sample-hero .wp-block-cover__inner-container { padding-top: 0; } }
+.sample-hero .wp-block-cover__background { opacity: .32; }
+.sample-hero h2, .sample-hero p { text-shadow: 0 1px 12px rgba(0,0,0,.55); }
+/* スマホ: 写真が縦に長く見えるので、文字は空の部分(上)に置き、顔に重ならないようにする */
+@media (max-width: 781px) {
+	.sample-hero { min-height: 480px !important; }
+	.sample-front .sample-hero .wp-block-cover__inner-container { justify-content: flex-start; padding-top: 44px; padding-bottom: 0; }
+}
