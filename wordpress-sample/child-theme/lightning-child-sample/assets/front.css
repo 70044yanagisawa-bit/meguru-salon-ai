@@ -112,8 +112,10 @@ body { font-family: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Noto Sans JP"
 .site-header::before { content: ""; display: block; height: 22px; background: var(--sample-navy); }
 .site-header { border-bottom: 0; }
 .site-header-container { padding-top: 14px; padding-bottom: 14px; }
-.global-nav-name { font-weight: 500; letter-spacing: .06em; }
-.global-nav-description { display: block; margin-top: 2px; font-size: .68rem; font-weight: 400; letter-spacing: .08em; color: var(--sample-muted); text-align: center; }
+/* ヘッダーの文字: 参考サイトと同様に、端末標準の日本語ゴシックを使う(Webフォントは読み込まない) */
+.site-header, .global-nav, .global-nav a { font-family: "游ゴシック体", "Yu Gothic", YuGothic, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif; }
+.global-nav-name { font-size: 16px; font-weight: 500; letter-spacing: .02em; color: #333; }
+.global-nav-description { display: block; margin-top: 3px; font-size: 11px; font-weight: 400; letter-spacing: .06em; color: #767676; text-align: center; }
 
 /* メインビジュアル: 細めの文字をゆったり配置 */
 .sample-hero { min-height: min(78vh, 700px); }
