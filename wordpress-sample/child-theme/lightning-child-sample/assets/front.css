@@ -178,3 +178,28 @@ strong, b, .wp-block-post-title, .wp-block-post-title a { font-weight: 700; }
 /* 上の指定が他のCSSに負けていた分を、指定を強めて確実に効かせる */
 .sample-front .sample-recommend .wp-block-cover__inner-container { max-width: 900px; }
 .sample-front .sample-recommend .sample-card-body { position: static; }
+
+/* ===== プロフィール: ぼかした背景(CSSだけで描く) + 中央の白い見出し + 正方形の写真 + 半透明の枠つき紹介文 ===== */
+.sample-front .sample-profile-wrap {
+	padding: 90px 20px 110px;
+	background:
+		radial-gradient(circle at 12% 78%, rgba(255,255,255,.34) 0, rgba(255,255,255,0) 14%),
+		radial-gradient(circle at 24% 92%, rgba(255,236,200,.30) 0, rgba(255,236,200,0) 11%),
+		radial-gradient(circle at 84% 70%, rgba(255,255,255,.30) 0, rgba(255,255,255,0) 15%),
+		radial-gradient(circle at 93% 90%, rgba(255,230,190,.28) 0, rgba(255,230,190,0) 12%),
+		radial-gradient(circle at 70% 96%, rgba(255,255,255,.26) 0, rgba(255,255,255,0) 10%),
+		linear-gradient(160deg, #5a76a3 0%, #6f89b3 55%, #8aa1c4 100%);
+}
+.sample-front .sample-profile-wrap .sample-section-title { color: #fff; text-align: center; font-size: 1.5rem; text-shadow: 0 1px 8px rgba(0,0,0,.25); }
+.sample-front .sample-profile-wrap .sample-section-title::after { display: none; }
+.sample-front .sample-profile-wrap .wp-block-columns { gap: 24px; margin-top: 48px; align-items: flex-start; }
+.sample-profile img { border-radius: 0; max-width: none; width: 100%; aspect-ratio: 1 / 1; object-fit: cover; display: block; }
+.sample-profile .wp-block-image { margin: 0; }
+.sample-front .sample-profile .wp-block-column:last-child { background: rgba(255,255,255,.84); border: 1px solid #333; padding: 28px 32px; align-self: stretch; }
+.sample-profile .wp-block-column:last-child h3 { margin-top: 0; }
+.sample-front .sample-profile .sample-notice { background: rgba(243,246,251,.9); }
+@media (max-width: 781px) {
+	.sample-front .sample-profile-wrap { padding: 64px 16px 72px; }
+	.sample-front .sample-profile .wp-block-column:last-child { padding: 20px; }
+	.sample-profile .wp-block-column:first-child { text-align: left; }
+}
