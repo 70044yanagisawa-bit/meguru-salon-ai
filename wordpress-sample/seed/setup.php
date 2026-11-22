@@ -45,6 +45,12 @@ for ( $i = 1; $i <= 6; $i++ ) {
 foreach ( $defs as $k => $d ) { $img[ $k ] = sample_import_image( $d[0], $d[1], $d[2] ); }
 $log( 'images: ' . count( $img ) );
 
+/* ---------- WordPress初期インストールのサンプルを削除(未編集のものだけ) ---------- */
+$hello = get_page_by_path( 'hello-world', OBJECT, 'post' );
+if ( $hello && 'Hello world!' === $hello->post_title ) { wp_delete_post( $hello->ID, true ); }
+$sample = get_page_by_path( 'sample-page', OBJECT, 'page' );
+if ( $sample && 'Sample Page' === $sample->post_title ) { wp_delete_post( $sample->ID, true ); }
+
 /* ---------- カテゴリー ---------- */
 $cats = array();
 foreach ( array( '活動紹介', 'ブログ', 'お知らせ', 'おすすめ' ) as $n ) {
