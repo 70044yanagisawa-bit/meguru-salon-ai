@@ -106,14 +106,19 @@ a:focus-visible, button:focus-visible, .wp-block-button__link:focus-visible {
 	--vk-color-primary-dark: #071540;
 	--vk-color-primary-vivid: #1f3a8a;
 }
-body { font-family: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Noto Sans JP", "Yu Gothic", Meiryo, sans-serif; }
+/* 全体の文字: 端末標準の日本語ゴシック(参考サイトと同様。Webフォントは使わない) */
+:root { --sample-font: "游ゴシック体", "Yu Gothic", YuGothic, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif; }
+body, button, input, select, textarea, h1, h2, h3, h4, h5, h6,
+.wp-block-heading, .wp-block-button__link, .wp-block-post-title, .wp-block-post-title a,
+.wp-block-post-excerpt, .wp-block-post-date, .wp-block-post-terms, .site-footer { font-family: var(--sample-font); font-weight: 500; }
+strong, b, .wp-block-post-title, .wp-block-post-title a { font-weight: 700; }
 
 /* ヘッダー最上部の細い帯 + 余裕のある白いヘッダー */
 .site-header::before { content: ""; display: block; height: 22px; background: var(--sample-navy); }
 .site-header { border-bottom: 0; }
 .site-header-container { padding-top: 14px; padding-bottom: 14px; }
 /* ヘッダーの文字: 参考サイトと同様に、端末標準の日本語ゴシックを使う(Webフォントは読み込まない) */
-.site-header, .global-nav, .global-nav a { font-family: "游ゴシック体", "Yu Gothic", YuGothic, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif; }
+.site-header, .global-nav, .global-nav a { font-family: var(--sample-font); }
 .global-nav-name { font-size: 16px; font-weight: 500; letter-spacing: .02em; color: #333; }
 .global-nav-description { display: block; margin-top: 3px; font-size: 11px; font-weight: 400; letter-spacing: .06em; color: #767676; text-align: center; }
 
@@ -132,3 +137,6 @@ body { font-family: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Noto Sans JP"
 .sample-recommend .wp-block-post-featured-image img { border-radius: 0; }
 .sample-recommend .sample-card-body { padding: 14px 16px 18px; }
 .sample-recommend .wp-block-post-excerpt { display: block; }
+
+/* 見出しは太めにして、読みやすさを保つ */
+.sample-section-title, .sample-profile h3, .site-footer h3 { font-weight: 700; }
