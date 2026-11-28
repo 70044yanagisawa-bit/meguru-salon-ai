@@ -1,0 +1,679 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>【仮写真プレビュー】所属のご案内｜Invent on the way</title>
+<meta name="description" content="ライバー同士がコーチとして支え合い、配信で育てた信頼を、自分の商品や仕事につなげる事務所です。運営 CoEmbody株式会社">
+<link rel="icon" type="image/png" href="/assets/favicon.png">
+<link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+<!--
+  TODO（公開前に差し替え）
+  - LINE公式アカウントのURL … href="#TODO-line" の箇所
+  - 所属応募フォームのURL   … href="#TODO-apply" の箇所
+  - 各アプリの報酬・条件ページ、100％還元の範囲・受取方法、よくある質問、Instagram / X … href="#TODO-…" の箇所
+  - 報酬・費用・契約期間などの条件が、自社の契約内容と一致しているか確認・修正すること
+  - 写真：public/assets/photos/ に置き、各枠の <div class="ph">…</div> を <img src="/assets/photos/ファイル名.jpg" alt="写真の説明"> に置き換える
+      ヒーロー（横長/縦長）、所属ライバーの声×3（正方形）、担当者×3（正方形）、代表（縦4:5）
+  - 所属ライバーの声・担当者・代表メッセージの文章と名前（「（ここに…）」「お名前」の箇所）
+-->
+<style>
+:root{
+  --blue:#1010ef;        /* ブランドブルー：リンク・主要ボタン・数字 */
+  --white:#faf9f6;       /* ウォームホワイト：背景 */
+  --lime:#b3ec00;        /* ライム：短い線のみ（文字色には使わない） */
+  --card:#ffffff;
+  --ink:#1b2340;
+  --ink-2:#454d68;
+  --ink-3:#5f6680;
+  --line:#e1e2e8;
+  --blue-soft:#eef0ff;
+  --line-green:#06c755;  /* LINEボタン専用 */
+  --radius:10px;
+  --max:1040px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:84px}
+body{background:var(--white);color:var(--ink);font-family:"Noto Sans JP","Hiragino Sans","Hiragino Kaku Gothic ProN",Meiryo,sans-serif;font-size:16px;line-height:1.9;letter-spacing:.03em;-webkit-font-smoothing:antialiased;line-break:strict}
+a{color:var(--blue);text-underline-offset:3px}
+img{max-width:100%;display:block}
+.wrap{max-width:var(--max);margin:0 auto;padding:0 20px}
+section{padding:96px 0;border-top:1px solid var(--line)}
+section.hero{border-top:0}
+
+/* 改行の制御：文節で折り返し、行末の1〜2文字落ちを防ぐ */
+h1,h2,h3,.sub-copy,.merit b{word-break:auto-phrase;text-wrap:balance}
+p,.note,td,li,summary{text-wrap:pretty;word-break:auto-phrase}
+.ib{display:inline-block}
+.nw{white-space:nowrap}
+
+/* header */
+header{position:sticky;top:0;z-index:20;background:rgba(250,249,246,.96);border-bottom:1px solid var(--line)}
+.hd{display:flex;align-items:center;justify-content:space-between;height:68px;gap:16px}
+.logo img{height:26px;width:auto}
+.nav{display:flex;align-items:center;gap:28px;font-size:14px}
+.nav a{text-decoration:none;color:var(--ink-2)}
+.nav a:hover{color:var(--blue)}
+.nav .btn{padding:9px 20px;font-size:14px;color:#fff}
+@media (max-width:860px){.nav{display:none}.logo img{height:22px}}
+
+/* buttons */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:52px;padding:14px 32px;border-radius:999px;font-weight:700;font-size:16px;text-decoration:none;border:1.5px solid var(--blue);background:var(--blue);color:#fff;transition:opacity .15s}
+.btn:hover{opacity:.88}
+.btn.line{background:var(--line-green);border-color:var(--line-green);color:#fff}
+.btn.ghost{background:transparent;color:var(--blue)}
+.btn.white{background:#fff;border-color:#fff;color:var(--blue)}
+.btns{display:flex;flex-wrap:wrap;align-items:center;gap:16px 24px}
+.textlink{font-size:15px;font-weight:500}
+
+/* type */
+h1{font-size:clamp(34px,6.4vw,56px);line-height:1.4;font-weight:700;letter-spacing:.04em;font-feature-settings:"palt"}
+h2{font-size:clamp(26px,4vw,34px);line-height:1.5;font-weight:700;letter-spacing:.05em;font-feature-settings:"palt";margin-bottom:20px}
+h3{font-size:18px;line-height:1.6;font-weight:700;letter-spacing:.04em;font-feature-settings:"palt";margin-bottom:8px}
+.lead{color:var(--ink);font-size:17px;max-width:38em}
+.body{color:var(--ink-2);max-width:38em}
+.note{font-size:14px;color:var(--ink-3);line-height:1.85;max-width:44em}
+
+/* hero */
+.hero{padding:88px 0 96px}
+.hero-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:64px;align-items:center}
+.hero .kicker{font-size:14px;font-weight:700;color:var(--ink-2);letter-spacing:.08em;margin-bottom:18px}
+.hero h1{display:inline;background:linear-gradient(transparent 82%,var(--lime) 82%,var(--lime) 92%,transparent 92%)}
+.hero .sub-copy{margin:28px 0 10px;font-size:18px;font-weight:700}
+.hero .lead{margin-bottom:36px;color:var(--ink-2);font-size:16px}
+.hero .meta{margin-top:24px;font-size:14px;color:var(--ink-3)}
+.hero-photo{aspect-ratio:4/5}
+@media (max-width:860px){
+  .hero{padding:48px 0 64px}
+  .hero-grid{grid-template-columns:1fr;gap:40px}
+  .hero-photo{aspect-ratio:16/10}
+}
+
+/* merit */
+.keys{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:40px 0 24px}
+.key{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:28px 28px 24px}
+.key .k-t{font-size:14px;color:var(--ink-2);font-weight:500}
+.key .k-n{font-size:48px;font-weight:700;line-height:1.25;color:var(--blue);letter-spacing:0;margin:4px 0}
+.key .k-n small{font-size:20px;margin-left:2px}
+.key .k-n.word{font-size:36px;line-height:1.55}
+.key .k-s{font-size:14px;color:var(--ink-3)}
+@media (max-width:760px){.keys{grid-template-columns:1fr;gap:12px}.key{display:grid;grid-template-columns:1fr auto;align-items:center;column-gap:16px;padding:20px 22px}.key .k-n{grid-row:span 2;grid-column:2;font-size:40px}.key .k-n.word{font-size:30px}}
+.merits{list-style:none;display:grid;grid-template-columns:repeat(3,1fr);column-gap:40px;border-top:1px solid var(--line)}
+.merit{padding:18px 0;border-bottom:1px solid var(--line)}
+.merit b{display:block;font-size:16px;font-weight:700}
+.merit span{font-size:14px;color:var(--ink-3)}
+@media (max-width:760px){.merits{grid-template-columns:1fr}.merit{display:flex;justify-content:space-between;align-items:baseline;gap:16px}.merit span{text-align:right}}
+
+/* support */
+.sup{display:grid;grid-template-columns:repeat(3,1fr);gap:40px;margin-top:48px}
+.sup-item .num{font-size:28px;font-weight:400;color:var(--blue);line-height:1;margin-bottom:16px}
+.sup-item p{color:var(--ink-2);font-size:15px}
+@media (max-width:760px){.sup{grid-template-columns:1fr;gap:36px}}
+.consult{margin-top:56px;display:grid;grid-template-columns:1fr 1fr;gap:16px 48px;padding-top:32px;border-top:1px solid var(--line)}
+.consult ul{list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:4px 24px;color:var(--ink-2);font-size:15px}
+.consult li::before{content:"・"}
+@media (max-width:760px){.consult{grid-template-columns:1fr}}
+
+/* details */
+details{margin-top:28px;border-top:1px solid var(--line);border-bottom:1px solid var(--line);max-width:44em}
+summary{cursor:pointer;list-style:none;padding:16px 0;font-size:15px;font-weight:500;display:flex;justify-content:space-between;gap:12px}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"＋";color:var(--blue)}
+details[open] summary::after{content:"−"}
+details .d-body{padding:0 0 18px;font-size:14px;color:var(--ink-2);line-height:1.9}
+
+/* conditions */
+.summary{width:100%;border-collapse:collapse;margin:8px 0 56px;background:var(--card);border:1px solid var(--line);font-size:15px}
+.summary th,.summary td{text-align:left;padding:16px 20px;border-bottom:1px solid var(--line);vertical-align:top}
+.summary th{width:180px;font-weight:700;background:var(--blue-soft);white-space:nowrap}
+.summary td b{color:var(--blue)}
+.cond{display:grid;grid-template-columns:180px 1fr;gap:32px;padding:36px 0;border-top:1px solid var(--line)}
+.cond .c-label{font-size:15px;font-weight:700;color:var(--ink-3)}
+.cond .note{margin-top:12px}
+.cond .links{margin-top:14px;font-size:14px;color:var(--ink-2)}
+.cond .links a{margin-right:14px;white-space:nowrap}
+@media (max-width:760px){.cond{grid-template-columns:1fr;gap:6px;padding:28px 0}}
+.term{width:100%;border-collapse:collapse;margin-top:16px;font-size:15px;background:var(--card)}
+.term th,.term td{text-align:left;padding:14px 16px;border-bottom:1px solid var(--line);vertical-align:top}
+.term th{width:120px;font-weight:700;background:var(--blue-soft);white-space:nowrap}
+@media (max-width:600px){.summary th,.term th{width:92px;padding:14px 12px}.summary td,.term td{padding:14px 12px}.summary{font-size:14px}}
+.contract{margin-top:40px;padding:28px 32px;background:var(--blue-soft);border-radius:var(--radius)}
+.contract b{font-size:18px}
+@media (max-width:600px){.contract{padding:24px 20px}}
+
+/* concept */
+.concept-head{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center}
+.concept-logo img{width:100%;max-width:420px;height:auto;margin-left:auto}
+.concept{display:grid;grid-template-columns:repeat(3,1fr);gap:40px;margin-top:56px}
+.concept-item{border-top:2px solid var(--ink);padding-top:18px}
+.concept-item .num{font-size:13px;font-weight:700;letter-spacing:.1em;color:var(--blue);margin-bottom:8px}
+.concept-item p{color:var(--ink-2);font-size:15px}
+.embody{margin-top:48px;padding-left:20px;border-left:2px solid var(--blue);color:var(--ink-2)}
+.approach{margin-top:72px;display:grid;grid-template-columns:1fr 1.4fr;gap:48px}
+.approach p+p{margin-top:14px}
+@media (max-width:760px){.concept-head,.approach{grid-template-columns:1fr;gap:24px}.concept-logo img{margin:0;max-width:300px}.concept{grid-template-columns:1fr;gap:28px}.approach{margin-top:56px}}
+
+
+
+/* apps marquee */
+.apps-band{padding:56px 0 64px;overflow:hidden}
+.apps-band h2{text-align:center;font-size:20px;margin-bottom:32px}
+.marquee{overflow:hidden;-webkit-mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent)}
+.marquee-track{list-style:none;display:flex;width:max-content;animation:marquee 40s linear infinite}
+.marquee:hover .marquee-track{animation-play-state:paused}
+.marquee-track li{flex:none;width:168px;display:flex;flex-direction:column;align-items:center;gap:12px;font-size:14px;font-weight:500;color:var(--ink-2)}
+.marquee-track img{width:96px;height:96px;border-radius:22px;border:1px solid var(--line);background:#fff}
+@keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@media (max-width:760px){.apps-band{padding:44px 0 48px}.marquee-track li{width:120px}.marquee-track img{width:72px;height:72px;border-radius:17px}}
+@media (prefers-reduced-motion:reduce){
+  .marquee{-webkit-mask-image:none;mask-image:none}
+  .marquee-track{animation:none;width:auto;flex-wrap:wrap;justify-content:center;gap:24px 0}
+  .marquee-track li[aria-hidden]{display:none}
+}
+
+
+/* illustrations */
+.ill{display:block;width:56px;height:56px;color:var(--blue);margin-bottom:16px}
+.flow-ill{grid-column:3;grid-row:1/span 2;width:48px;height:48px;color:#fff;margin:0;align-self:center;opacity:.95}
+
+/* photo slots（.ph を <img> に置き換えるとそのまま写真が入る） */
+.photo{position:relative;margin:0}
+.photo img{display:block;width:100%;height:100%;object-fit:cover;border-radius:var(--radius)}
+.photo .ph{width:100%;height:100%;border-radius:var(--radius)}
+.ph{background:#eceae4;color:var(--ink-3);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;text-align:center;font-size:13px;line-height:1.7;padding:20px;border:1px dashed #c9c7bf}
+.ph svg{width:28px;height:28px;opacity:.7}
+/* ブランドの飾り：ライムの斜め線（ロゴの y の先端と同じ角度感） */
+.photo.deco::after,.hero-photo::after{content:"";position:absolute;right:-10px;top:24px;width:56px;height:10px;background:var(--lime);border-radius:3px;transform:skewX(-35deg)}
+
+/* voices */
+.voices{display:grid;grid-template-columns:repeat(3,1fr);gap:32px;margin-top:40px}
+.voice{margin:0;display:flex;flex-direction:column}
+.voice-photo{width:120px;height:120px;margin-bottom:20px}
+.voice-photo .ph,.voice-photo img{border-radius:50%}
+.voice-photo .ph{padding:8px}
+.voice-photo .ph span{display:none}
+.voice blockquote{margin:0;font-size:15px;color:var(--ink);line-height:1.9;flex:1}
+.voice figcaption{margin-top:14px;padding-top:12px;border-top:1px solid var(--line);font-size:14px;color:var(--ink-3)}
+.voice figcaption b{color:var(--ink);margin-right:10px}
+@media (max-width:760px){.voices{grid-template-columns:1fr;gap:36px}.voice{display:grid;grid-template-columns:88px 1fr;column-gap:16px}.voice-photo{width:88px;height:88px;grid-row:span 2;margin:0}}
+
+/* staff */
+.staffs{display:grid;grid-template-columns:repeat(3,1fr);gap:32px;margin-top:40px}
+.staff{margin:0}
+.staff-photo{aspect-ratio:1/1;margin-bottom:16px}
+.staff .role{display:block;font-size:13px;font-weight:700;color:var(--blue);letter-spacing:.06em}
+.staff b{display:block;font-size:18px;margin:2px 0 6px}
+.staff p{font-size:14px;color:var(--ink-2)}
+@media (max-width:760px){.staffs{grid-template-columns:1fr;gap:28px}.staff{display:grid;grid-template-columns:112px 1fr;column-gap:16px;align-items:start}.staff-photo{margin:0}.staff-photo .ph{padding:8px}.staff-photo .ph span{display:none}}
+
+/* message */
+.message{display:grid;grid-template-columns:.8fr 1.2fr;gap:64px;align-items:start}
+.message-photo{aspect-ratio:4/5}
+.message-body p{color:var(--ink-2);max-width:34em}
+.message-body p+p{margin-top:14px}
+.sign{margin-top:28px;font-size:14px;color:var(--ink-3)}
+.sign b{display:block;font-size:20px;color:var(--ink);letter-spacing:.1em}
+@media (max-width:760px){.message{grid-template-columns:1fr;gap:28px}.message-photo{max-width:320px}}
+
+/* first-time worries */
+.worries{display:grid;grid-template-columns:repeat(3,1fr);gap:40px;margin-top:40px}
+.worry .q{font-size:15px;color:var(--ink-3);font-weight:500;margin-bottom:10px;padding-bottom:12px;border-bottom:1px solid var(--line)}
+.worry .q::before{content:"Q.";color:var(--blue);font-weight:700;margin-right:6px}
+.worry p{color:var(--ink-2);font-size:15px}
+@media (max-width:760px){.worries{grid-template-columns:1fr;gap:32px}}
+
+/* suits */
+.suits{list-style:none;display:grid;grid-template-columns:1fr 1fr;column-gap:40px;border-top:1px solid var(--line);margin-top:32px}
+.suits li{padding:18px 0 18px 32px;border-bottom:1px solid var(--line);position:relative;font-weight:500}
+.suits li::before{content:"";position:absolute;left:4px;top:27px;width:12px;height:7px;border-left:2px solid var(--blue);border-bottom:2px solid var(--blue);transform:rotate(-45deg)}
+.suits li span{display:block;font-size:14px;font-weight:400;color:var(--ink-3)}
+@media (max-width:760px){.suits{grid-template-columns:1fr}}
+
+/* faq */
+.faq{margin-top:32px;border-top:1px solid var(--line);max-width:48em}
+.faq details{margin:0;border-top:0;max-width:none}
+.faq summary{padding:20px 0;font-size:16px}
+.faq summary span::before{content:"Q.";color:var(--blue);font-weight:700;margin-right:8px}
+.faq .d-body{font-size:15px}
+
+/* talk (blue band) */
+.talk{background:var(--blue);color:#fff;border-top:0}
+.talk h2,.talk h3{color:#fff}
+.talk .lead{color:#fff}
+.talk .note{color:rgba(255,255,255,.86)}
+.talk a{color:#fff}
+.flow{list-style:none;margin:48px 0;max-width:760px;border-top:1px solid rgba(255,255,255,.35)}
+.flow li{display:grid;grid-template-columns:64px 1fr 56px;column-gap:16px;padding:20px 0;border-bottom:1px solid rgba(255,255,255,.35)}
+.flow .s-n{grid-row:span 2;font-size:28px;line-height:1.2;font-weight:400}
+.flow h3{margin-bottom:4px}
+.flow p{font-size:15px;color:rgba(255,255,255,.9)}
+@media (max-width:760px){.flow li{grid-template-columns:44px 1fr 40px;column-gap:8px}.flow-ill{width:36px;height:36px}.flow .s-n{font-size:24px}}
+.msg-area{max-width:560px}
+.msg-cap{font-size:14px;color:rgba(255,255,255,.86);margin-bottom:10px}
+.msg{background:#fff;color:var(--ink);border-radius:18px 18px 4px 18px;padding:16px 20px;font-size:15px;margin:0 0 32px auto;max-width:440px}
+@media (max-width:760px){.msg{margin-left:24px}}
+
+/* apply */
+.apply-row{display:grid;grid-template-columns:1fr auto;gap:24px 48px;align-items:center}
+@media (max-width:760px){.apply-row{grid-template-columns:1fr}}
+
+footer{border-top:1px solid var(--line);padding:56px 0 120px;font-size:14px;color:var(--ink-3)}
+.ft{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:24px}
+.ft img{height:56px;width:auto;margin-bottom:16px}
+.ft a{display:inline-block;padding:12px 0;margin-left:20px;text-decoration:none;color:var(--ink-2)}
+
+/* fixed bar (mobile): ヒーローを過ぎてから表示 */
+.fixbar{position:fixed;left:0;right:0;bottom:0;z-index:30;display:none;align-items:center;gap:16px;padding:10px 16px calc(10px + env(safe-area-inset-bottom));background:rgba(250,249,246,.97);border-top:1px solid var(--line);transform:translateY(110%);transition:transform .25s}
+.fixbar.is-show{transform:none}
+.fixbar .btn{flex:1;min-height:48px;padding:12px 16px;font-size:15px}
+.fixbar .textlink{font-size:14px;white-space:nowrap}
+@media (max-width:760px){.fixbar{display:flex}section{padding:72px 0}}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.fixbar{transition:none}}
+</style>
+</head>
+<body>
+
+<div style="background:#1b2340;color:#fff;font-size:13px;text-align:center;padding:8px 16px;line-height:1.6">見た目確認用のプレビューです。写真はすべて仮（Unsplashのフリー素材）で、実在の所属ライバー・スタッフではありません。</div>
+<header>
+  <div class="wrap hd">
+    <a class="logo" href="/"><img src="/assets/logo-horizontal.png" alt="Invent on the way" width="771" height="101"></a>
+    <nav class="nav">
+      <a href="#merit">メリット</a><a href="#support">サポート</a><a href="#conditions">契約の条件</a><a href="#staff">担当者</a><a href="#concept">私たちについて</a><a href="#faq">よくある質問</a>
+      <a class="btn" href="#talk">無料で相談する</a>
+    </nav>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero" id="top">
+  <div class="wrap hero-grid">
+    <div>
+      <p class="kicker">ライバー事務所 × コーチング</p>
+      <h1><span class="ib">なりたい自分に、</span><span class="ib">今日からなる。</span></h1>
+      <p class="sub-copy"><span class="ib">まず一歩。</span><span class="ib">動いた先で、</span><span class="ib">次の一手が見えてくる。</span></p>
+      <p class="lead">ライバー同士がコーチとして支え合い、配信で育てた信頼を、自分の商品や仕事につなげる事務所です。</p>
+      <div class="btns">
+        <a class="btn line" href="#TODO-line">LINEで無料相談</a>
+        <a class="textlink" href="#conditions">先に条件を見る ↓</a>
+      </div>
+      <p class="meta">未経験歓迎・全国オンライン対応</p>
+    </div>
+    <!-- 写真の差し替え：.ph の div を <img src="/assets/photos/hero.jpg" alt="（写真の説明）"> に置き換える -->
+    <figure class="photo hero-photo"><img src="/preview/photos/hero.webp" alt="仮写真：トップ"></figure>
+  </div>
+</section>
+
+<!-- APPS -->
+<section class="apps-band" id="apps" aria-labelledby="apps-title">
+  <h2 id="apps-title">対応アプリ</h2>
+  <div class="marquee"><ul class="marquee-track"><li><img src="/assets/apps/bigo.webp" alt="BIGO LIVE" width="240" height="240" loading="lazy"><span>BIGO LIVE</span></li><li><img src="/assets/apps/whowatch.webp" alt="ふわっち" width="240" height="240" loading="lazy"><span>ふわっち</span></li><li><img src="/assets/apps/palmu.webp" alt="Palmu" width="240" height="240" loading="lazy"><span>Palmu</span></li><li><img src="/assets/apps/mixch.webp" alt="ミクチャ" width="240" height="240" loading="lazy"><span>ミクチャ</span></li><li aria-hidden="true"><img src="/assets/apps/bigo.webp" alt="" width="240" height="240" loading="lazy"><span>BIGO LIVE</span></li><li aria-hidden="true"><img src="/assets/apps/whowatch.webp" alt="" width="240" height="240" loading="lazy"><span>ふわっち</span></li><li aria-hidden="true"><img src="/assets/apps/palmu.webp" alt="" width="240" height="240" loading="lazy"><span>Palmu</span></li><li aria-hidden="true"><img src="/assets/apps/mixch.webp" alt="" width="240" height="240" loading="lazy"><span>ミクチャ</span></li><li aria-hidden="true"><img src="/assets/apps/bigo.webp" alt="" width="240" height="240" loading="lazy"><span>BIGO LIVE</span></li><li aria-hidden="true"><img src="/assets/apps/whowatch.webp" alt="" width="240" height="240" loading="lazy"><span>ふわっち</span></li><li aria-hidden="true"><img src="/assets/apps/palmu.webp" alt="" width="240" height="240" loading="lazy"><span>Palmu</span></li><li aria-hidden="true"><img src="/assets/apps/mixch.webp" alt="" width="240" height="240" loading="lazy"><span>ミクチャ</span></li><li aria-hidden="true"><img src="/assets/apps/bigo.webp" alt="" width="240" height="240" loading="lazy"><span>BIGO LIVE</span></li><li aria-hidden="true"><img src="/assets/apps/whowatch.webp" alt="" width="240" height="240" loading="lazy"><span>ふわっち</span></li><li aria-hidden="true"><img src="/assets/apps/palmu.webp" alt="" width="240" height="240" loading="lazy"><span>Palmu</span></li><li aria-hidden="true"><img src="/assets/apps/mixch.webp" alt="" width="240" height="240" loading="lazy"><span>ミクチャ</span></li><li aria-hidden="true"><img src="/assets/apps/bigo.webp" alt="" width="240" height="240" loading="lazy"><span>BIGO LIVE</span></li><li aria-hidden="true"><img src="/assets/apps/whowatch.webp" alt="" width="240" height="240" loading="lazy"><span>ふわっち</span></li><li aria-hidden="true"><img src="/assets/apps/palmu.webp" alt="" width="240" height="240" loading="lazy"><span>Palmu</span></li><li aria-hidden="true"><img src="/assets/apps/mixch.webp" alt="" width="240" height="240" loading="lazy"><span>ミクチャ</span></li><li aria-hidden="true"><img src="/assets/apps/bigo.webp" alt="" width="240" height="240" loading="lazy"><span>BIGO LIVE</span></li><li aria-hidden="true"><img src="/assets/apps/whowatch.webp" alt="" width="240" height="240" loading="lazy"><span>ふわっち</span></li><li aria-hidden="true"><img src="/assets/apps/palmu.webp" alt="" width="240" height="240" loading="lazy"><span>Palmu</span></li><li aria-hidden="true"><img src="/assets/apps/mixch.webp" alt="" width="240" height="240" loading="lazy"><span>ミクチャ</span></li></ul></div>
+</section>
+
+<!-- FIRST TIME -->
+<section id="first">
+  <div class="wrap">
+    <h2>はじめてでも、大丈夫です</h2>
+    <p class="lead">配信を始める前によくいただく不安に、先にお答えします。</p>
+    <div class="worries">
+      <div class="worry"><svg class="ill" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 14h34a6 6 0 0 1 6 6v16a6 6 0 0 1-6 6H26l-9 8v-8h-7a6 6 0 0 1-6-6V20a6 6 0 0 1 6-6z"/><path d="M27 34c-5-3.4-8-6-8-9a3.6 3.6 0 0 1 8-1 3.6 3.6 0 0 1 8 1c0 3-3 5.6-8 9z"/><path d="M52 8l4-4M56 14h5" stroke="#b3ec00" stroke-width="3"/></svg><p class="q">何を話せばいいかわからない</p><h3><span class="ib">好きなこと・得意なことから</span><span class="ib">一緒に考えます</span></h3><p>配信のテーマや企画は、担当者や仲間と相談しながら決められます。最初から完璧な企画がなくても大丈夫です。</p></div>
+      <div class="worry"><svg class="ill" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="26" cy="32" r="18"/><path d="M26 21v11l7 5"/><rect x="42" y="26" width="16" height="28" rx="3"/><path d="M48 49h4"/><path d="M8 10l5 4" stroke="#b3ec00" stroke-width="3"/></svg><p class="q">仕事や学校と両立できる？</p><h3>生活に合うペースで続けられます</h3><p>事務所独自の一律ノルマや配信の強制はありません。アプリ側の条件は、事前にご案内します。</p></div>
+      <div class="worry"><svg class="ill" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="20" cy="22" r="7"/><path d="M8 50c0-9 5.4-15 12-15s12 6 12 15"/><circle cx="44" cy="22" r="7"/><path d="M32 50c0-9 5.4-15 12-15s12 6 12 15"/><path d="M27 8l3-4M34 8l-3-4" stroke="#b3ec00" stroke-width="3"/></svg><p class="q">ひとりで続けられるか不安</p><h3><span class="ib">ライバー同士が</span><span class="ib">コーチとして支え合います</span></h3><p>配信のあとに仲間と対話して振り返り、次の配信で新しいやり方を試せます。迷ったときは担当者にも相談できます。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- MERIT -->
+<section id="merit">
+  <div class="wrap">
+    <h2>所属のメリット</h2>
+    <p class="lead">費用をかけずに始められ、配信のペースは自分で決められます。<br>対応アプリは BIGO LIVE・ふわっち・Palmu・ミクチャです。</p>
+
+    <div class="keys">
+      <div class="key"><div class="k-t">対象ライバー報酬</div><div class="k-n">100<small>%</small></div><div class="k-s">対象報酬を全額還元</div></div>
+      <div class="key"><div class="k-t">登録・所属費</div><div class="k-n">0<small>円</small></div><div class="k-s">初期・月額費用なし</div></div>
+      <div class="key"><div class="k-t">配信ノルマ</div><div class="k-n word">なし</div><div class="k-s">本人のペースで</div></div>
+    </div>
+
+    <ul class="merits">
+      <li class="merit"><b>退所時の定額違約金なし</b><span>契約に沿って退所可能</span></li>
+      <li class="merit"><b>退所後の活動の自由</b><span>契約終了後の活動</span></li>
+      <li class="merit"><b>画像制作サポート</b><span>アイコン・告知画像など</span></li>
+      <li class="merit"><b>プロフィール掲載</b><span>公式サイトで紹介</span></li>
+      <li class="merit"><b>贈り物の受取支援</b><span>事務所住所で受取</span></li>
+      <li class="merit"><b>ライバー同士のコーチング</b><span>仲間と対話して振り返り</span></li>
+    </ul>
+
+    <p class="note" style="margin-top:24px">対象報酬・アプリの活動条件・退所手続きは、<a class="nw" href="#conditions">契約の条件</a>で確認できます。質問だけでも大丈夫です。相談だけで契約が決まることはありません。</p>
+  </div>
+</section>
+
+<!-- VOICES -->
+<!-- 写真とコメントが届いたら差し替え。顔出しNGの方は手元・シルエット写真でも可 -->
+<section id="voices">
+  <div class="wrap">
+    <h2>所属ライバーの声</h2>
+    <div class="voices">
+      <figure class="voice">
+        <div class="photo voice-photo" title="ライバー本人の写真（顔出しNGなら手元・シルエット）"><img src="/preview/photos/voice1.webp" alt="仮写真：ライバー"></div>
+        <blockquote>（ここに本人のコメント。60〜100字ほど。所属して変わったこと、コーチングで気づいたことなど）</blockquote>
+        <figcaption><b>ニックネーム</b><span>20代・BIGO LIVE</span></figcaption>
+      </figure>
+      <figure class="voice">
+        <div class="photo voice-photo" title="ライバー本人の写真（顔出しNGなら手元・シルエット）"><img src="/preview/photos/voice2.webp" alt="仮写真：ライバー"></div>
+        <blockquote>（ここに本人のコメント。60〜100字ほど。所属して変わったこと、コーチングで気づいたことなど）</blockquote>
+        <figcaption><b>ニックネーム</b><span>20代・BIGO LIVE</span></figcaption>
+      </figure>
+      <figure class="voice">
+        <div class="photo voice-photo" title="ライバー本人の写真（顔出しNGなら手元・シルエット）"><img src="/preview/photos/voice3.webp" alt="仮写真：ライバー"></div>
+        <blockquote>（ここに本人のコメント。60〜100字ほど。所属して変わったこと、コーチングで気づいたことなど）</blockquote>
+        <figcaption><b>ニックネーム</b><span>20代・BIGO LIVE</span></figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<!-- SUPPORT -->
+<section id="support">
+  <div class="wrap">
+    <h2>所属ライバーが使えるサポート</h2>
+    <p class="lead">配信を始める前の準備から、活動中の相談まで。担当者や仲間と<span class="nw">一緒に考えられます。</span></p>
+
+    <div class="sup">
+      <div class="sup-item"><div class="num">01</div><h3>アイコン・告知画像の相談</h3><p>アイコンや配信告知画像の見せ方を、雰囲気や伝えたいことから相談できます。</p></div>
+      <div class="sup-item"><div class="num">02</div><h3>公式サイトでプロフィールを紹介</h3><p>配信の特徴や人柄を、公式サイトの紹介ページで伝えます。</p></div>
+      <div class="sup-item"><div class="num">03</div><h3>贈り物は事務所住所で受け取り</h3><p>リスナーさんからの贈り物は、事務所住所のライバーさん宛に送っていただけます。お届け先を案内する際は、担当者にご相談ください。</p></div>
+    </div>
+
+    <div class="consult">
+      <div>
+        <h3>迷ったときの相談相手がいます</h3>
+        <p class="body" style="font-size:15px">迷ったときに担当者や仲間と整理し、次の一歩を考えられます。</p>
+      </div>
+      <ul><li>配信準備</li><li>テーマ・企画</li><li>イベント</li><li>リスナー対応</li><li>活動の振り返り</li></ul>
+    </div>
+
+    <details>
+      <summary>サポートの範囲・ご利用前の確認について</summary>
+      <div class="d-body">支援の内容・範囲は、アプリや目標、活動状況によって異なります。画像制作の費用・点数・修正・納期、プロフィールの掲載内容・時期、贈り物の受取条件は、利用前に担当者へご確認ください。成果や無制限の対応をお約束するものではありません。<br>アカウント停止や決済など、アプリ側でのみ対応できる問題は、公式窓口をご案内する場合があります。</div>
+    </details>
+  </div>
+</section>
+
+<!-- STAFF -->
+<section id="staff">
+  <div class="wrap">
+    <h2>相談にのる担当者・コーチ</h2>
+    <p class="lead">LINEで相談すると、このメンバーが対応します。</p>
+    <div class="staffs">
+      <figure class="staff">
+        <div class="photo staff-photo"><img src="/preview/photos/staff1.webp" alt="仮写真：担当者"></div>
+        <figcaption>
+          <span class="role">マネージャー</span>
+          <b>お名前</b>
+          <p>（ひとこと。どんな相談にのれるか、大切にしていることなど。40〜60字ほど）</p>
+        </figcaption>
+      </figure>
+      <figure class="staff">
+        <div class="photo staff-photo"><img src="/preview/photos/staff2.webp" alt="仮写真：担当者"></div>
+        <figcaption>
+          <span class="role">配信コーチ</span>
+          <b>お名前</b>
+          <p>（ひとこと。どんな相談にのれるか、大切にしていることなど。40〜60字ほど）</p>
+        </figcaption>
+      </figure>
+      <figure class="staff">
+        <div class="photo staff-photo"><img src="/preview/photos/staff3.webp" alt="仮写真：担当者"></div>
+        <figcaption>
+          <span class="role">クリエイティブ担当</span>
+          <b>お名前</b>
+          <p>（ひとこと。どんな相談にのれるか、大切にしていることなど。40〜60字ほど）</p>
+        </figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<!-- CONDITIONS -->
+<section id="conditions">
+  <div class="wrap">
+    <h2>報酬・費用・契約の条件</h2>
+    <p class="lead" style="margin-bottom:32px">所属前に知っておいてほしい条件を、良い点も注意点も<span class="nw">まとめました。</span></p>
+
+    <table class="summary">
+      <tr><th>報酬</th><td>対象ライバー報酬の<b>100％</b>（事務所独自の分配手数料なし）</td></tr>
+      <tr><th>費用</th><td>登録料・所属費用・月額費用 <b>0円</b></td></tr>
+      <tr><th>配信ノルマ</th><td>事務所独自の一律ノルマなし</td></tr>
+      <tr><th>契約期間</th><td>1年（途中終了は30日前までに通知）</td></tr>
+      <tr><th>退所</th><td>定額の違約金なし</td></tr>
+    </table>
+
+    <div class="cond">
+      <div class="c-label">報酬</div>
+      <div>
+        <h3>対象報酬から、事務所の分配手数料は引きません</h3>
+        <p class="body">対象ライバー報酬から、事務所独自の分配手数料は差し引きません。</p>
+        <p class="note">※100％は各アプリの規定で発生する対象ライバー報酬のこと。ギフト購入額の全額還元ではなく、報酬の発生・受取にはアプリごとの条件があります。</p>
+        <p class="links"><a href="#TODO-reward-policy">100％還元の範囲・受取方法 →</a></p>
+        <details>
+          <summary>報酬の実費・控除・調整について</summary>
+          <div class="d-body">通常報酬・ボーナス・キャンペーンは対象項目と条件を個別に確認します。税法上必要な控除、返金・実績訂正等の調整、アプリ側の換金手数料等は、事務所独自の分配手数料とは別です。収入や成果を保証するものではありません。</div>
+        </details>
+      </div>
+    </div>
+
+    <div class="cond">
+      <div class="c-label">配信ペース</div>
+      <div>
+        <h3>事務所独自の配信ノルマはありません</h3>
+        <p class="body">生活に合うペースを大切にし、事務所独自の一律ノルマや配信の<span class="nw">強制はありません。</span></p>
+        <p class="note">※アプリの公式登録・報酬制度・イベント等には、配信日数や時間などの条件があります。ミクチャでも、希望するプランごとに対象・達成条件を確認し、事前にご案内します。</p>
+        <p class="links">各アプリの報酬・条件：<a href="#TODO-bigo">BIGO LIVE</a><a href="#TODO-whowatch">ふわっち</a><a href="#TODO-palmu">Palmu</a><a href="#TODO-mixch">ミクチャ</a></p>
+      </div>
+    </div>
+
+    <div class="cond">
+      <div class="c-label">費用</div>
+      <div>
+        <h3>登録料・所属費用・月額費用は0円です</h3>
+        <p class="body">相談・応募とレッスン料も無料です。</p>
+        <p class="note">※通信費・配信機材などは原則ご本人の負担です。個別制作などで費用が関わる場合は、事前に<span class="nw">ご案内します。</span></p>
+      </div>
+    </div>
+
+    <div class="cond">
+      <div class="c-label">退所時のお金</div>
+      <div>
+        <h3>退所に定額の違約金はかかりません</h3>
+        <p class="body">契約に沿った手続きで退所できます。</p>
+        <p class="note">※契約違反などで損害が生じた場合の責任は別です。貸与品がある場合は、契約に沿って返却が必要です。</p>
+      </div>
+    </div>
+
+    <div class="cond">
+      <div class="c-label">期間・手続き</div>
+      <div>
+        <h3>1年契約で、途中でも終了できます</h3>
+        <table class="term">
+          <tr><th>契約期間</th><td>締結日から1年間</td></tr>
+          <tr><th>途中終了</th><td>30日前までに、書面または電子的方法で通知</td></tr>
+          <tr><th>更新</th><td>満了日の30日前までに更新しない旨の通知がなければ、同じ条件で1年間更新</td></tr>
+        </table>
+        <p class="note">※通知方法・終了日を担当者と確認し、アプリ側の登録解除等の手続きも別途確認します。</p>
+      </div>
+    </div>
+
+    <div class="cond" style="border-bottom:1px solid var(--line)">
+      <div class="c-label">その後の活動</div>
+      <div>
+        <h3>契約終了後の活動は自由です</h3>
+        <p class="body">独立して配信を続けたり、ほかの事務所と契約したりできます。</p>
+        <p class="note">※契約終了前の他事務所との契約・所属には制限があります。終了後も秘密保持等の約束は続きます。アカウントの継続利用・再登録の可否や時期は、アプリの規定によります。無条件の保証はありません。</p>
+      </div>
+    </div>
+
+    <div class="contract">
+      <b>契約書は、署名前に確認できます。</b>
+      <p class="body" style="margin-top:6px">わからないところを残さずに、<span class="nw">納得してから。</span></p>
+      <p class="note" style="margin-top:8px">標準的な契約内容の概要です。個別の合意やアプリによって条件が異なる場合は、契約前にご説明します。</p>
+    </div>
+  </div>
+</section>
+
+<!-- CONCEPT + APPROACH -->
+<section id="concept">
+  <div class="wrap">
+    <div class="concept-head">
+      <div>
+        <h2><span class="ib">「共に体現する」を、</span><span class="ib">配信の現場で。</span></h2>
+        <p class="lead">まず配信する。ライバー同士がコーチとして対話し、状態を整え、次の配信で新しいやり方を試す。この繰り返しで配信を磨き、視聴者との信頼を育て、自分の商品や仕事につなげていく。</p>
+      </div>
+      <div class="concept-logo"><img src="/assets/logo-basic.png" alt="Invent on the way" width="1428" height="433"></div>
+    </div>
+
+    <div class="concept">
+      <div class="concept-item"><div class="num">I / INVENT</div><h3>自分の意志で踏み出す。</h3><p>やってみて初めてわかることがある。まず一歩を、自分で選ぶ。</p></div>
+      <div class="concept-item"><div class="num">w / WAY</div><h3>仲間と試しながら進む。</h3><p>曲線に、実践と振り返りを行き来しながら自分の道をつくる姿を重ねています。</p></div>
+      <div class="concept-item"><div class="num">y / NEXT STEP</div><h3>経験を次の一歩につなぐ。</h3><p>先へ伸びる形に、配信で得た手応えを次の挑戦へつなぐ意志を込めました。</p></div>
+    </div>
+
+    <p class="embody">CoEmbodyの「共に体現する」は、この姿勢を仲間と日々の行動に移すことです。</p>
+
+    <div class="approach">
+      <h3 style="font-size:22px">決めるのはライバー本人です</h3>
+      <div>
+        <p class="body">もっと挑戦したいときも、少しペースを落としたいときも、大切にしたいのはライバー本人の気持ちです。</p>
+        <p class="body">配信を強制したり、必要以上に活動を促したりせず、ご本人の意思を尊重します。迷いや困りごとがあるときは、できる限り寄り添い、一緒に考えます。選んだ配信のかたちを、<span class="nw">Invent on the way</span> は支えていきます。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MESSAGE -->
+<section id="message">
+  <div class="wrap message">
+    <div class="photo message-photo"><img src="/preview/photos/message.webp" alt="仮写真：代表"></div>
+    <div>
+      <h2>代表メッセージ</h2>
+      <div class="message-body">
+        <p>（ここに代表メッセージ。なぜこの事務所をつくったのか、ライバーにどうなってほしいか、「共に体現する」に込めた思いなど。300〜500字ほど）</p>
+      </div>
+      <p class="sign">CoEmbody株式会社 代表<b>お名前</b></p>
+    </div>
+  </div>
+</section>
+
+<!-- SUITS -->
+<section id="suits">
+  <div class="wrap">
+    <h2>こんな人に向いています</h2>
+    <ul class="suits">
+      <li>配信を、自分の商品や仕事につなげたい<span>配信で育てた信頼を、次の活動の土台にしたい人</span></li>
+      <li>仲間と試しながら続けたい<span>ひとりで悩むより、対話しながら改善したい人</span></li>
+      <li>未経験から、自分のペースで始めたい<span>仕事や学校、家庭と両立しながら挑戦したい人</span></li>
+      <li>今の配信を振り返って伸ばしたい<span>経験はあるけれど、次の一手を見つけたい人</span></li>
+      <li>好きなこと・得意なことを発信したい<span>歌・雑談・趣味など、自分らしい配信をしたい人</span></li>
+      <li>まず一歩を、自分で踏み出したい<span>「やってみたい」を行動に移したい人</span></li>
+    </ul>
+  </div>
+</section>
+
+<!-- ALREADY -->
+<section id="already">
+  <div class="wrap">
+    <h2>ほかの事務所に所属中の方へ</h2>
+    <p class="lead">活動するアプリや現在の契約によっては、<span class="nw">Invent on the way</span> への所属を相談できる場合があります。</p>
+    <p class="body" style="margin-top:12px">今の事務所との契約と各アプリの規定を尊重し、必要な確認をしたうえでご案内します。所属先・活動中のアプリ・希望する活動を、差し支えない範囲でお知らせください。</p>
+    <p class="note" style="margin-top:20px">別アプリなら必ず所属できるわけではありません。所属・移籍・並行活動の可否や時期は個別確認となります。現在の契約に反する登録や活動開始はお控えください。ミクチャでの他アプリとの並行活動や専属条件も、適用される契約・プランごとに確認します。</p>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq">
+  <div class="wrap">
+    <h2>よくある質問</h2>
+    <div class="faq">
+      <details><summary><span>配信をしたことがなくても大丈夫ですか？</span></summary><div class="d-body">大丈夫です。配信の準備やテーマ選びから、担当者や仲間と一緒に考えられます。</div></details>
+      <details><summary><span>顔出しは必須ですか？</span></summary><div class="d-body">顔出しは自由です。顔を出さない配信も選べます。どんな見せ方がよいかは、希望するアプリに合わせて一緒に考えます。</div></details>
+      <details><summary><span>地方に住んでいても所属できますか？</span></summary><div class="d-body">全国どこからでもオンラインで相談・所属手続きができます。</div></details>
+      <details><summary><span>毎日配信できなくても大丈夫ですか？</span></summary><div class="d-body">事務所独自の一律ノルマはありません。ただし、アプリの公式登録・報酬制度・イベント等には、配信日数や時間などの条件があります。希望するアプリの条件は事前にご案内します。</div></details>
+      <details><summary><span>相談や応募をしたら、必ず所属しなければいけませんか？</span></summary><div class="d-body">いいえ。相談した時点で契約が決まることはありません。支援内容・報酬・契約・退所の条件を確認し、ご本人の意思で所属を決めてから手続きに進みます。</div></details>
+      <details><summary><span>機材は必要ですか？費用はかかりますか？</span></summary><div class="d-body">登録料・所属費用・月額費用は0円です。通信費・配信機材などは原則ご本人の負担です。必要な準備は、希望するアプリに合わせてご案内します。</div></details>
+      <details><summary><span>年齢の条件はありますか？</span></summary><div class="d-body">未成年の方は、保護者の同意が必要です。また、年齢の条件はアプリごとに異なるため、希望するアプリの規定を確認したうえでご案内します。</div></details>
+      <details><summary><span>ほかの事務所に所属中でも相談できますか？</span></summary><div class="d-body">相談できます。今の事務所との契約と各アプリの規定を尊重し、必要な確認をしたうえでご案内します。詳しくは<a href="#already">ほかの事務所に所属中の方へ</a>をご覧ください。</div></details>
+    </div>
+  </div>
+</section>
+
+<!-- TALK -->
+<section class="talk" id="talk">
+  <div class="wrap">
+    <h2>所属を決める前に、<span class="ib">LINEで相談できます</span></h2>
+    <p class="lead">気になることを聞くだけでも大丈夫です。状況に合わせてご案内します。</p>
+
+    <h3 style="font-size:20px;margin-top:48px">相談から活動開始までの流れ</h3>
+    <!-- TODO: 面談の所要時間・形式、連絡までの目安日数が決まっていれば追記 -->
+    <ol class="flow" style="margin-top:20px">
+      <li><span class="s-n">1</span><svg class="ill flow-ill" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="18" y="6" width="28" height="52" rx="5"/><path d="M28 52h8"/><path d="M24 18h16a3 3 0 0 1 3 3v8a3 3 0 0 1-3 3h-9l-5 4v-4h-2a3 3 0 0 1-3-3v-8a3 3 0 0 1 3-3z"/></svg><h3>LINEで相談・応募</h3><p>知りたいことや、希望するアプリをお送りください。ニックネームで大丈夫です。</p></li>
+      <li><span class="s-n">2</span><svg class="ill flow-ill" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 44V30a12 12 0 0 1 24 0v14l4 5H16z"/><path d="M28 54a4 4 0 0 0 8 0"/><path d="M32 12v6"/></svg><h3>担当者からご連絡</h3><p>内容を確認し、面談の日程を担当者からご連絡します。</p></li>
+      <li><span class="s-n">3</span><svg class="ill flow-ill" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="10" y="12" width="44" height="30" rx="3"/><path d="M4 50h56l-4-8H8z"/><circle cx="32" cy="24" r="5"/><path d="M23 38c1.6-4.5 5-7 9-7s7.4 2.5 9 7"/></svg><h3>オンライン面談</h3><p>配信の経験や目標、生活のペースをお聞きします。お住まいの地域に関係なく、オンラインで行います。</p></li>
+      <li><span class="s-n">4</span><svg class="ill flow-ill" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 6h22l10 10v42H16z"/><path d="M38 6v10h10"/><path d="M22 26h20M22 33h20M22 40h10"/><path d="M34 47l4 4 8-9"/></svg><h3>条件と契約書の確認</h3><p>支援内容・報酬・契約・退所の条件を一緒に確認します。契約書は署名前に確認できます。</p></li>
+      <li><span class="s-n">5</span><svg class="ill flow-ill" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="22" y="8" width="20" height="34" rx="3"/><path d="M29 20l8 5-8 5z"/><path d="M32 42v10M24 58l8-6 8 6"/><path d="M48 12c3 3 3 9 0 12M53 8c5 5 5 15 0 20"/></svg><h3>納得して契約、活動スタート</h3><p>ご本人の意思で所属を決めてから契約します。アプリの登録や配信の準備を、担当者と進めていきます。</p></li>
+    </ol>
+
+    <div class="msg-area">
+      <p class="msg-cap">最初のメッセージは、こんな一文で大丈夫です。</p>
+      <div class="msg">所属を検討しています。メリットや契約について、もう少し詳しく聞きたいです。</div>
+    </div>
+
+    <div class="btns"><a class="btn line" href="#TODO-line">LINEで無料相談</a></div>
+    <p class="note" style="margin-top:20px">相談した時点で契約が決まることはありません。24時間受付。即時の返信をお約束するものではありません。<br>所属・登録の可否や必要期間は、アプリや現在の状況によって異なります。<br>年齢・顔出し・活動準備などの疑問は <a href="#faq">よくある質問へ →</a></p>
+  </div>
+</section>
+
+<!-- APPLY -->
+<section id="apply">
+  <div class="wrap apply-row">
+    <div>
+      <h3 style="font-size:22px">条件を確認したうえで、応募へ進む方へ</h3>
+      <p class="body">ニックネームで希望を送信できます。まだ気になる点がある方はLINEでご相談ください。</p>
+    </div>
+    <a class="btn ghost" href="#TODO-apply">ライバー所属応募フォームへ</a>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap ft">
+    <div>
+      <img src="/assets/logo-basic.png" alt="Invent on the way" width="1428" height="433">
+      <div>ライバー事務所 × コーチング</div>
+      <div>運営 CoEmbody株式会社 「共に体現する」</div>
+      <div style="margin-top:8px">© 2026 CoEmbody株式会社</div>
+      <div style="margin-top:24px;font-size:12px">仮写真：Unsplash（Lechon Kirb / Benjamin Combs / Roksolana Zasiadko / Alexander Shustov / Eutah Mizushima / Olu Eletu / Alejandro Escamilla / hieu le）</div>
+
+    </div>
+    <div><a href="#TODO-instagram">Instagram</a><a href="#TODO-x">X</a></div>
+  </div>
+</footer>
+
+<div class="fixbar" id="fixbar">
+  <a class="btn line" href="#TODO-line">LINEで無料相談</a>
+  <a class="textlink" href="#apply">応募する</a>
+</div>
+
+<script>
+// スマホの固定バーは、ヒーローを過ぎてから、相談セクションが見えるまでの間だけ表示
+(function(){
+  var bar=document.getElementById('fixbar'),hero=document.getElementById('top'),talk=document.getElementById('talk');
+  if(!('IntersectionObserver' in window)){bar.classList.add('is-show');return;}
+  var heroVisible=true,talkVisible=false;
+  function update(){bar.classList.toggle('is-show',!heroVisible&&!talkVisible);}
+  new IntersectionObserver(function(e){heroVisible=e[0].isIntersecting;update();}).observe(hero);
+  new IntersectionObserver(function(e){talkVisible=e[0].isIntersecting;update();}).observe(talk);
+})();
+</script>
+</body>
+</html>
