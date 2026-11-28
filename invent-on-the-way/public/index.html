@@ -28,6 +28,7 @@
   --ink-3:#5f6680;
   --line:#e1e2e8;
   --blue-soft:#eef0ff;
+  --line-green:#06c755;  /* LINEボタン専用 */
   --radius:10px;
   --max:1040px;
 }
@@ -59,6 +60,7 @@ header{position:sticky;top:0;z-index:20;background:rgba(250,249,246,.96);border-
 /* buttons */
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:52px;padding:14px 32px;border-radius:999px;font-weight:700;font-size:16px;text-decoration:none;border:1.5px solid var(--blue);background:var(--blue);color:#fff;transition:opacity .15s}
 .btn:hover{opacity:.88}
+.btn.line{background:var(--line-green);border-color:var(--line-green);color:#fff}
 .btn.ghost{background:transparent;color:var(--blue)}
 .btn.white{background:#fff;border-color:#fff;color:var(--blue)}
 .btns{display:flex;flex-wrap:wrap;align-items:center;gap:16px 24px}
@@ -206,7 +208,7 @@ footer{border-top:1px solid var(--line);padding:56px 0 120px;font-size:14px;colo
       <p class="sub-copy"><span class="ib">まず一歩。</span><span class="ib">動いた先で、</span><span class="ib">次の一手が見えてくる。</span></p>
       <p class="lead">ライバー同士がコーチとして支え合い、配信で育てた信頼を、自分の商品や仕事につなげる事務所です。</p>
       <div class="btns">
-        <a class="btn" href="#TODO-line">LINEで無料相談</a>
+        <a class="btn line" href="#TODO-line">LINEで無料相談</a>
         <a class="textlink" href="#conditions">先に条件を見る ↓</a>
       </div>
       <p class="meta">未経験歓迎・全国オンライン対応</p>
@@ -409,7 +411,7 @@ footer{border-top:1px solid var(--line);padding:56px 0 120px;font-size:14px;colo
       <div class="msg">所属を検討しています。メリットや契約について、もう少し詳しく聞きたいです。</div>
     </div>
 
-    <div class="btns"><a class="btn white" href="#TODO-line">LINEで無料相談</a></div>
+    <div class="btns"><a class="btn line" href="#TODO-line">LINEで無料相談</a></div>
     <p class="note" style="margin-top:20px">相談した時点で契約が決まることはありません。24時間受付。即時の返信をお約束するものではありません。<br>所属・登録の可否や必要期間は、アプリや現在の状況によって異なります。<br>年齢・顔出し・活動準備などの疑問は <a href="#TODO-faq">よくある質問へ →</a></p>
   </div>
 </section>
@@ -438,7 +440,7 @@ footer{border-top:1px solid var(--line);padding:56px 0 120px;font-size:14px;colo
 </footer>
 
 <div class="fixbar" id="fixbar">
-  <a class="btn" href="#TODO-line">LINEで無料相談</a>
+  <a class="btn line" href="#TODO-line">LINEで無料相談</a>
   <a class="textlink" href="#apply">応募する</a>
 </div>
 
