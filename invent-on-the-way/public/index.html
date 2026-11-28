@@ -16,6 +16,9 @@
   - 所属応募フォームのURL   … href="#TODO-apply" の箇所
   - 各アプリの報酬・条件ページ、100％還元の範囲・受取方法、よくある質問、Instagram / X … href="#TODO-…" の箇所
   - 報酬・費用・契約期間などの条件が、自社の契約内容と一致しているか確認・修正すること
+  - 写真：public/assets/photos/ に置き、各枠の <div class="ph">…</div> を <img src="/assets/photos/ファイル名.jpg" alt="写真の説明"> に置き換える
+      ヒーロー（横長/縦長）、所属ライバーの声×3（正方形）、担当者×3（正方形）、代表（縦4:5）
+  - 所属ライバーの声・担当者・代表メッセージの文章と名前（「（ここに…）」「お名前」の箇所）
 -->
 <style>
 :root{
@@ -82,7 +85,7 @@ h3{font-size:18px;line-height:1.6;font-weight:700;letter-spacing:.04em;font-feat
 .hero .sub-copy{margin:28px 0 10px;font-size:18px;font-weight:700}
 .hero .lead{margin-bottom:36px;color:var(--ink-2);font-size:16px}
 .hero .meta{margin-top:24px;font-size:14px;color:var(--ink-3)}
-.hero-photo{aspect-ratio:4/5;border-radius:var(--radius);background:#f0efeb;display:flex;align-items:center;justify-content:center;text-align:center;color:var(--ink-3);font-size:13px;padding:24px}
+.hero-photo{aspect-ratio:4/5}
 @media (max-width:860px){
   .hero{padding:48px 0 64px}
   .hero-grid{grid-template-columns:1fr;gap:40px}
@@ -171,6 +174,50 @@ details .d-body{padding:0 0 18px;font-size:14px;color:var(--ink-2);line-height:1
   .marquee-track li[aria-hidden]{display:none}
 }
 
+
+/* illustrations */
+.ill{display:block;width:56px;height:56px;color:var(--blue);margin-bottom:16px}
+.flow-ill{grid-column:3;grid-row:1/span 2;width:48px;height:48px;color:#fff;margin:0;align-self:center;opacity:.95}
+
+/* photo slots（.ph を <img> に置き換えるとそのまま写真が入る） */
+.photo{position:relative;margin:0}
+.photo img{display:block;width:100%;height:100%;object-fit:cover;border-radius:var(--radius)}
+.photo .ph{width:100%;height:100%;border-radius:var(--radius)}
+.ph{background:#eceae4;color:var(--ink-3);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;text-align:center;font-size:13px;line-height:1.7;padding:20px;border:1px dashed #c9c7bf}
+.ph svg{width:28px;height:28px;opacity:.7}
+/* ブランドの飾り：ライムの斜め線（ロゴの y の先端と同じ角度感） */
+.photo.deco::after,.hero-photo::after{content:"";position:absolute;right:-10px;top:24px;width:56px;height:10px;background:var(--lime);border-radius:3px;transform:skewX(-35deg)}
+
+/* voices */
+.voices{display:grid;grid-template-columns:repeat(3,1fr);gap:32px;margin-top:40px}
+.voice{margin:0;display:flex;flex-direction:column}
+.voice-photo{width:120px;height:120px;margin-bottom:20px}
+.voice-photo .ph,.voice-photo img{border-radius:50%}
+.voice-photo .ph{padding:8px}
+.voice-photo .ph span{display:none}
+.voice blockquote{margin:0;font-size:15px;color:var(--ink);line-height:1.9;flex:1}
+.voice figcaption{margin-top:14px;padding-top:12px;border-top:1px solid var(--line);font-size:14px;color:var(--ink-3)}
+.voice figcaption b{color:var(--ink);margin-right:10px}
+@media (max-width:760px){.voices{grid-template-columns:1fr;gap:36px}.voice{display:grid;grid-template-columns:88px 1fr;column-gap:16px}.voice-photo{width:88px;height:88px;grid-row:span 2;margin:0}}
+
+/* staff */
+.staffs{display:grid;grid-template-columns:repeat(3,1fr);gap:32px;margin-top:40px}
+.staff{margin:0}
+.staff-photo{aspect-ratio:1/1;margin-bottom:16px}
+.staff .role{display:block;font-size:13px;font-weight:700;color:var(--blue);letter-spacing:.06em}
+.staff b{display:block;font-size:18px;margin:2px 0 6px}
+.staff p{font-size:14px;color:var(--ink-2)}
+@media (max-width:760px){.staffs{grid-template-columns:1fr;gap:28px}.staff{display:grid;grid-template-columns:112px 1fr;column-gap:16px;align-items:start}.staff-photo{margin:0}.staff-photo .ph{padding:8px}.staff-photo .ph span{display:none}}
+
+/* message */
+.message{display:grid;grid-template-columns:.8fr 1.2fr;gap:64px;align-items:start}
+.message-photo{aspect-ratio:4/5}
+.message-body p{color:var(--ink-2);max-width:34em}
+.message-body p+p{margin-top:14px}
+.sign{margin-top:28px;font-size:14px;color:var(--ink-3)}
+.sign b{display:block;font-size:20px;color:var(--ink);letter-spacing:.1em}
+@media (max-width:760px){.message{grid-template-columns:1fr;gap:28px}.message-photo{max-width:320px}}
+
 /* first-time worries */
 .worries{display:grid;grid-template-columns:repeat(3,1fr);gap:40px;margin-top:40px}
 .worry .q{font-size:15px;color:var(--ink-3);font-weight:500;margin-bottom:10px;padding-bottom:12px;border-bottom:1px solid var(--line)}
@@ -199,11 +246,11 @@ details .d-body{padding:0 0 18px;font-size:14px;color:var(--ink-2);line-height:1
 .talk .note{color:rgba(255,255,255,.86)}
 .talk a{color:#fff}
 .flow{list-style:none;margin:48px 0;max-width:760px;border-top:1px solid rgba(255,255,255,.35)}
-.flow li{display:grid;grid-template-columns:64px 1fr;column-gap:16px;padding:20px 0;border-bottom:1px solid rgba(255,255,255,.35)}
+.flow li{display:grid;grid-template-columns:64px 1fr 56px;column-gap:16px;padding:20px 0;border-bottom:1px solid rgba(255,255,255,.35)}
 .flow .s-n{grid-row:span 2;font-size:28px;line-height:1.2;font-weight:400}
 .flow h3{margin-bottom:4px}
 .flow p{font-size:15px;color:rgba(255,255,255,.9)}
-@media (max-width:760px){.flow li{grid-template-columns:44px 1fr;column-gap:8px}.flow .s-n{font-size:24px}}
+@media (max-width:760px){.flow li{grid-template-columns:44px 1fr 40px;column-gap:8px}.flow-ill{width:36px;height:36px}.flow .s-n{font-size:24px}}
 .msg-area{max-width:560px}
 .msg-cap{font-size:14px;color:rgba(255,255,255,.86);margin-bottom:10px}
 .msg{background:#fff;color:var(--ink);border-radius:18px 18px 4px 18px;padding:16px 20px;font-size:15px;margin:0 0 32px auto;max-width:440px}
@@ -233,7 +280,7 @@ footer{border-top:1px solid var(--line);padding:56px 0 120px;font-size:14px;colo
   <div class="wrap hd">
     <a class="logo" href="/"><img src="/assets/logo-horizontal.png" alt="Invent on the way" width="771" height="101"></a>
     <nav class="nav">
-      <a href="#merit">メリット</a><a href="#support">サポート</a><a href="#conditions">契約の条件</a><a href="#concept">私たちについて</a><a href="#faq">よくある質問</a>
+      <a href="#merit">メリット</a><a href="#support">サポート</a><a href="#conditions">契約の条件</a><a href="#staff">担当者</a><a href="#concept">私たちについて</a><a href="#faq">よくある質問</a>
       <a class="btn" href="#talk">無料で相談する</a>
     </nav>
   </div>
@@ -253,7 +300,8 @@ footer{border-top:1px solid var(--line);padding:56px 0 120px;font-size:14px;colo
       </div>
       <p class="meta">未経験歓迎・全国オンライン対応</p>
     </div>
-    <div class="hero-photo">実際の所属ライバー／スタッフの写真<br>（自然光・普段の配信風景など）</div>
+    <!-- 写真の差し替え：.ph の div を <img src="/assets/photos/hero.jpg" alt="（写真の説明）"> に置き換える -->
+    <figure class="photo hero-photo"><div class="ph "><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8h4l2-3h6l2 3h4v11H3z"/><circle cx="12" cy="13" r="3.5"/></svg><span>写真：ライバー同士がスマホを手に話している場面<br>（自然光・横長でも縦長でも可）</span></div></figure>
   </div>
 </section>
 
@@ -269,9 +317,9 @@ footer{border-top:1px solid var(--line);padding:56px 0 120px;font-size:14px;colo
     <h2>はじめてでも、大丈夫です</h2>
     <p class="lead">配信を始める前によくいただく不安に、先にお答えします。</p>
     <div class="worries">
-      <div class="worry"><p class="q">何を話せばいいかわからない</p><h3><span class="ib">好きなこと・得意なことから</span><span class="ib">一緒に考えます</span></h3><p>配信のテーマや企画は、担当者や仲間と相談しながら決められます。最初から完璧な企画がなくても大丈夫です。</p></div>
-      <div class="worry"><p class="q">仕事や学校と両立できる？</p><h3>生活に合うペースで続けられます</h3><p>事務所独自の一律ノルマや配信の強制はありません。アプリ側の条件は、事前にご案内します。</p></div>
-      <div class="worry"><p class="q">ひとりで続けられるか不安</p><h3><span class="ib">ライバー同士が</span><span class="ib">コーチとして支え合います</span></h3><p>配信のあとに仲間と対話して振り返り、次の配信で新しいやり方を試せます。迷ったときは担当者にも相談できます。</p></div>
+      <div class="worry"><svg class="ill" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 14h34a6 6 0 0 1 6 6v16a6 6 0 0 1-6 6H26l-9 8v-8h-7a6 6 0 0 1-6-6V20a6 6 0 0 1 6-6z"/><path d="M27 34c-5-3.4-8-6-8-9a3.6 3.6 0 0 1 8-1 3.6 3.6 0 0 1 8 1c0 3-3 5.6-8 9z"/><path d="M52 8l4-4M56 14h5" stroke="#b3ec00" stroke-width="3"/></svg><p class="q">何を話せばいいかわからない</p><h3><span class="ib">好きなこと・得意なことから</span><span class="ib">一緒に考えます</span></h3><p>配信のテーマや企画は、担当者や仲間と相談しながら決められます。最初から完璧な企画がなくても大丈夫です。</p></div>
+      <div class="worry"><svg class="ill" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="26" cy="32" r="18"/><path d="M26 21v11l7 5"/><rect x="42" y="26" width="16" height="28" rx="3"/><path d="M48 49h4"/><path d="M8 10l5 4" stroke="#b3ec00" stroke-width="3"/></svg><p class="q">仕事や学校と両立できる？</p><h3>生活に合うペースで続けられます</h3><p>事務所独自の一律ノルマや配信の強制はありません。アプリ側の条件は、事前にご案内します。</p></div>
+      <div class="worry"><svg class="ill" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="20" cy="22" r="7"/><path d="M8 50c0-9 5.4-15 12-15s12 6 12 15"/><circle cx="44" cy="22" r="7"/><path d="M32 50c0-9 5.4-15 12-15s12 6 12 15"/><path d="M27 8l3-4M34 8l-3-4" stroke="#b3ec00" stroke-width="3"/></svg><p class="q">ひとりで続けられるか不安</p><h3><span class="ib">ライバー同士が</span><span class="ib">コーチとして支え合います</span></h3><p>配信のあとに仲間と対話して振り返り、次の配信で新しいやり方を試せます。迷ったときは担当者にも相談できます。</p></div>
     </div>
   </div>
 </section>
@@ -301,6 +349,31 @@ footer{border-top:1px solid var(--line);padding:56px 0 120px;font-size:14px;colo
   </div>
 </section>
 
+<!-- VOICES -->
+<!-- 写真とコメントが届いたら差し替え。顔出しNGの方は手元・シルエット写真でも可 -->
+<section id="voices">
+  <div class="wrap">
+    <h2>所属ライバーの声</h2>
+    <div class="voices">
+      <figure class="voice">
+        <div class="photo voice-photo" title="ライバー本人の写真（顔出しNGなら手元・シルエット）"><div class="ph "><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8h4l2-3h6l2 3h4v11H3z"/><circle cx="12" cy="13" r="3.5"/></svg><span>写真：ライバー本人</span></div></div>
+        <blockquote>（ここに本人のコメント。60〜100字ほど。所属して変わったこと、コーチングで気づいたことなど）</blockquote>
+        <figcaption><b>ニックネーム</b><span>20代・BIGO LIVE</span></figcaption>
+      </figure>
+      <figure class="voice">
+        <div class="photo voice-photo" title="ライバー本人の写真（顔出しNGなら手元・シルエット）"><div class="ph "><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8h4l2-3h6l2 3h4v11H3z"/><circle cx="12" cy="13" r="3.5"/></svg><span>写真：ライバー本人<br>（手元・シルエットでも可）</span></div></div>
+        <blockquote>（ここに本人のコメント。60〜100字ほど。所属して変わったこと、コーチングで気づいたことなど）</blockquote>
+        <figcaption><b>ニックネーム</b><span>20代・BIGO LIVE</span></figcaption>
+      </figure>
+      <figure class="voice">
+        <div class="photo voice-photo" title="ライバー本人の写真（顔出しNGなら手元・シルエット）"><div class="ph "><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8h4l2-3h6l2 3h4v11H3z"/><circle cx="12" cy="13" r="3.5"/></svg><span>写真：ライバー本人</span></div></div>
+        <blockquote>（ここに本人のコメント。60〜100字ほど。所属して変わったこと、コーチングで気づいたことなど）</blockquote>
+        <figcaption><b>ニックネーム</b><span>20代・BIGO LIVE</span></figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
 <!-- SUPPORT -->
 <section id="support">
   <div class="wrap">
@@ -325,6 +398,40 @@ footer{border-top:1px solid var(--line);padding:56px 0 120px;font-size:14px;colo
       <summary>サポートの範囲・ご利用前の確認について</summary>
       <div class="d-body">支援の内容・範囲は、アプリや目標、活動状況によって異なります。画像制作の費用・点数・修正・納期、プロフィールの掲載内容・時期、贈り物の受取条件は、利用前に担当者へご確認ください。成果や無制限の対応をお約束するものではありません。<br>アカウント停止や決済など、アプリ側でのみ対応できる問題は、公式窓口をご案内する場合があります。</div>
     </details>
+  </div>
+</section>
+
+<!-- STAFF -->
+<section id="staff">
+  <div class="wrap">
+    <h2>相談にのる担当者・コーチ</h2>
+    <p class="lead">LINEで相談すると、このメンバーが対応します。</p>
+    <div class="staffs">
+      <figure class="staff">
+        <div class="photo staff-photo"><div class="ph "><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8h4l2-3h6l2 3h4v11H3z"/><circle cx="12" cy="13" r="3.5"/></svg><span>写真：顔写真<br>（全員同じ背景でそろえる）</span></div></div>
+        <figcaption>
+          <span class="role">マネージャー</span>
+          <b>お名前</b>
+          <p>（ひとこと。どんな相談にのれるか、大切にしていることなど。40〜60字ほど）</p>
+        </figcaption>
+      </figure>
+      <figure class="staff">
+        <div class="photo staff-photo"><div class="ph "><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8h4l2-3h6l2 3h4v11H3z"/><circle cx="12" cy="13" r="3.5"/></svg><span>写真：顔写真<br>（全員同じ背景でそろえる）</span></div></div>
+        <figcaption>
+          <span class="role">配信コーチ</span>
+          <b>お名前</b>
+          <p>（ひとこと。どんな相談にのれるか、大切にしていることなど。40〜60字ほど）</p>
+        </figcaption>
+      </figure>
+      <figure class="staff">
+        <div class="photo staff-photo"><div class="ph "><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8h4l2-3h6l2 3h4v11H3z"/><circle cx="12" cy="13" r="3.5"/></svg><span>写真：顔写真<br>（全員同じ背景でそろえる）</span></div></div>
+        <figcaption>
+          <span class="role">クリエイティブ担当</span>
+          <b>お名前</b>
+          <p>（ひとこと。どんな相談にのれるか、大切にしていることなど。40〜60字ほど）</p>
+        </figcaption>
+      </figure>
+    </div>
   </div>
 </section>
 
@@ -443,6 +550,20 @@ footer{border-top:1px solid var(--line);padding:56px 0 120px;font-size:14px;colo
   </div>
 </section>
 
+<!-- MESSAGE -->
+<section id="message">
+  <div class="wrap message">
+    <div class="photo message-photo"><div class="ph " style="aspect-ratio:4/5"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8h4l2-3h6l2 3h4v11H3z"/><circle cx="12" cy="13" r="3.5"/></svg><span>写真：代表のポートレート<br>（自然光・上半身）</span></div></div>
+    <div>
+      <h2>代表メッセージ</h2>
+      <div class="message-body">
+        <p>（ここに代表メッセージ。なぜこの事務所をつくったのか、ライバーにどうなってほしいか、「共に体現する」に込めた思いなど。300〜500字ほど）</p>
+      </div>
+      <p class="sign">CoEmbody株式会社 代表<b>お名前</b></p>
+    </div>
+  </div>
+</section>
+
 <!-- SUITS -->
 <section id="suits">
   <div class="wrap">
@@ -494,11 +615,11 @@ footer{border-top:1px solid var(--line);padding:56px 0 120px;font-size:14px;colo
     <h3 style="font-size:20px;margin-top:48px">相談から活動開始までの流れ</h3>
     <!-- TODO: 面談の所要時間・形式、連絡までの目安日数が決まっていれば追記 -->
     <ol class="flow" style="margin-top:20px">
-      <li><span class="s-n">1</span><h3>LINEで相談・応募</h3><p>知りたいことや、希望するアプリをお送りください。ニックネームで大丈夫です。</p></li>
-      <li><span class="s-n">2</span><h3>担当者からご連絡</h3><p>内容を確認し、面談の日程を担当者からご連絡します。</p></li>
-      <li><span class="s-n">3</span><h3>オンライン面談</h3><p>配信の経験や目標、生活のペースをお聞きします。お住まいの地域に関係なく、オンラインで行います。</p></li>
-      <li><span class="s-n">4</span><h3>条件と契約書の確認</h3><p>支援内容・報酬・契約・退所の条件を一緒に確認します。契約書は署名前に確認できます。</p></li>
-      <li><span class="s-n">5</span><h3>納得して契約、活動スタート</h3><p>ご本人の意思で所属を決めてから契約します。アプリの登録や配信の準備を、担当者と進めていきます。</p></li>
+      <li><span class="s-n">1</span><svg class="ill flow-ill" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="18" y="6" width="28" height="52" rx="5"/><path d="M28 52h8"/><path d="M24 18h16a3 3 0 0 1 3 3v8a3 3 0 0 1-3 3h-9l-5 4v-4h-2a3 3 0 0 1-3-3v-8a3 3 0 0 1 3-3z"/></svg><h3>LINEで相談・応募</h3><p>知りたいことや、希望するアプリをお送りください。ニックネームで大丈夫です。</p></li>
+      <li><span class="s-n">2</span><svg class="ill flow-ill" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 44V30a12 12 0 0 1 24 0v14l4 5H16z"/><path d="M28 54a4 4 0 0 0 8 0"/><path d="M32 12v6"/></svg><h3>担当者からご連絡</h3><p>内容を確認し、面談の日程を担当者からご連絡します。</p></li>
+      <li><span class="s-n">3</span><svg class="ill flow-ill" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="10" y="12" width="44" height="30" rx="3"/><path d="M4 50h56l-4-8H8z"/><circle cx="32" cy="24" r="5"/><path d="M23 38c1.6-4.5 5-7 9-7s7.4 2.5 9 7"/></svg><h3>オンライン面談</h3><p>配信の経験や目標、生活のペースをお聞きします。お住まいの地域に関係なく、オンラインで行います。</p></li>
+      <li><span class="s-n">4</span><svg class="ill flow-ill" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 6h22l10 10v42H16z"/><path d="M38 6v10h10"/><path d="M22 26h20M22 33h20M22 40h10"/><path d="M34 47l4 4 8-9"/></svg><h3>条件と契約書の確認</h3><p>支援内容・報酬・契約・退所の条件を一緒に確認します。契約書は署名前に確認できます。</p></li>
+      <li><span class="s-n">5</span><svg class="ill flow-ill" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="22" y="8" width="20" height="34" rx="3"/><path d="M29 20l8 5-8 5z"/><path d="M32 42v10M24 58l8-6 8 6"/><path d="M48 12c3 3 3 9 0 12M53 8c5 5 5 15 0 20"/></svg><h3>納得して契約、活動スタート</h3><p>ご本人の意思で所属を決めてから契約します。アプリの登録や配信の準備を、担当者と進めていきます。</p></li>
     </ol>
 
     <div class="msg-area">
