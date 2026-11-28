@@ -3,149 +3,173 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>所属メリットと契約のご案内｜LOL MGMT</title>
+<title>所属のご案内｜Invent on the way</title>
+<meta name="description" content="ライバー同士がコーチとして支え合い、配信で育てた信頼を、自分の商品や仕事につなげる事務所です。運営：CoEmbody株式会社">
+<link rel="icon" type="image/png" href="/assets/favicon.png">
+<link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+<!--
+  TODO（公開前に差し替え）
+  - LINE_URL      … LINE公式アカウントのURL（"#line" になっている箇所）
+  - APPLY_URL     … 所属応募フォームのURL（"#apply" になっている箇所）
+  - 各アプリの報酬・条件ページ、Instagram / X のURL
+  - 報酬・費用・契約期間などの条件は、参考にしたLOL MGMTの条件のまま。自社の契約内容に合わせて確認・修正すること
+-->
 <style>
 :root{
-  --bg:#ffffff;
-  --bg-sub:#f6f5f2;
-  --ink:#1f1f1f;
-  --ink-2:#555;
-  --ink-3:#888;
-  --line:#e6e4df;
-  --accent:#d9534a;      /* 見出しの小ラベル・数字だけに使う */
-  --accent-soft:#fbeceb;
-  --line-green:#06c755;  /* LINEボタン専用 */
+  --blue:#1010ef;        /* ブランドブルー：見出しの強調・リンク・主要ボタン */
+  --white:#faf9f6;       /* ウォームホワイト：背景 */
+  --lime:#b3ec00;        /* ライム：短い線・小さなアクセントのみ（文字色には使わない） */
+  --card:#ffffff;
+  --ink:#1b2340;
+  --ink-2:#4b5370;
+  --ink-3:#7d8399;
+  --line:#e3e4ea;
+  --blue-soft:#eef0ff;
+  --line-green:#06c755;
   --radius:12px;
   --max:1080px;
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
-body{background:var(--bg);color:var(--ink);font-family:"Noto Sans JP","Hiragino Sans","Hiragino Kaku Gothic ProN",Meiryo,sans-serif;font-size:16px;line-height:1.9;letter-spacing:.02em;-webkit-font-smoothing:antialiased}
-a{color:inherit}
+body{background:var(--white);color:var(--ink);font-family:"Noto Sans JP","Hiragino Sans","Hiragino Kaku Gothic ProN",Meiryo,sans-serif;font-size:16px;line-height:1.9;letter-spacing:.02em;-webkit-font-smoothing:antialiased}
+a{color:var(--blue)}
 img{max-width:100%;display:block}
 .wrap{max-width:var(--max);margin:0 auto;padding:0 20px}
 section{padding:88px 0}
-.sub{background:var(--bg-sub)}
+.alt{background:var(--card)}
 
 /* header */
-header{position:sticky;top:0;z-index:20;background:rgba(255,255,255,.96);border-bottom:1px solid var(--line)}
-.hd{display:flex;align-items:center;justify-content:space-between;height:64px}
-.logo{font-weight:700;font-size:18px;letter-spacing:.08em;text-decoration:none}
+header{position:sticky;top:0;z-index:20;background:rgba(250,249,246,.96);border-bottom:1px solid var(--line)}
+.hd{display:flex;align-items:center;justify-content:space-between;height:68px;gap:16px}
+.logo img{height:26px;width:auto}
 .nav{display:flex;gap:24px;font-size:13px}
 .nav a{text-decoration:none;color:var(--ink-2)}
-.nav a:hover{color:var(--ink)}
+.nav a:hover{color:var(--blue)}
 .hd .btn{padding:9px 18px;font-size:13px}
-@media (max-width:860px){.nav{display:none}}
+@media (max-width:860px){.nav{display:none}.logo img{height:22px}}
 
 /* buttons */
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:15px 28px;border-radius:999px;font-weight:700;font-size:15px;text-decoration:none;border:1.5px solid var(--ink);background:var(--ink);color:#fff;transition:opacity .15s}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:15px 28px;border-radius:999px;font-weight:700;font-size:15px;text-decoration:none;border:1.5px solid var(--blue);background:var(--blue);color:#fff;transition:opacity .15s}
 .btn:hover{opacity:.85}
 .btn.line{background:var(--line-green);border-color:var(--line-green)}
-.btn.ghost{background:transparent;color:var(--ink)}
+.btn.ghost{background:transparent;color:var(--blue)}
 .btns{display:flex;flex-wrap:wrap;gap:12px}
 
 /* type */
-.label{display:inline-block;font-size:12px;font-weight:700;letter-spacing:.14em;color:var(--accent);margin-bottom:14px}
-h1{font-size:clamp(32px,6vw,52px);line-height:1.45;font-weight:700;letter-spacing:.04em}
+.label{display:inline-flex;align-items:center;gap:10px;font-size:12px;font-weight:700;letter-spacing:.14em;color:var(--blue);margin-bottom:14px}
+.label::before{content:"";width:18px;height:3px;background:var(--lime);border-radius:2px;transform:skewX(-30deg)}
+h1{font-size:clamp(32px,6vw,54px);line-height:1.4;font-weight:700;letter-spacing:.03em}
 h2{font-size:clamp(24px,4vw,34px);line-height:1.55;font-weight:700;letter-spacing:.03em;margin-bottom:20px}
 h3{font-size:19px;line-height:1.6;font-weight:700;margin-bottom:10px}
 .lead{color:var(--ink-2);font-size:16px}
 .note{font-size:13px;color:var(--ink-3);line-height:1.8}
 .center{text-align:center}
+.center .label{justify-content:center}
 .center .btns{justify-content:center}
 
 /* hero */
-.hero{padding:72px 0 80px}
+.hero{padding:80px 0 88px}
 .hero-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:56px;align-items:center}
-.hero .lead{margin:24px 0 36px;font-size:17px}
-.hero-photo{aspect-ratio:4/5;border-radius:var(--radius);background:var(--bg-sub);border:1px dashed #cfccc5;display:flex;align-items:center;justify-content:center;text-align:center;color:var(--ink-3);font-size:13px;padding:24px}
+.hero .sub-copy{margin:18px 0 8px;font-size:18px;font-weight:500;color:var(--ink)}
+.hero .lead{margin-bottom:36px}
+.hero-photo{aspect-ratio:4/5;border-radius:var(--radius);background:var(--card);border:1px dashed #c9cbd6;display:flex;align-items:center;justify-content:center;text-align:center;color:var(--ink-3);font-size:13px;padding:24px}
 .tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:28px}
-.tag{font-size:12px;padding:5px 12px;border:1px solid var(--line);border-radius:999px;color:var(--ink-2);background:#fff}
+.tag{font-size:12px;padding:5px 12px;border:1px solid var(--line);border-radius:999px;color:var(--ink-2);background:var(--card)}
 @media (max-width:860px){.hero-grid{grid-template-columns:1fr;gap:36px}.hero-photo{aspect-ratio:16/10}}
+
+/* concept */
+.concept{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:40px}
+.concept-item{border-top:1px solid var(--line);padding-top:18px}
+.concept-item .num{font-size:12px;font-weight:700;letter-spacing:.12em;color:var(--blue);margin-bottom:8px}
+.concept-item p{color:var(--ink-2);font-size:15px}
+.embody{margin-top:48px;padding:32px;border-radius:var(--radius);background:var(--white)}
+.embody p{color:var(--ink-2)}
+@media (max-width:760px){.concept{grid-template-columns:1fr}.embody{padding:24px 20px}}
 
 /* key numbers */
 .keys{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:40px 0 16px}
-.key{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:28px 24px}
+.key{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:28px 24px}
 .key .k-t{font-size:13px;color:var(--ink-2);font-weight:500}
-.key .k-n{font-size:44px;font-weight:700;line-height:1.3;color:var(--accent);letter-spacing:0}
+.key .k-n{font-size:44px;font-weight:700;line-height:1.3;color:var(--blue);letter-spacing:0}
 .key .k-n small{font-size:20px;margin-left:2px}
 .key .k-s{font-size:13px;color:var(--ink-3)}
 @media (max-width:760px){.keys{grid-template-columns:1fr}}
 
 /* merit list */
-.merits{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--line);border-left:1px solid var(--line);background:#fff;border-radius:var(--radius);overflow:hidden}
-.merit{padding:22px 22px;border-right:1px solid var(--line);border-bottom:1px solid var(--line)}
+.merits{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--line);border-left:1px solid var(--line);background:var(--card);border-radius:var(--radius);overflow:hidden}
+.merit{padding:22px;border-right:1px solid var(--line);border-bottom:1px solid var(--line)}
 .merit b{display:block;font-size:16px}
 .merit span{font-size:13px;color:var(--ink-3)}
 @media (max-width:760px){.merits{grid-template-columns:1fr 1fr}.merit{padding:18px 16px}}
 
 .jump{display:flex;flex-wrap:wrap;gap:10px;margin-top:40px}
-.jump a{font-size:13px;text-decoration:none;padding:8px 16px;border:1px solid var(--line);border-radius:999px;background:#fff}
-.jump a:hover{border-color:var(--ink)}
+.jump a{font-size:13px;text-decoration:none;color:var(--ink);padding:8px 16px;border:1px solid var(--line);border-radius:999px;background:var(--card)}
+.jump a:hover{border-color:var(--blue);color:var(--blue)}
 
 /* support */
 .sup{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:48px}
-.sup-item .num{font-size:12px;font-weight:700;letter-spacing:.14em;color:var(--accent);border-bottom:1px solid var(--line);padding-bottom:12px;margin-bottom:18px}
+.sup-item .num{font-size:12px;font-weight:700;letter-spacing:.14em;color:var(--blue);border-bottom:1px solid var(--line);padding-bottom:12px;margin-bottom:18px}
 .sup-item p{color:var(--ink-2);font-size:15px}
 @media (max-width:760px){.sup{grid-template-columns:1fr;gap:36px}}
-.consult{margin-top:56px;padding:32px;border-radius:var(--radius);background:var(--bg-sub)}
+.consult{margin-top:56px;padding:32px;border-radius:var(--radius);background:var(--white)}
+@media (max-width:600px){.consult{padding:24px 20px}}
 .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
-.chip{font-size:13px;background:#fff;border:1px solid var(--line);padding:6px 14px;border-radius:999px}
+.chip{font-size:13px;background:var(--card);border:1px solid var(--line);padding:6px 14px;border-radius:999px}
 
 /* details */
 details{margin-top:24px;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
 summary{cursor:pointer;list-style:none;padding:16px 0;font-size:14px;font-weight:500;display:flex;justify-content:space-between;gap:12px}
 summary::-webkit-details-marker{display:none}
-summary::after{content:"＋";color:var(--ink-3)}
+summary::after{content:"＋";color:var(--blue)}
 details[open] summary::after{content:"−"}
 details .body{padding:0 0 18px;font-size:13px;color:var(--ink-2);line-height:1.9}
 
 /* approach */
 .approach{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:start}
 .approach p+p{margin-top:16px}
-.approach .lead{font-size:16px}
 @media (max-width:760px){.approach{grid-template-columns:1fr;gap:20px}}
 
 /* already */
-.box{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:40px}
+.box{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:40px}
 @media (max-width:600px){.box{padding:28px 20px}}
 
 /* conditions */
 .cond{display:grid;grid-template-columns:220px 1fr;gap:32px;padding:36px 0;border-top:1px solid var(--line)}
 .cond:last-of-type{border-bottom:1px solid var(--line)}
-.cond .c-label{font-size:12px;font-weight:700;letter-spacing:.14em;color:var(--accent)}
+.cond .c-label{font-size:12px;font-weight:700;letter-spacing:.14em;color:var(--blue)}
 .cond .c-label div{font-size:15px;color:var(--ink);letter-spacing:.04em;margin-top:4px}
 .cond p{color:var(--ink-2)}
 .cond .note{margin-top:12px}
 @media (max-width:760px){.cond{grid-template-columns:1fr;gap:10px}}
-table{width:100%;border-collapse:collapse;margin-top:16px;font-size:14px}
+table{width:100%;border-collapse:collapse;margin-top:16px;font-size:14px;background:var(--card)}
 th,td{text-align:left;padding:14px 12px;border-bottom:1px solid var(--line);vertical-align:top}
-th{width:120px;font-weight:700;background:var(--bg-sub);white-space:nowrap}
+th{width:120px;font-weight:700;background:var(--blue-soft);white-space:nowrap}
 .apps{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
-.apps a{font-size:13px;padding:6px 14px;border:1px solid var(--line);border-radius:999px;text-decoration:none}
-.contract{margin-top:40px;padding:24px 28px;background:var(--accent-soft);border-radius:var(--radius)}
+.apps span{font-size:13px;padding:6px 14px;border:1px solid var(--line);border-radius:999px;background:var(--card)}
+.contract{margin-top:40px;padding:24px 28px;background:var(--blue-soft);border-radius:var(--radius)}
 .contract b{font-size:17px}
 
 /* talk */
-.msg{max-width:520px;margin:28px auto;background:#fff;border:1px solid var(--line);border-radius:16px 16px 16px 4px;padding:18px 22px;text-align:left;font-size:15px}
-.msg-cap{font-size:13px;color:var(--ink-3)}
+.msg{max-width:520px;margin:12px auto 28px;background:var(--card);border:1px solid var(--line);border-radius:16px 16px 16px 4px;padding:18px 22px;text-align:left;font-size:15px}
+.msg-cap{font-size:13px;color:var(--ink-3);margin-top:36px}
 .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:56px;text-align:left}
-.step{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:24px}
-.step .s-n{display:inline-flex;width:30px;height:30px;border-radius:50%;background:var(--ink);color:#fff;font-size:13px;font-weight:700;align-items:center;justify-content:center;margin-bottom:12px}
+.step{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:24px}
+.step .s-n{display:inline-flex;width:30px;height:30px;border-radius:50%;background:var(--blue);color:#fff;font-size:13px;font-weight:700;align-items:center;justify-content:center;margin-bottom:12px}
 .step p{font-size:14px;color:var(--ink-2)}
 @media (max-width:760px){.steps{grid-template-columns:1fr}}
-.apply{margin-top:56px;padding:40px;border-radius:var(--radius);border:1.5px solid var(--ink);background:#fff}
+.apply{margin-top:56px;padding:40px;border-radius:var(--radius);border:1.5px solid var(--blue);background:var(--card)}
 @media (max-width:600px){.apply{padding:28px 20px}}
 
-footer{border-top:1px solid var(--line);padding:40px 0 120px;font-size:13px;color:var(--ink-3)}
-.ft{display:flex;flex-wrap:wrap;justify-content:space-between;gap:16px}
-.ft a{text-decoration:none;margin-left:16px}
+footer{border-top:1px solid var(--line);padding:48px 0 120px;font-size:13px;color:var(--ink-3)}
+.ft{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:24px}
+.ft img{height:56px;width:auto;margin-bottom:14px}
+.ft a{text-decoration:none;color:var(--ink-2);margin-left:16px}
 
 /* fixed bar (mobile) */
-.fixbar{position:fixed;left:0;right:0;bottom:0;z-index:30;display:none;gap:8px;padding:10px 12px calc(10px + env(safe-area-inset-bottom));background:#fff;border-top:1px solid var(--line)}
+.fixbar{position:fixed;left:0;right:0;bottom:0;z-index:30;display:none;gap:8px;padding:10px 12px calc(10px + env(safe-area-inset-bottom));background:var(--white);border-top:1px solid var(--line)}
 .fixbar .btn{flex:1;padding:13px 10px;font-size:14px}
 @media (max-width:760px){.fixbar{display:flex}section{padding:64px 0}}
 </style>
@@ -154,11 +178,11 @@ footer{border-top:1px solid var(--line);padding:40px 0 120px;font-size:13px;colo
 
 <header>
   <div class="wrap hd">
-    <a class="logo" href="https://www.lolmgmt.jp/">LOL MGMT</a>
+    <a class="logo" href="/"><img src="/assets/logo-horizontal.png" alt="Invent on the way" width="771" height="101"></a>
     <nav class="nav">
-      <a href="https://www.lolmgmt.jp/our-story/">OUR STORY</a><a href="https://www.lolmgmt.jp/liver/">LIVERS</a><a href="https://www.lolmgmt.jp/creative/">CREATIVE</a><a href="https://www.lolmgmt.jp/support-faq/">FAQ</a><a href="https://www.lolmgmt.jp/company/">CORPORATE</a><a href="https://www.lolmgmt.jp/category/lolmgmt-column/">コラム</a>
+      <a href="#concept">私たちについて</a><a href="#merit">メリット</a><a href="#support">サポート</a><a href="#conditions">条件</a><a href="#talk">相談・応募</a>
     </nav>
-    <a class="btn" href="https://www.lolmgmt.jp/apply/?from=header">所属応募</a>
+    <a class="btn" href="#apply">所属応募</a>
   </div>
 </header>
 
@@ -166,11 +190,12 @@ footer{border-top:1px solid var(--line);padding:40px 0 120px;font-size:13px;colo
 <section class="hero">
   <div class="wrap hero-grid">
     <div>
-      <span class="label">所属メリットと契約のご案内</span>
-      <h1>自分のペースで。<br>ひとりで悩まずに。</h1>
-      <p class="lead">配信を楽しむことも、所属前の不安も。<br>あなたのペースで、一緒に考えます。</p>
+      <span class="label">ライバー事務所 × コーチング</span>
+      <h1>なりたい自分に、<br>今日からなる。</h1>
+      <p class="sub-copy">まず一歩。動いた先で、次の一手が見えてくる。</p>
+      <p class="lead">ライバー同士がコーチとして支え合い、配信で育てた信頼を、自分の商品や仕事につなげる事務所です。</p>
       <div class="btns">
-        <a class="btn line" href="https://lin.ee/W29ihxm">LINEで無料相談</a>
+        <a class="btn line" href="#line">LINEで無料相談</a>
         <a class="btn ghost" href="#merit">メリットを見る</a>
       </div>
       <div class="tags">
@@ -181,12 +206,31 @@ footer{border-top:1px solid var(--line);padding:40px 0 120px;font-size:13px;colo
   </div>
 </section>
 
-<!-- MERIT -->
-<section class="sub" id="merit">
+<!-- CONCEPT -->
+<section class="alt" id="concept">
   <div class="wrap">
-    <span class="label">WHY LOL MGMT</span>
-    <h2>所属のメリット</h2>
-    <p class="lead">BIGO LIVE・ふわっち・Palmu・ミクチャに対応しています。</p>
+    <span class="label">INVENT ON THE WAY</span>
+    <h2>「共に体現する」を、<br>配信の現場で。</h2>
+    <p class="lead">まず配信する。ライバー同士がコーチとして対話し、状態を整え、次の配信で新しいやり方を試す。この繰り返しで配信を磨き、視聴者との信頼を育て、自分の商品や仕事につなげていく。</p>
+
+    <div class="concept">
+      <div class="concept-item"><div class="num">I / INVENT</div><h3>自分の意志で踏み出す。</h3><p>やってみて初めてわかることがある。まず一歩を、自分で選ぶ。</p></div>
+      <div class="concept-item"><div class="num">w / WAY</div><h3>仲間と試しながら進む。</h3><p>実践と振り返りを行き来しながら、自分の道をつくっていく。</p></div>
+      <div class="concept-item"><div class="num">y / NEXT STEP</div><h3>経験を次の一歩につなぐ。</h3><p>配信で得た手応えを、次の挑戦へつなげていく。</p></div>
+    </div>
+
+    <div class="embody">
+      <p>運営するCoEmbody株式会社の「共に体現する」は、この姿勢を仲間と日々の行動に移すことです。</p>
+    </div>
+  </div>
+</section>
+
+<!-- MERIT -->
+<section id="merit">
+  <div class="wrap">
+    <span class="label">WHY INVENT ON THE WAY</span>
+    <h2>自分のペースで。<br>ひとりで悩まずに。</h2>
+    <p class="lead">配信を楽しむことも、所属前の不安も。あなたのペースで、一緒に考えます。<br>BIGO LIVE・ふわっち・Palmu・ミクチャに対応しています。</p>
 
     <div class="keys">
       <div class="key"><div class="k-t">対象ライバー報酬</div><div class="k-n">100<small>%</small></div><div class="k-s">対象報酬を全額還元</div></div>
@@ -200,7 +244,7 @@ footer{border-top:1px solid var(--line);padding:40px 0 120px;font-size:13px;colo
       <div class="merit"><b>画像制作サポート</b><span>アイコン・告知画像など</span></div>
       <div class="merit"><b>プロフィール掲載</b><span>公式サイトで紹介</span></div>
       <div class="merit"><b>贈り物の受取支援</b><span>事務所住所で受取</span></div>
-      <div class="merit"><b>担当者に相談できる</b><span>配信準備から振り返りまで</span></div>
+      <div class="merit"><b>ライバー同士のコーチング</b><span>対話で整え、次の配信へ</span></div>
     </div>
 
     <p class="note" style="margin-top:20px">対象報酬・アプリの活動条件・退所手続きは、<a href="#conditions">後半のご案内</a>で確認できます。<br>質問だけでも大丈夫です。相談だけで契約が決まることはありません。</p>
@@ -212,11 +256,11 @@ footer{border-top:1px solid var(--line);padding:40px 0 120px;font-size:13px;colo
 </section>
 
 <!-- SUPPORT -->
-<section id="support">
+<section class="alt" id="support">
   <div class="wrap">
     <span class="label">SUPPORT</span>
     <h2>配信するあなたに、<br>心強いサポートを。</h2>
-    <p class="lead">始める前の準備も、活動中の迷いも。担当者と、一緒に考えられます。</p>
+    <p class="lead">始める前の準備も、活動中の迷いも。担当者や仲間と、一緒に考えられます。</p>
 
     <div class="sup">
       <div class="sup-item"><div class="num">01 / CREATIVE</div><h3>第一印象づくりも、一緒に。</h3><p>アイコンや配信告知画像の見せ方を、雰囲気や伝えたいことから相談できます。</p></div>
@@ -226,7 +270,7 @@ footer{border-top:1px solid var(--line);padding:40px 0 120px;font-size:13px;colo
 
     <div class="consult">
       <h3>困ったときに、相談できる相手がいる。</h3>
-      <p class="lead" style="font-size:15px">迷ったときに担当者と整理し、次の一歩を考えられます。</p>
+      <p class="lead" style="font-size:15px">迷ったときに担当者や仲間と整理し、次の一歩を考えられます。</p>
       <div class="chips"><span class="chip">配信準備</span><span class="chip">テーマ・企画</span><span class="chip">イベント</span><span class="chip">リスナー対応</span><span class="chip">活動の振り返り</span></div>
     </div>
 
@@ -238,7 +282,7 @@ footer{border-top:1px solid var(--line);padding:40px 0 120px;font-size:13px;colo
 </section>
 
 <!-- APPROACH -->
-<section class="sub" id="approach">
+<section id="approach">
   <div class="wrap approach">
     <div>
       <span class="label">OUR APPROACH</span>
@@ -247,13 +291,13 @@ footer{border-top:1px solid var(--line);padding:40px 0 120px;font-size:13px;colo
     <div>
       <p class="lead">もっと挑戦したいときも、少しペースを落としたいときも。大切にしたいのは、ライバー本人の気持ちです。</p>
       <p class="lead">配信を強制したり、必要以上に活動を促したりせず、ご本人の意思を尊重する。迷いや困りごとがあるときは、できる限り寄り添い、一緒に考える。</p>
-      <p class="lead">あなたが選ぶ配信のかたちを、LOL MGMTは支えていきます。</p>
+      <p class="lead">あなたが選ぶ配信のかたちを、Invent on the way は支えていきます。</p>
     </div>
   </div>
 </section>
 
 <!-- CONDITIONS -->
-<section id="conditions">
+<section class="alt" id="conditions">
   <div class="wrap">
     <span class="label">CLEAR CONDITIONS</span>
     <h2>始める前に、<br>終えるときのことまで。</h2>
@@ -265,7 +309,6 @@ footer{border-top:1px solid var(--line);padding:40px 0 120px;font-size:13px;colo
         <h3>対象報酬は、100％あなたへ。</h3>
         <p>対象ライバー報酬から、事務所独自の分配手数料は差し引きません。</p>
         <p class="note">※100％は各アプリの規定で発生する対象ライバー報酬のこと。ギフト購入額の全額還元ではなく、報酬の発生・受取にはアプリごとの条件があります。</p>
-        <p style="margin-top:12px;font-size:14px"><a href="https://www.lolmgmt.jp/reward-policy/">100％還元の範囲・受取方法 →</a></p>
         <details>
           <summary>報酬の実費・控除・調整について</summary>
           <div class="body">通常報酬・ボーナス・キャンペーンは対象項目と条件を個別に確認します。税法上必要な控除、返金・実績訂正等の調整、アプリ側の換金手数料等は、事務所独自の分配手数料とは別です。収入や成果を保証するものではありません。</div>
@@ -279,7 +322,7 @@ footer{border-top:1px solid var(--line);padding:40px 0 120px;font-size:13px;colo
         <h3>配信のペースは、あなたらしく。</h3>
         <p>生活に合うペースを大切にし、事務所独自の一律ノルマや配信の強制はありません。</p>
         <p class="note">※アプリの公式登録・報酬制度・イベント等には、配信日数や時間などの条件があります。ミクチャでも、希望するプランごとに対象・達成条件を確認し、事前にご案内します。</p>
-        <div class="apps"><a href="https://www.lolmgmt.jp/bigo-live-agency/">BIGO LIVE の報酬・条件 ↗</a><a href="https://www.lolmgmt.jp/whowatch-agency/">ふわっち ↗</a><a href="https://www.lolmgmt.jp/palmu-agency/">Palmu ↗</a><a href="https://www.lolmgmt.jp/mixchannel-reward/">ミクチャ</a></div>
+        <div class="apps"><span>BIGO LIVE</span><span>ふわっち</span><span>Palmu</span><span>ミクチャ</span></div>
       </div>
     </div>
 
@@ -332,12 +375,12 @@ footer{border-top:1px solid var(--line);padding:40px 0 120px;font-size:13px;colo
 </section>
 
 <!-- ALREADY -->
-<section class="sub" id="already">
+<section id="already">
   <div class="wrap">
     <div class="box">
       <span class="label">ALREADY WITH AN AGENCY?</span>
       <h2>ほかの事務所に所属中でも、<br>まずは状況をお聞かせください。</h2>
-      <p class="lead">活動するアプリや現在の契約によっては、LOL MGMTへの所属を相談できる場合があります。</p>
+      <p class="lead">活動するアプリや現在の契約によっては、Invent on the way への所属を相談できる場合があります。</p>
       <p class="lead" style="margin-top:12px">今の事務所との契約と各アプリの規定を尊重し、必要な確認をしたうえでご案内します。所属先・活動中のアプリ・希望する活動を、差し支えない範囲でお知らせください。</p>
       <p class="note" style="margin-top:20px">別アプリなら必ず所属できるわけではありません。所属・移籍・並行活動の可否や時期は個別確認となります。現在の契約に反する登録や活動開始はお控えください。ミクチャでの他アプリとの並行活動や専属条件も、適用される契約・プランごとに確認します。</p>
     </div>
@@ -345,16 +388,16 @@ footer{border-top:1px solid var(--line);padding:40px 0 120px;font-size:13px;colo
 </section>
 
 <!-- TALK -->
-<section id="talk">
+<section class="alt" id="talk">
   <div class="wrap center">
     <span class="label">LET'S TALK</span>
     <h2>「少し聞いてみたい」から、<br>始めませんか。</h2>
     <p class="lead">所属を決める前に、気になることから。あなたの状況に合わせて、ご案内します。</p>
 
-    <p class="msg-cap" style="margin-top:36px">こんなメッセージからで大丈夫です。</p>
+    <p class="msg-cap">こんなメッセージからで大丈夫です。</p>
     <div class="msg">所属を検討しています。メリットや契約について、もう少し詳しく聞きたいです。</div>
 
-    <div class="btns"><a class="btn line" href="https://lin.ee/W29ihxm">LINEで無料相談</a></div>
+    <div class="btns"><a class="btn line" href="#line" id="line">LINEで無料相談</a></div>
     <p class="note" style="margin-top:16px">相談だけでも大丈夫。相談した時点で契約が決まることはありません。<br>24時間受付。即時の返信をお約束するものではありません。<br>所属・登録の可否や必要期間は、アプリや現在の状況によって異なります。</p>
 
     <div class="steps">
@@ -362,26 +405,30 @@ footer{border-top:1px solid var(--line);padding:40px 0 120px;font-size:13px;colo
       <div class="step"><span class="s-n">2</span><h3>条件を確認</h3><p>支援内容・報酬・契約・退所の条件を一緒に確認します。</p></div>
       <div class="step"><span class="s-n">3</span><h3>納得して手続きへ</h3><p>内容を確かめ、ご本人の意思で所属を決めてから進みます。</p></div>
     </div>
-    <p class="note" style="margin-top:20px">年齢・顔出し・活動準備などの疑問は <a href="https://www.lolmgmt.jp/support-faq/">よくある質問へ →</a></p>
 
-    <div class="apply">
+    <div class="apply" id="apply">
       <h3>条件を確認し、応募へ進みたい方へ。</h3>
       <p class="lead" style="font-size:15px;margin-bottom:24px">ニックネームで希望を送信できます。まだ気になる点がある方はLINEでご相談ください。</p>
-      <div class="btns"><a class="btn" href="https://www.lolmgmt.jp/apply/?from=membership">ライバー所属応募へ進む</a><a class="btn ghost" href="https://lin.ee/W29ihxm">LINEで無料相談</a></div>
+      <div class="btns"><a class="btn" href="#apply">ライバー所属応募へ進む</a><a class="btn ghost" href="#line">LINEで無料相談</a></div>
     </div>
   </div>
 </section>
 
 <footer>
   <div class="wrap ft">
-    <div>© 2026 合同会社 LOL Talent Agency</div>
-    <div>FOLLOW US<a href="https://www.instagram.com/lolmgmt.official/">Instagram</a><a href="https://x.com/LOLMGMT_JP">X</a><a href="https://www.lolmgmt.jp/privacy-policy/">プライバシーポリシー</a></div>
+    <div>
+      <img src="/assets/logo-basic.png" alt="Invent on the way" width="1428" height="433">
+      <div>ライバー事務所 × コーチング</div>
+      <div>運営　CoEmbody株式会社「共に体現する」</div>
+      <div style="margin-top:8px">© 2026 CoEmbody株式会社</div>
+    </div>
+    <div>FOLLOW US<a href="#">Instagram</a><a href="#">X</a></div>
   </div>
 </footer>
 
 <div class="fixbar">
-  <a class="btn line" href="https://lin.ee/W29ihxm">LINEで無料相談</a>
-  <a class="btn" href="https://www.lolmgmt.jp/apply/?from=fixed">所属応募へ</a>
+  <a class="btn line" href="#line">LINEで無料相談</a>
+  <a class="btn" href="#apply">所属応募へ</a>
 </div>
 
 </body>
