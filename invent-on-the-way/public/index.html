@@ -154,6 +154,23 @@ details .d-body{padding:0 0 18px;font-size:14px;color:var(--ink-2);line-height:1
 @media (max-width:760px){.concept-head,.approach{grid-template-columns:1fr;gap:24px}.concept-logo img{margin:0;max-width:300px}.concept{grid-template-columns:1fr;gap:28px}.approach{margin-top:56px}}
 
 
+
+/* apps marquee */
+.apps-band{padding:56px 0 64px;overflow:hidden}
+.apps-band h2{text-align:center;font-size:20px;margin-bottom:32px}
+.marquee{overflow:hidden;-webkit-mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent)}
+.marquee-track{list-style:none;display:flex;width:max-content;animation:marquee 40s linear infinite}
+.marquee:hover .marquee-track{animation-play-state:paused}
+.marquee-track li{flex:none;width:168px;display:flex;flex-direction:column;align-items:center;gap:12px;font-size:14px;font-weight:500;color:var(--ink-2)}
+.marquee-track img{width:96px;height:96px;border-radius:22px;border:1px solid var(--line);background:#fff}
+@keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@media (max-width:760px){.apps-band{padding:44px 0 48px}.marquee-track li{width:120px}.marquee-track img{width:72px;height:72px;border-radius:17px}}
+@media (prefers-reduced-motion:reduce){
+  .marquee{-webkit-mask-image:none;mask-image:none}
+  .marquee-track{animation:none;width:auto;flex-wrap:wrap;justify-content:center;gap:24px 0}
+  .marquee-track li[aria-hidden]{display:none}
+}
+
 /* first-time worries */
 .worries{display:grid;grid-template-columns:repeat(3,1fr);gap:40px;margin-top:40px}
 .worry .q{font-size:15px;color:var(--ink-3);font-weight:500;margin-bottom:10px;padding-bottom:12px;border-bottom:1px solid var(--line)}
@@ -238,6 +255,12 @@ footer{border-top:1px solid var(--line);padding:56px 0 120px;font-size:14px;colo
     </div>
     <div class="hero-photo">実際の所属ライバー／スタッフの写真<br>（自然光・普段の配信風景など）</div>
   </div>
+</section>
+
+<!-- APPS -->
+<section class="apps-band" id="apps" aria-labelledby="apps-title">
+  <h2 id="apps-title">対応アプリ</h2>
+  <div class="marquee"><ul class="marquee-track"><li><img src="/assets/apps/bigo.webp" alt="BIGO LIVE" width="240" height="240" loading="lazy"><span>BIGO LIVE</span></li><li><img src="/assets/apps/whowatch.webp" alt="ふわっち" width="240" height="240" loading="lazy"><span>ふわっち</span></li><li><img src="/assets/apps/palmu.webp" alt="Palmu" width="240" height="240" loading="lazy"><span>Palmu</span></li><li><img src="/assets/apps/mixch.webp" alt="ミクチャ" width="240" height="240" loading="lazy"><span>ミクチャ</span></li><li aria-hidden="true"><img src="/assets/apps/bigo.webp" alt="" width="240" height="240" loading="lazy"><span>BIGO LIVE</span></li><li aria-hidden="true"><img src="/assets/apps/whowatch.webp" alt="" width="240" height="240" loading="lazy"><span>ふわっち</span></li><li aria-hidden="true"><img src="/assets/apps/palmu.webp" alt="" width="240" height="240" loading="lazy"><span>Palmu</span></li><li aria-hidden="true"><img src="/assets/apps/mixch.webp" alt="" width="240" height="240" loading="lazy"><span>ミクチャ</span></li><li aria-hidden="true"><img src="/assets/apps/bigo.webp" alt="" width="240" height="240" loading="lazy"><span>BIGO LIVE</span></li><li aria-hidden="true"><img src="/assets/apps/whowatch.webp" alt="" width="240" height="240" loading="lazy"><span>ふわっち</span></li><li aria-hidden="true"><img src="/assets/apps/palmu.webp" alt="" width="240" height="240" loading="lazy"><span>Palmu</span></li><li aria-hidden="true"><img src="/assets/apps/mixch.webp" alt="" width="240" height="240" loading="lazy"><span>ミクチャ</span></li><li aria-hidden="true"><img src="/assets/apps/bigo.webp" alt="" width="240" height="240" loading="lazy"><span>BIGO LIVE</span></li><li aria-hidden="true"><img src="/assets/apps/whowatch.webp" alt="" width="240" height="240" loading="lazy"><span>ふわっち</span></li><li aria-hidden="true"><img src="/assets/apps/palmu.webp" alt="" width="240" height="240" loading="lazy"><span>Palmu</span></li><li aria-hidden="true"><img src="/assets/apps/mixch.webp" alt="" width="240" height="240" loading="lazy"><span>ミクチャ</span></li><li aria-hidden="true"><img src="/assets/apps/bigo.webp" alt="" width="240" height="240" loading="lazy"><span>BIGO LIVE</span></li><li aria-hidden="true"><img src="/assets/apps/whowatch.webp" alt="" width="240" height="240" loading="lazy"><span>ふわっち</span></li><li aria-hidden="true"><img src="/assets/apps/palmu.webp" alt="" width="240" height="240" loading="lazy"><span>Palmu</span></li><li aria-hidden="true"><img src="/assets/apps/mixch.webp" alt="" width="240" height="240" loading="lazy"><span>ミクチャ</span></li><li aria-hidden="true"><img src="/assets/apps/bigo.webp" alt="" width="240" height="240" loading="lazy"><span>BIGO LIVE</span></li><li aria-hidden="true"><img src="/assets/apps/whowatch.webp" alt="" width="240" height="240" loading="lazy"><span>ふわっち</span></li><li aria-hidden="true"><img src="/assets/apps/palmu.webp" alt="" width="240" height="240" loading="lazy"><span>Palmu</span></li><li aria-hidden="true"><img src="/assets/apps/mixch.webp" alt="" width="240" height="240" loading="lazy"><span>ミクチャ</span></li></ul></div>
 </section>
 
 <!-- FIRST TIME -->
@@ -446,18 +469,17 @@ footer{border-top:1px solid var(--line);padding:56px 0 120px;font-size:14px;colo
 </section>
 
 <!-- FAQ -->
-<!-- TODO: 顔出し・年齢の回答は、自社の方針に合わせて確認すること -->
 <section id="faq">
   <div class="wrap">
     <h2>よくある質問</h2>
     <div class="faq">
       <details><summary><span>配信をしたことがなくても大丈夫ですか？</span></summary><div class="d-body">大丈夫です。配信の準備やテーマ選びから、担当者や仲間と一緒に考えられます。</div></details>
-      <details><summary><span>顔出しは必須ですか？</span></summary><div class="d-body">顔出しをするかどうかは、希望するアプリの規定とご本人の希望を確認したうえで、一緒に相談して決められます。</div></details>
+      <details><summary><span>顔出しは必須ですか？</span></summary><div class="d-body">顔出しは自由です。顔を出さない配信も選べます。どんな見せ方がよいかは、希望するアプリに合わせて一緒に考えます。</div></details>
       <details><summary><span>地方に住んでいても所属できますか？</span></summary><div class="d-body">全国どこからでもオンラインで相談・所属手続きができます。</div></details>
       <details><summary><span>毎日配信できなくても大丈夫ですか？</span></summary><div class="d-body">事務所独自の一律ノルマはありません。ただし、アプリの公式登録・報酬制度・イベント等には、配信日数や時間などの条件があります。希望するアプリの条件は事前にご案内します。</div></details>
       <details><summary><span>相談や応募をしたら、必ず所属しなければいけませんか？</span></summary><div class="d-body">いいえ。相談した時点で契約が決まることはありません。支援内容・報酬・契約・退所の条件を確認し、ご本人の意思で所属を決めてから手続きに進みます。</div></details>
       <details><summary><span>機材は必要ですか？費用はかかりますか？</span></summary><div class="d-body">登録料・所属費用・月額費用は0円です。通信費・配信機材などは原則ご本人の負担です。必要な準備は、希望するアプリに合わせてご案内します。</div></details>
-      <details><summary><span>年齢の条件はありますか？</span></summary><div class="d-body">年齢の条件はアプリごとに異なります。希望するアプリの規定を確認したうえで、個別にご案内します。</div></details>
+      <details><summary><span>年齢の条件はありますか？</span></summary><div class="d-body">未成年の方は、保護者の同意が必要です。また、年齢の条件はアプリごとに異なるため、希望するアプリの規定を確認したうえでご案内します。</div></details>
       <details><summary><span>ほかの事務所に所属中でも相談できますか？</span></summary><div class="d-body">相談できます。今の事務所との契約と各アプリの規定を尊重し、必要な確認をしたうえでご案内します。詳しくは<a href="#already">ほかの事務所に所属中の方へ</a>をご覧ください。</div></details>
     </div>
   </div>
