@@ -12,168 +12,177 @@
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
 <!--
   TODO（公開前に差し替え）
-  - LINE_URL      … LINE公式アカウントのURL（"#line" になっている箇所）
-  - APPLY_URL     … 所属応募フォームのURL（"#apply" になっている箇所）
-  - 各アプリの報酬・条件ページ、Instagram / X のURL
-  - 報酬・費用・契約期間などの条件は、自社の契約内容と一致しているか確認・修正すること
+  - LINE公式アカウントのURL … href="#TODO-line" の箇所
+  - 所属応募フォームのURL   … href="#TODO-apply" の箇所
+  - 各アプリの報酬・条件ページ、100％還元の範囲・受取方法、よくある質問、Instagram / X … href="#TODO-…" の箇所
+  - 報酬・費用・契約期間などの条件が、自社の契約内容と一致しているか確認・修正すること
 -->
 <style>
 :root{
-  --blue:#1010ef;        /* ブランドブルー：見出しの強調・リンク・主要ボタン */
+  --blue:#1010ef;        /* ブランドブルー：リンク・主要ボタン・数字 */
   --white:#faf9f6;       /* ウォームホワイト：背景 */
-  --lime:#b3ec00;        /* ライム：短い線・小さなアクセントのみ（文字色には使わない） */
+  --lime:#b3ec00;        /* ライム：短い線のみ（文字色には使わない） */
   --card:#ffffff;
   --ink:#1b2340;
-  --ink-2:#4b5370;
-  --ink-3:#7d8399;
-  --line:#e3e4ea;
+  --ink-2:#454d68;
+  --ink-3:#5f6680;
+  --line:#e1e2e8;
   --blue-soft:#eef0ff;
-  --line-green:#06c755;
-  --radius:12px;
-  --max:1080px;
+  --radius:10px;
+  --max:1040px;
 }
 *{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth}
-body{background:var(--white);color:var(--ink);font-family:"Noto Sans JP","Hiragino Sans","Hiragino Kaku Gothic ProN",Meiryo,sans-serif;font-size:16px;line-height:1.9;letter-spacing:.02em;-webkit-font-smoothing:antialiased}
-a{color:var(--blue)}
+html{scroll-behavior:smooth;scroll-padding-top:84px}
+body{background:var(--white);color:var(--ink);font-family:"Noto Sans JP","Hiragino Sans","Hiragino Kaku Gothic ProN",Meiryo,sans-serif;font-size:16px;line-height:1.9;letter-spacing:.03em;-webkit-font-smoothing:antialiased;line-break:strict}
+a{color:var(--blue);text-underline-offset:3px}
 img{max-width:100%;display:block}
 .wrap{max-width:var(--max);margin:0 auto;padding:0 20px}
-section{padding:88px 0}
-.alt{background:var(--card)}
+section{padding:96px 0;border-top:1px solid var(--line)}
+section.hero{border-top:0}
+
+/* 改行の制御：文節で折り返し、行末の1〜2文字落ちを防ぐ */
+h1,h2,h3,.sub-copy,.merit b{word-break:auto-phrase;text-wrap:balance}
+p,.note,td,li,summary{text-wrap:pretty;word-break:auto-phrase}
+.ib{display:inline-block}
+.nw{white-space:nowrap}
 
 /* header */
 header{position:sticky;top:0;z-index:20;background:rgba(250,249,246,.96);border-bottom:1px solid var(--line)}
 .hd{display:flex;align-items:center;justify-content:space-between;height:68px;gap:16px}
 .logo img{height:26px;width:auto}
-.nav{display:flex;gap:24px;font-size:13px}
+.nav{display:flex;align-items:center;gap:28px;font-size:14px}
 .nav a{text-decoration:none;color:var(--ink-2)}
 .nav a:hover{color:var(--blue)}
-.hd .btn{padding:9px 18px;font-size:13px}
+.nav .btn{padding:9px 20px;font-size:14px;color:#fff}
 @media (max-width:860px){.nav{display:none}.logo img{height:22px}}
 
 /* buttons */
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:15px 28px;border-radius:999px;font-weight:700;font-size:15px;text-decoration:none;border:1.5px solid var(--blue);background:var(--blue);color:#fff;transition:opacity .15s}
-.btn:hover{opacity:.85}
-.btn.line{background:var(--line-green);border-color:var(--line-green)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:52px;padding:14px 32px;border-radius:999px;font-weight:700;font-size:16px;text-decoration:none;border:1.5px solid var(--blue);background:var(--blue);color:#fff;transition:opacity .15s}
+.btn:hover{opacity:.88}
 .btn.ghost{background:transparent;color:var(--blue)}
-.btns{display:flex;flex-wrap:wrap;gap:12px}
+.btn.white{background:#fff;border-color:#fff;color:var(--blue)}
+.btns{display:flex;flex-wrap:wrap;align-items:center;gap:16px 24px}
+.textlink{font-size:15px;font-weight:500}
 
 /* type */
-.label{display:inline-flex;align-items:center;gap:10px;font-size:12px;font-weight:700;letter-spacing:.14em;color:var(--blue);margin-bottom:14px}
-.label::before{content:"";width:18px;height:3px;background:var(--lime);border-radius:2px;transform:skewX(-30deg)}
-h1{font-size:clamp(32px,6vw,54px);line-height:1.4;font-weight:700;letter-spacing:.03em}
-h2{font-size:clamp(24px,4vw,34px);line-height:1.55;font-weight:700;letter-spacing:.03em;margin-bottom:20px}
-h3{font-size:19px;line-height:1.6;font-weight:700;margin-bottom:10px}
-.lead{color:var(--ink-2);font-size:16px}
-.note{font-size:13px;color:var(--ink-3);line-height:1.8}
-.center{text-align:center}
-.center .label{justify-content:center}
-.center .btns{justify-content:center}
+h1{font-size:clamp(34px,6.4vw,56px);line-height:1.4;font-weight:700;letter-spacing:.04em;font-feature-settings:"palt"}
+h2{font-size:clamp(26px,4vw,34px);line-height:1.5;font-weight:700;letter-spacing:.05em;font-feature-settings:"palt";margin-bottom:20px}
+h3{font-size:18px;line-height:1.6;font-weight:700;letter-spacing:.04em;font-feature-settings:"palt";margin-bottom:8px}
+.lead{color:var(--ink);font-size:17px;max-width:38em}
+.body{color:var(--ink-2);max-width:38em}
+.note{font-size:14px;color:var(--ink-3);line-height:1.85;max-width:44em}
 
 /* hero */
-.hero{padding:80px 0 88px}
-.hero-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:56px;align-items:center}
-.hero .sub-copy{margin:18px 0 8px;font-size:18px;font-weight:500;color:var(--ink)}
-.hero .lead{margin-bottom:36px}
-.hero-photo{aspect-ratio:4/5;border-radius:var(--radius);background:var(--card);border:1px dashed #c9cbd6;display:flex;align-items:center;justify-content:center;text-align:center;color:var(--ink-3);font-size:13px;padding:24px}
-.tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:28px}
-.tag{font-size:12px;padding:5px 12px;border:1px solid var(--line);border-radius:999px;color:var(--ink-2);background:var(--card)}
-@media (max-width:860px){.hero-grid{grid-template-columns:1fr;gap:36px}.hero-photo{aspect-ratio:16/10}}
+.hero{padding:88px 0 96px}
+.hero-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:64px;align-items:center}
+.hero .kicker{font-size:14px;font-weight:700;color:var(--ink-2);letter-spacing:.08em;margin-bottom:18px}
+.hero h1{display:inline;background:linear-gradient(transparent 82%,var(--lime) 82%,var(--lime) 92%,transparent 92%)}
+.hero .sub-copy{margin:28px 0 10px;font-size:18px;font-weight:700}
+.hero .lead{margin-bottom:36px;color:var(--ink-2);font-size:16px}
+.hero .meta{margin-top:24px;font-size:14px;color:var(--ink-3)}
+.hero-photo{aspect-ratio:4/5;border-radius:var(--radius);background:#f0efeb;display:flex;align-items:center;justify-content:center;text-align:center;color:var(--ink-3);font-size:13px;padding:24px}
+@media (max-width:860px){
+  .hero{padding:48px 0 64px}
+  .hero-grid{grid-template-columns:1fr;gap:40px}
+  .hero-photo{aspect-ratio:16/10}
+}
 
-/* concept */
-.concept-logo{margin-top:48px;padding:40px 20px;background:var(--white);border-radius:var(--radius);display:flex;justify-content:center}
-.concept-logo img{width:min(420px,80%);height:auto}
-.concept{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:40px}
-.concept-item{border-top:1px solid var(--line);padding-top:18px}
-.concept-item .num{font-size:12px;font-weight:700;letter-spacing:.12em;color:var(--blue);margin-bottom:8px}
-.concept-item p{color:var(--ink-2);font-size:15px}
-.embody{margin-top:48px;padding:32px;border-radius:var(--radius);background:var(--white)}
-.embody p{color:var(--ink-2)}
-@media (max-width:760px){.concept{grid-template-columns:1fr}.embody{padding:24px 20px}}
-
-/* key numbers */
-.keys{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:40px 0 16px}
-.key{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:28px 24px}
-.key .k-t{font-size:13px;color:var(--ink-2);font-weight:500}
-.key .k-n{font-size:44px;font-weight:700;line-height:1.3;color:var(--blue);letter-spacing:0}
+/* merit */
+.keys{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:40px 0 24px}
+.key{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:28px 28px 24px}
+.key .k-t{font-size:14px;color:var(--ink-2);font-weight:500}
+.key .k-n{font-size:48px;font-weight:700;line-height:1.25;color:var(--blue);letter-spacing:0;margin:4px 0}
 .key .k-n small{font-size:20px;margin-left:2px}
-.key .k-s{font-size:13px;color:var(--ink-3)}
-@media (max-width:760px){.keys{grid-template-columns:1fr}}
-
-/* merit list */
-.merits{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--line);border-left:1px solid var(--line);background:var(--card);border-radius:var(--radius);overflow:hidden}
-.merit{padding:22px;border-right:1px solid var(--line);border-bottom:1px solid var(--line)}
-.merit b{display:block;font-size:16px}
-.merit span{font-size:13px;color:var(--ink-3)}
-@media (max-width:760px){.merits{grid-template-columns:1fr 1fr}.merit{padding:18px 16px}}
-
-.jump{display:flex;flex-wrap:wrap;gap:10px;margin-top:40px}
-.jump a{font-size:13px;text-decoration:none;color:var(--ink);padding:8px 16px;border:1px solid var(--line);border-radius:999px;background:var(--card)}
-.jump a:hover{border-color:var(--blue);color:var(--blue)}
+.key .k-n.word{font-size:36px;line-height:1.55}
+.key .k-s{font-size:14px;color:var(--ink-3)}
+@media (max-width:760px){.keys{grid-template-columns:1fr;gap:12px}.key{display:grid;grid-template-columns:1fr auto;align-items:center;column-gap:16px;padding:20px 22px}.key .k-n{grid-row:span 2;grid-column:2;font-size:40px}.key .k-n.word{font-size:30px}}
+.merits{list-style:none;display:grid;grid-template-columns:repeat(3,1fr);column-gap:40px;border-top:1px solid var(--line)}
+.merit{padding:18px 0;border-bottom:1px solid var(--line)}
+.merit b{display:block;font-size:16px;font-weight:700}
+.merit span{font-size:14px;color:var(--ink-3)}
+@media (max-width:760px){.merits{grid-template-columns:1fr}.merit{display:flex;justify-content:space-between;align-items:baseline;gap:16px}.merit span{text-align:right}}
 
 /* support */
-.sup{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:48px}
-.sup-item .num{font-size:12px;font-weight:700;letter-spacing:.14em;color:var(--blue);border-bottom:1px solid var(--line);padding-bottom:12px;margin-bottom:18px}
+.sup{display:grid;grid-template-columns:repeat(3,1fr);gap:40px;margin-top:48px}
+.sup-item .num{font-size:28px;font-weight:400;color:var(--blue);line-height:1;margin-bottom:16px}
 .sup-item p{color:var(--ink-2);font-size:15px}
 @media (max-width:760px){.sup{grid-template-columns:1fr;gap:36px}}
-.consult{margin-top:56px;padding:32px;border-radius:var(--radius);background:var(--white)}
-@media (max-width:600px){.consult{padding:24px 20px}}
-.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
-.chip{font-size:13px;background:var(--card);border:1px solid var(--line);padding:6px 14px;border-radius:999px}
+.consult{margin-top:56px;display:grid;grid-template-columns:1fr 1fr;gap:16px 48px;padding-top:32px;border-top:1px solid var(--line)}
+.consult ul{list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:4px 24px;color:var(--ink-2);font-size:15px}
+.consult li::before{content:"・"}
+@media (max-width:760px){.consult{grid-template-columns:1fr}}
 
 /* details */
-details{margin-top:24px;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
-summary{cursor:pointer;list-style:none;padding:16px 0;font-size:14px;font-weight:500;display:flex;justify-content:space-between;gap:12px}
+details{margin-top:28px;border-top:1px solid var(--line);border-bottom:1px solid var(--line);max-width:44em}
+summary{cursor:pointer;list-style:none;padding:16px 0;font-size:15px;font-weight:500;display:flex;justify-content:space-between;gap:12px}
 summary::-webkit-details-marker{display:none}
 summary::after{content:"＋";color:var(--blue)}
 details[open] summary::after{content:"−"}
-details .body{padding:0 0 18px;font-size:13px;color:var(--ink-2);line-height:1.9}
-
-/* approach */
-.approach{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:start}
-.approach p+p{margin-top:16px}
-@media (max-width:760px){.approach{grid-template-columns:1fr;gap:20px}}
-
-/* already */
-.box{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:40px}
-@media (max-width:600px){.box{padding:28px 20px}}
+details .d-body{padding:0 0 18px;font-size:14px;color:var(--ink-2);line-height:1.9}
 
 /* conditions */
-.cond{display:grid;grid-template-columns:220px 1fr;gap:32px;padding:36px 0;border-top:1px solid var(--line)}
-.cond:last-of-type{border-bottom:1px solid var(--line)}
-.cond .c-label{font-size:12px;font-weight:700;letter-spacing:.14em;color:var(--blue)}
-.cond .c-label div{font-size:15px;color:var(--ink);letter-spacing:.04em;margin-top:4px}
-.cond p{color:var(--ink-2)}
+.summary{width:100%;border-collapse:collapse;margin:8px 0 56px;background:var(--card);border:1px solid var(--line);font-size:15px}
+.summary th,.summary td{text-align:left;padding:16px 20px;border-bottom:1px solid var(--line);vertical-align:top}
+.summary th{width:180px;font-weight:700;background:var(--blue-soft);white-space:nowrap}
+.summary td b{color:var(--blue)}
+.cond{display:grid;grid-template-columns:180px 1fr;gap:32px;padding:36px 0;border-top:1px solid var(--line)}
+.cond .c-label{font-size:15px;font-weight:700;color:var(--ink-3)}
 .cond .note{margin-top:12px}
-@media (max-width:760px){.cond{grid-template-columns:1fr;gap:10px}}
-table{width:100%;border-collapse:collapse;margin-top:16px;font-size:14px;background:var(--card)}
-th,td{text-align:left;padding:14px 12px;border-bottom:1px solid var(--line);vertical-align:top}
-th{width:120px;font-weight:700;background:var(--blue-soft);white-space:nowrap}
-.apps{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
-.apps span{font-size:13px;padding:6px 14px;border:1px solid var(--line);border-radius:999px;background:var(--card)}
-.contract{margin-top:40px;padding:24px 28px;background:var(--blue-soft);border-radius:var(--radius)}
-.contract b{font-size:17px}
+.cond .links{margin-top:14px;font-size:14px;color:var(--ink-2)}
+.cond .links a{margin-right:14px;white-space:nowrap}
+@media (max-width:760px){.cond{grid-template-columns:1fr;gap:6px;padding:28px 0}}
+.term{width:100%;border-collapse:collapse;margin-top:16px;font-size:15px;background:var(--card)}
+.term th,.term td{text-align:left;padding:14px 16px;border-bottom:1px solid var(--line);vertical-align:top}
+.term th{width:120px;font-weight:700;background:var(--blue-soft);white-space:nowrap}
+@media (max-width:600px){.summary th,.term th{width:92px;padding:14px 12px}.summary td,.term td{padding:14px 12px}.summary{font-size:14px}}
+.contract{margin-top:40px;padding:28px 32px;background:var(--blue-soft);border-radius:var(--radius)}
+.contract b{font-size:18px}
+@media (max-width:600px){.contract{padding:24px 20px}}
 
-/* talk */
-.msg{max-width:520px;margin:12px auto 28px;background:var(--card);border:1px solid var(--line);border-radius:16px 16px 16px 4px;padding:18px 22px;text-align:left;font-size:15px}
-.msg-cap{font-size:13px;color:var(--ink-3);margin-top:36px}
-.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:56px;text-align:left}
-.step{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:24px}
-.step .s-n{display:inline-flex;width:30px;height:30px;border-radius:50%;background:var(--blue);color:#fff;font-size:13px;font-weight:700;align-items:center;justify-content:center;margin-bottom:12px}
-.step p{font-size:14px;color:var(--ink-2)}
-@media (max-width:760px){.steps{grid-template-columns:1fr}}
-.apply{margin-top:56px;padding:40px;border-radius:var(--radius);border:1.5px solid var(--blue);background:var(--card)}
-@media (max-width:600px){.apply{padding:28px 20px}}
+/* concept */
+.concept-head{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center}
+.concept-logo img{width:100%;max-width:420px;height:auto;margin-left:auto}
+.concept{display:grid;grid-template-columns:repeat(3,1fr);gap:40px;margin-top:56px}
+.concept-item{border-top:2px solid var(--ink);padding-top:18px}
+.concept-item .num{font-size:13px;font-weight:700;letter-spacing:.1em;color:var(--blue);margin-bottom:8px}
+.concept-item p{color:var(--ink-2);font-size:15px}
+.embody{margin-top:48px;padding-left:20px;border-left:2px solid var(--blue);color:var(--ink-2)}
+.approach{margin-top:72px;display:grid;grid-template-columns:1fr 1.4fr;gap:48px}
+.approach p+p{margin-top:14px}
+@media (max-width:760px){.concept-head,.approach{grid-template-columns:1fr;gap:24px}.concept-logo img{margin:0;max-width:300px}.concept{grid-template-columns:1fr;gap:28px}.approach{margin-top:56px}}
 
-footer{border-top:1px solid var(--line);padding:48px 0 120px;font-size:13px;color:var(--ink-3)}
+/* talk (blue band) */
+.talk{background:var(--blue);color:#fff;border-top:0}
+.talk h2,.talk h3{color:#fff}
+.talk .lead{color:#fff}
+.talk .note{color:rgba(255,255,255,.86)}
+.talk a{color:#fff}
+.flow{list-style:none;display:grid;grid-template-columns:repeat(3,1fr);gap:32px;margin:48px 0}
+.flow li{border-top:1px solid rgba(255,255,255,.4);padding-top:16px}
+.flow .s-n{display:block;font-size:28px;line-height:1;margin-bottom:12px;font-weight:400}
+.flow p{font-size:15px;color:rgba(255,255,255,.9)}
+@media (max-width:760px){.flow{grid-template-columns:1fr;gap:24px}}
+.msg-area{max-width:560px}
+.msg-cap{font-size:14px;color:rgba(255,255,255,.86);margin-bottom:10px}
+.msg{background:#fff;color:var(--ink);border-radius:18px 18px 4px 18px;padding:16px 20px;font-size:15px;margin:0 0 32px auto;max-width:440px}
+@media (max-width:760px){.msg{margin-left:24px}}
+
+/* apply */
+.apply-row{display:grid;grid-template-columns:1fr auto;gap:24px 48px;align-items:center}
+@media (max-width:760px){.apply-row{grid-template-columns:1fr}}
+
+footer{border-top:1px solid var(--line);padding:56px 0 120px;font-size:14px;color:var(--ink-3)}
 .ft{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:24px}
-.ft img{height:56px;width:auto;margin-bottom:14px}
-.ft a{text-decoration:none;color:var(--ink-2);margin-left:16px}
+.ft img{height:56px;width:auto;margin-bottom:16px}
+.ft a{display:inline-block;padding:12px 0;margin-left:20px;text-decoration:none;color:var(--ink-2)}
 
-/* fixed bar (mobile) */
-.fixbar{position:fixed;left:0;right:0;bottom:0;z-index:30;display:none;gap:8px;padding:10px 12px calc(10px + env(safe-area-inset-bottom));background:var(--white);border-top:1px solid var(--line)}
-.fixbar .btn{flex:1;padding:13px 10px;font-size:14px}
-@media (max-width:760px){.fixbar{display:flex}section{padding:64px 0}}
+/* fixed bar (mobile): ヒーローを過ぎてから表示 */
+.fixbar{position:fixed;left:0;right:0;bottom:0;z-index:30;display:none;align-items:center;gap:16px;padding:10px 16px calc(10px + env(safe-area-inset-bottom));background:rgba(250,249,246,.97);border-top:1px solid var(--line);transform:translateY(110%);transition:transform .25s}
+.fixbar.is-show{transform:none}
+.fixbar .btn{flex:1;min-height:48px;padding:12px 16px;font-size:15px}
+.fixbar .textlink{font-size:14px;white-space:nowrap}
+@media (max-width:760px){.fixbar{display:flex}section{padding:72px 0}}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.fixbar{transition:none}}
 </style>
 </head>
 <body>
@@ -182,177 +191,143 @@ footer{border-top:1px solid var(--line);padding:48px 0 120px;font-size:13px;colo
   <div class="wrap hd">
     <a class="logo" href="/"><img src="/assets/logo-horizontal.png" alt="Invent on the way" width="771" height="101"></a>
     <nav class="nav">
-      <a href="#concept">私たちについて</a><a href="#merit">メリット</a><a href="#support">サポート</a><a href="#conditions">条件</a><a href="#talk">相談・応募</a>
+      <a href="#merit">メリット</a><a href="#support">サポート</a><a href="#conditions">契約の条件</a><a href="#concept">私たちについて</a>
+      <a class="btn" href="#talk">無料で相談する</a>
     </nav>
-    <a class="btn" href="#apply">所属応募</a>
   </div>
 </header>
 
 <!-- HERO -->
-<section class="hero">
+<section class="hero" id="top">
   <div class="wrap hero-grid">
     <div>
-      <span class="label">ライバー事務所 × コーチング</span>
-      <h1>なりたい自分に、<br>今日からなる。</h1>
-      <p class="sub-copy">まず一歩。動いた先で、次の一手が見えてくる。</p>
+      <p class="kicker">ライバー事務所 × コーチング</p>
+      <h1><span class="ib">なりたい自分に、</span><span class="ib">今日からなる。</span></h1>
+      <p class="sub-copy"><span class="ib">まず一歩。</span><span class="ib">動いた先で、</span><span class="ib">次の一手が見えてくる。</span></p>
       <p class="lead">ライバー同士がコーチとして支え合い、配信で育てた信頼を、自分の商品や仕事につなげる事務所です。</p>
       <div class="btns">
-        <a class="btn line" href="#line">LINEで無料相談</a>
-        <a class="btn ghost" href="#merit">メリットを見る</a>
+        <a class="btn" href="#TODO-line">LINEで無料相談</a>
+        <a class="textlink" href="#conditions">先に条件を見る ↓</a>
       </div>
-      <div class="tags">
-        <span class="tag">未経験歓迎</span><span class="tag">全国オンライン対応</span><span class="tag">BIGO LIVE・ふわっち・Palmu・ミクチャ</span>
-      </div>
+      <p class="meta">未経験歓迎・全国オンライン対応</p>
     </div>
     <div class="hero-photo">実際の所属ライバー／スタッフの写真<br>（自然光・普段の配信風景など）</div>
-  </div>
-</section>
-
-<!-- CONCEPT -->
-<section class="alt" id="concept">
-  <div class="wrap">
-    <span class="label">INVENT ON THE WAY</span>
-    <h2>「共に体現する」を、<br>配信の現場で。</h2>
-    <p class="lead">まず配信する。ライバー同士がコーチとして対話し、状態を整え、次の配信で新しいやり方を試す。この繰り返しで配信を磨き、視聴者との信頼を育て、自分の商品や仕事につなげていく。</p>
-
-    <div class="concept-logo"><img src="/assets/logo-basic.png" alt="Invent on the way" width="1428" height="433"></div>
-
-    <div class="concept">
-      <div class="concept-item"><div class="num">I / INVENT</div><h3>自分の意志で踏み出す。</h3><p>やってみて初めてわかることがある。まず一歩を、自分で選ぶ。</p></div>
-      <div class="concept-item"><div class="num">w / WAY</div><h3>仲間と試しながら進む。</h3><p>曲線に、実践と振り返りを行き来しながら自分の道をつくる姿を重ねています。</p></div>
-      <div class="concept-item"><div class="num">y / NEXT STEP</div><h3>経験を次の一歩につなぐ。</h3><p>先へ伸びる形に、配信で得た手応えを次の挑戦へつなぐ意志を込めました。</p></div>
-    </div>
-
-    <div class="embody">
-      <p>CoEmbodyの「共に体現する」は、この姿勢を仲間と日々の行動に移すことです。</p>
-    </div>
   </div>
 </section>
 
 <!-- MERIT -->
 <section id="merit">
   <div class="wrap">
-    <span class="label">WHY INVENT ON THE WAY</span>
-    <h2>自分のペースで。<br>ひとりで悩まずに。</h2>
-    <p class="lead">配信を楽しむことも、所属前の不安も。あなたのペースで、一緒に考えます。<br>BIGO LIVE・ふわっち・Palmu・ミクチャに対応しています。</p>
+    <h2>所属のメリット</h2>
+    <p class="lead">費用をかけずに始められ、配信のペースは自分で決められます。<br>対応アプリは BIGO LIVE・ふわっち・Palmu・ミクチャです。</p>
 
     <div class="keys">
       <div class="key"><div class="k-t">対象ライバー報酬</div><div class="k-n">100<small>%</small></div><div class="k-s">対象報酬を全額還元</div></div>
       <div class="key"><div class="k-t">登録・所属費</div><div class="k-n">0<small>円</small></div><div class="k-s">初期・月額費用なし</div></div>
-      <div class="key"><div class="k-t">配信ノルマ</div><div class="k-n">なし</div><div class="k-s">本人のペースで</div></div>
+      <div class="key"><div class="k-t">配信ノルマ</div><div class="k-n word">なし</div><div class="k-s">本人のペースで</div></div>
     </div>
 
-    <div class="merits">
-      <div class="merit"><b>退所時の定額違約金なし</b><span>契約に沿って退所可能</span></div>
-      <div class="merit"><b>退所後の活動の自由</b><span>契約終了後の活動</span></div>
-      <div class="merit"><b>画像制作サポート</b><span>アイコン・告知画像など</span></div>
-      <div class="merit"><b>プロフィール掲載</b><span>公式サイトで紹介</span></div>
-      <div class="merit"><b>贈り物の受取支援</b><span>事務所住所で受取</span></div>
-      <div class="merit"><b>ライバー同士のコーチング</b><span>対話で整え、次の配信へ</span></div>
-    </div>
+    <ul class="merits">
+      <li class="merit"><b>退所時の定額違約金なし</b><span>契約に沿って退所可能</span></li>
+      <li class="merit"><b>退所後の活動の自由</b><span>契約終了後の活動</span></li>
+      <li class="merit"><b>画像制作サポート</b><span>アイコン・告知画像など</span></li>
+      <li class="merit"><b>プロフィール掲載</b><span>公式サイトで紹介</span></li>
+      <li class="merit"><b>贈り物の受取支援</b><span>事務所住所で受取</span></li>
+      <li class="merit"><b>ライバー同士のコーチング</b><span>仲間と対話して振り返り</span></li>
+    </ul>
 
-    <p class="note" style="margin-top:20px">対象報酬・アプリの活動条件・退所手続きは、<a href="#conditions">後半のご案内</a>で確認できます。<br>質問だけでも大丈夫です。相談だけで契約が決まることはありません。</p>
-
-    <div class="jump">
-      <a href="#support">サポート紹介</a><a href="#approach">私たちの方針</a><a href="#conditions">報酬・契約の条件</a><a href="#already">所属中の方へ</a>
-    </div>
+    <p class="note" style="margin-top:24px">対象報酬・アプリの活動条件・退所手続きは、<a class="nw" href="#conditions">契約の条件</a>で確認できます。質問だけでも大丈夫です。相談だけで契約が決まることはありません。</p>
   </div>
 </section>
 
 <!-- SUPPORT -->
-<section class="alt" id="support">
+<section id="support">
   <div class="wrap">
-    <span class="label">SUPPORT</span>
-    <h2>配信するあなたに、<br>心強いサポートを。</h2>
-    <p class="lead">始める前の準備も、活動中の迷いも。担当者や仲間と、一緒に考えられます。</p>
+    <h2>所属ライバーが使えるサポート</h2>
+    <p class="lead">配信を始める前の準備から、活動中の相談まで。担当者や仲間と<span class="nw">一緒に考えられます。</span></p>
 
     <div class="sup">
-      <div class="sup-item"><div class="num">01 / CREATIVE</div><h3>第一印象づくりも、一緒に。</h3><p>アイコンや配信告知画像の見せ方を、雰囲気や伝えたいことから相談できます。</p></div>
-      <div class="sup-item"><div class="num">02 / PROFILE</div><h3>知ってもらう、もうひとつのきっかけに。</h3><p>配信の特徴や人柄を、公式サイトの紹介ページで伝えます。</p></div>
-      <div class="sup-item"><div class="num">03 / GIFTS</div><h3>贈り物の受け取りも、事務所を窓口に。</h3><p>リスナーさんからの贈り物は、事務所住所のライバーさん宛に送っていただけます。お届け先を案内する際は、担当者にご相談ください。</p></div>
+      <div class="sup-item"><div class="num">01</div><h3>アイコン・告知画像の相談</h3><p>アイコンや配信告知画像の見せ方を、雰囲気や伝えたいことから相談できます。</p></div>
+      <div class="sup-item"><div class="num">02</div><h3>公式サイトでプロフィールを紹介</h3><p>配信の特徴や人柄を、公式サイトの紹介ページで伝えます。</p></div>
+      <div class="sup-item"><div class="num">03</div><h3>贈り物は事務所住所で受け取り</h3><p>リスナーさんからの贈り物は、事務所住所のライバーさん宛に送っていただけます。お届け先を案内する際は、担当者にご相談ください。</p></div>
     </div>
 
     <div class="consult">
-      <h3>困ったときに、相談できる相手がいる。</h3>
-      <p class="lead" style="font-size:15px">迷ったときに担当者や仲間と整理し、次の一歩を考えられます。</p>
-      <div class="chips"><span class="chip">配信準備</span><span class="chip">テーマ・企画</span><span class="chip">イベント</span><span class="chip">リスナー対応</span><span class="chip">活動の振り返り</span></div>
+      <div>
+        <h3>迷ったときの相談相手がいます</h3>
+        <p class="body" style="font-size:15px">迷ったときに担当者や仲間と整理し、次の一歩を考えられます。</p>
+      </div>
+      <ul><li>配信準備</li><li>テーマ・企画</li><li>イベント</li><li>リスナー対応</li><li>活動の振り返り</li></ul>
     </div>
 
     <details>
       <summary>サポートの範囲・ご利用前の確認について</summary>
-      <div class="body">支援の内容・範囲は、アプリや目標、活動状況によって異なります。画像制作の費用・点数・修正・納期、プロフィールの掲載内容・時期、贈り物の受取条件は、利用前に担当者へご確認ください。成果や無制限の対応をお約束するものではありません。<br>アカウント停止や決済など、アプリ側でのみ対応できる問題は、公式窓口をご案内する場合があります。</div>
+      <div class="d-body">支援の内容・範囲は、アプリや目標、活動状況によって異なります。画像制作の費用・点数・修正・納期、プロフィールの掲載内容・時期、贈り物の受取条件は、利用前に担当者へご確認ください。成果や無制限の対応をお約束するものではありません。<br>アカウント停止や決済など、アプリ側でのみ対応できる問題は、公式窓口をご案内する場合があります。</div>
     </details>
   </div>
 </section>
 
-<!-- APPROACH -->
-<section id="approach">
-  <div class="wrap approach">
-    <div>
-      <span class="label">OUR APPROACH</span>
-      <h2>決めるのは、あなた。<br>相談できるのが、私たち。</h2>
-    </div>
-    <div>
-      <p class="lead">もっと挑戦したいときも、少しペースを落としたいときも。大切にしたいのは、ライバー本人の気持ちです。</p>
-      <p class="lead">配信を強制したり、必要以上に活動を促したりせず、ご本人の意思を尊重する。迷いや困りごとがあるときは、できる限り寄り添い、一緒に考える。</p>
-      <p class="lead">あなたが選ぶ配信のかたちを、Invent on the way は支えていきます。</p>
-    </div>
-  </div>
-</section>
-
 <!-- CONDITIONS -->
-<section class="alt" id="conditions">
+<section id="conditions">
   <div class="wrap">
-    <span class="label">CLEAR CONDITIONS</span>
-    <h2>始める前に、<br>終えるときのことまで。</h2>
-    <p class="lead" style="margin-bottom:40px">いいところも、大切な条件も。納得して選べるよう、わかりやすくお伝えします。</p>
+    <h2>報酬・費用・契約の条件</h2>
+    <p class="lead" style="margin-bottom:32px">所属前に知っておいてほしい条件を、良い点も注意点も<span class="nw">まとめました。</span></p>
+
+    <table class="summary">
+      <tr><th>報酬</th><td>対象ライバー報酬の<b>100％</b>（事務所独自の分配手数料なし）</td></tr>
+      <tr><th>費用</th><td>登録料・所属費用・月額費用 <b>0円</b></td></tr>
+      <tr><th>配信ノルマ</th><td>事務所独自の一律ノルマなし</td></tr>
+      <tr><th>契約期間</th><td>1年（途中終了は30日前までに通知）</td></tr>
+      <tr><th>退所</th><td>定額の違約金なし</td></tr>
+    </table>
 
     <div class="cond">
-      <div class="c-label">REWARD<div>報酬</div></div>
+      <div class="c-label">報酬</div>
       <div>
-        <h3>対象報酬は、100％あなたへ。</h3>
-        <p>対象ライバー報酬から、事務所独自の分配手数料は差し引きません。</p>
+        <h3>対象報酬から、事務所の分配手数料は引きません</h3>
+        <p class="body">対象ライバー報酬から、事務所独自の分配手数料は差し引きません。</p>
         <p class="note">※100％は各アプリの規定で発生する対象ライバー報酬のこと。ギフト購入額の全額還元ではなく、報酬の発生・受取にはアプリごとの条件があります。</p>
+        <p class="links"><a href="#TODO-reward-policy">100％還元の範囲・受取方法 →</a></p>
         <details>
           <summary>報酬の実費・控除・調整について</summary>
-          <div class="body">通常報酬・ボーナス・キャンペーンは対象項目と条件を個別に確認します。税法上必要な控除、返金・実績訂正等の調整、アプリ側の換金手数料等は、事務所独自の分配手数料とは別です。収入や成果を保証するものではありません。</div>
+          <div class="d-body">通常報酬・ボーナス・キャンペーンは対象項目と条件を個別に確認します。税法上必要な控除、返金・実績訂正等の調整、アプリ側の換金手数料等は、事務所独自の分配手数料とは別です。収入や成果を保証するものではありません。</div>
         </details>
       </div>
     </div>
 
     <div class="cond">
-      <div class="c-label">YOUR PACE<div>配信ペース</div></div>
+      <div class="c-label">配信ペース</div>
       <div>
-        <h3>配信のペースは、あなたらしく。</h3>
-        <p>生活に合うペースを大切にし、事務所独自の一律ノルマや配信の強制はありません。</p>
+        <h3>事務所独自の配信ノルマはありません</h3>
+        <p class="body">生活に合うペースを大切にし、事務所独自の一律ノルマや配信の<span class="nw">強制はありません。</span></p>
         <p class="note">※アプリの公式登録・報酬制度・イベント等には、配信日数や時間などの条件があります。ミクチャでも、希望するプランごとに対象・達成条件を確認し、事前にご案内します。</p>
-        <div class="apps"><span>BIGO LIVE</span><span>ふわっち</span><span>Palmu</span><span>ミクチャ</span></div>
+        <p class="links">各アプリの報酬・条件：<a href="#TODO-bigo">BIGO LIVE</a><a href="#TODO-whowatch">ふわっち</a><a href="#TODO-palmu">Palmu</a><a href="#TODO-mixch">ミクチャ</a></p>
       </div>
     </div>
 
     <div class="cond">
-      <div class="c-label">COST<div>費用</div></div>
+      <div class="c-label">費用</div>
       <div>
-        <h3>登録料・所属費用・月額費用は0円。</h3>
-        <p>相談・応募とレッスン料も無料です。</p>
-        <p class="note">※通信費・配信機材などは原則ご本人の負担です。個別制作などで費用が関わる場合は、事前にご案内します。</p>
+        <h3>登録料・所属費用・月額費用は0円です</h3>
+        <p class="body">相談・応募とレッスン料も無料です。</p>
+        <p class="note">※通信費・配信機材などは原則ご本人の負担です。個別制作などで費用が関わる場合は、事前に<span class="nw">ご案内します。</span></p>
       </div>
     </div>
 
     <div class="cond">
-      <div class="c-label">LEAVING<div>退所時のお金</div></div>
+      <div class="c-label">退所時のお金</div>
       <div>
-        <h3>退所そのものに、定額の違約金はありません。</h3>
-        <p>契約に沿った手続きで退所できます。</p>
+        <h3>退所に定額の違約金はかかりません</h3>
+        <p class="body">契約に沿った手続きで退所できます。</p>
         <p class="note">※契約違反などで損害が生じた場合の責任は別です。貸与品がある場合は、契約に沿って返却が必要です。</p>
       </div>
     </div>
 
     <div class="cond">
-      <div class="c-label">TERM<div>期間・手続き</div></div>
+      <div class="c-label">期間・手続き</div>
       <div>
-        <h3>1年契約でも、途中で終了できます。</h3>
-        <table>
+        <h3>1年契約で、途中でも終了できます</h3>
+        <table class="term">
           <tr><th>契約期間</th><td>締結日から1年間</td></tr>
           <tr><th>途中終了</th><td>30日前までに、書面または電子的方法で通知</td></tr>
           <tr><th>更新</th><td>満了日の30日前までに更新しない旨の通知がなければ、同じ条件で1年間更新</td></tr>
@@ -361,19 +336,48 @@ footer{border-top:1px solid var(--line);padding:48px 0 120px;font-size:13px;colo
       </div>
     </div>
 
-    <div class="cond">
-      <div class="c-label">AFTER<div>その後の活動</div></div>
+    <div class="cond" style="border-bottom:1px solid var(--line)">
+      <div class="c-label">その後の活動</div>
       <div>
-        <h3>契約終了後は、あなたが選ぶ次の活動へ。</h3>
-        <p>独立して配信を続けたり、ほかの事務所と契約したりできます。</p>
+        <h3>契約終了後の活動は自由です</h3>
+        <p class="body">独立して配信を続けたり、ほかの事務所と契約したりできます。</p>
         <p class="note">※契約終了前の他事務所との契約・所属には制限があります。終了後も秘密保持等の約束は続きます。アカウントの継続利用・再登録の可否や時期は、アプリの規定によります。無条件の保証はありません。</p>
       </div>
     </div>
 
     <div class="contract">
       <b>契約書は、署名前に確認できます。</b>
-      <p style="margin-top:6px">わからないところを残さずに、納得してから。</p>
+      <p class="body" style="margin-top:6px">わからないところを残さずに、<span class="nw">納得してから。</span></p>
       <p class="note" style="margin-top:8px">標準的な契約内容の概要です。個別の合意やアプリによって条件が異なる場合は、契約前にご説明します。</p>
+    </div>
+  </div>
+</section>
+
+<!-- CONCEPT + APPROACH -->
+<section id="concept">
+  <div class="wrap">
+    <div class="concept-head">
+      <div>
+        <h2><span class="ib">「共に体現する」を、</span><span class="ib">配信の現場で。</span></h2>
+        <p class="lead">まず配信する。ライバー同士がコーチとして対話し、状態を整え、次の配信で新しいやり方を試す。この繰り返しで配信を磨き、視聴者との信頼を育て、自分の商品や仕事につなげていく。</p>
+      </div>
+      <div class="concept-logo"><img src="/assets/logo-basic.png" alt="Invent on the way" width="1428" height="433"></div>
+    </div>
+
+    <div class="concept">
+      <div class="concept-item"><div class="num">I / INVENT</div><h3>自分の意志で踏み出す。</h3><p>やってみて初めてわかることがある。まず一歩を、自分で選ぶ。</p></div>
+      <div class="concept-item"><div class="num">w / WAY</div><h3>仲間と試しながら進む。</h3><p>曲線に、実践と振り返りを行き来しながら自分の道をつくる姿を重ねています。</p></div>
+      <div class="concept-item"><div class="num">y / NEXT STEP</div><h3>経験を次の一歩につなぐ。</h3><p>先へ伸びる形に、配信で得た手応えを次の挑戦へつなぐ意志を込めました。</p></div>
+    </div>
+
+    <p class="embody">CoEmbodyの「共に体現する」は、この姿勢を仲間と日々の行動に移すことです。</p>
+
+    <div class="approach">
+      <h3 style="font-size:22px">決めるのはライバー本人です</h3>
+      <div>
+        <p class="body">もっと挑戦したいときも、少しペースを落としたいときも、大切にしたいのはライバー本人の気持ちです。</p>
+        <p class="body">配信を強制したり、必要以上に活動を促したりせず、ご本人の意思を尊重します。迷いや困りごとがあるときは、できる限り寄り添い、一緒に考えます。選んだ配信のかたちを、<span class="nw">Invent on the way</span> は支えていきます。</p>
+      </div>
     </div>
   </div>
 </section>
@@ -381,40 +385,43 @@ footer{border-top:1px solid var(--line);padding:48px 0 120px;font-size:13px;colo
 <!-- ALREADY -->
 <section id="already">
   <div class="wrap">
-    <div class="box">
-      <span class="label">ALREADY WITH AN AGENCY?</span>
-      <h2>ほかの事務所に所属中でも、<br>まずは状況をお聞かせください。</h2>
-      <p class="lead">活動するアプリや現在の契約によっては、Invent on the way への所属を相談できる場合があります。</p>
-      <p class="lead" style="margin-top:12px">今の事務所との契約と各アプリの規定を尊重し、必要な確認をしたうえでご案内します。所属先・活動中のアプリ・希望する活動を、差し支えない範囲でお知らせください。</p>
-      <p class="note" style="margin-top:20px">別アプリなら必ず所属できるわけではありません。所属・移籍・並行活動の可否や時期は個別確認となります。現在の契約に反する登録や活動開始はお控えください。ミクチャでの他アプリとの並行活動や専属条件も、適用される契約・プランごとに確認します。</p>
-    </div>
+    <h2>ほかの事務所に所属中の方へ</h2>
+    <p class="lead">活動するアプリや現在の契約によっては、<span class="nw">Invent on the way</span> への所属を相談できる場合があります。</p>
+    <p class="body" style="margin-top:12px">今の事務所との契約と各アプリの規定を尊重し、必要な確認をしたうえでご案内します。所属先・活動中のアプリ・希望する活動を、差し支えない範囲でお知らせください。</p>
+    <p class="note" style="margin-top:20px">別アプリなら必ず所属できるわけではありません。所属・移籍・並行活動の可否や時期は個別確認となります。現在の契約に反する登録や活動開始はお控えください。ミクチャでの他アプリとの並行活動や専属条件も、適用される契約・プランごとに確認します。</p>
   </div>
 </section>
 
 <!-- TALK -->
-<section class="alt" id="talk">
-  <div class="wrap center">
-    <span class="label">LET'S TALK</span>
-    <h2>「少し聞いてみたい」から、<br>始めませんか。</h2>
-    <p class="lead">所属を決める前に、気になることから。あなたの状況に合わせて、ご案内します。</p>
+<section class="talk" id="talk">
+  <div class="wrap">
+    <h2>所属を決める前に、<span class="ib">LINEで相談できます</span></h2>
+    <p class="lead">気になることを聞くだけでも大丈夫です。状況に合わせてご案内します。</p>
 
-    <p class="msg-cap">こんなメッセージからで大丈夫です。</p>
-    <div class="msg">所属を検討しています。メリットや契約について、もう少し詳しく聞きたいです。</div>
+    <ol class="flow">
+      <li><span class="s-n">1</span><h3>LINEで相談</h3><p>知りたいことや、希望するアプリを<span class="nw">お送りください。</span></p></li>
+      <li><span class="s-n">2</span><h3>条件を確認</h3><p>支援内容・報酬・契約・退所の条件を一緒に確認します。</p></li>
+      <li><span class="s-n">3</span><h3>納得して手続きへ</h3><p>内容を確かめ、ご本人の意思で所属を決めてから進みます。</p></li>
+    </ol>
 
-    <div class="btns"><a class="btn line" href="#line" id="line">LINEで無料相談</a></div>
-    <p class="note" style="margin-top:16px">相談だけでも大丈夫。相談した時点で契約が決まることはありません。<br>24時間受付。即時の返信をお約束するものではありません。<br>所属・登録の可否や必要期間は、アプリや現在の状況によって異なります。</p>
-
-    <div class="steps">
-      <div class="step"><span class="s-n">1</span><h3>LINEで相談</h3><p>知りたいことや、希望するアプリをお送りください。</p></div>
-      <div class="step"><span class="s-n">2</span><h3>条件を確認</h3><p>支援内容・報酬・契約・退所の条件を一緒に確認します。</p></div>
-      <div class="step"><span class="s-n">3</span><h3>納得して手続きへ</h3><p>内容を確かめ、ご本人の意思で所属を決めてから進みます。</p></div>
+    <div class="msg-area">
+      <p class="msg-cap">最初のメッセージは、こんな一文で大丈夫です。</p>
+      <div class="msg">所属を検討しています。メリットや契約について、もう少し詳しく聞きたいです。</div>
     </div>
 
-    <div class="apply" id="apply">
-      <h3>条件を確認し、応募へ進みたい方へ。</h3>
-      <p class="lead" style="font-size:15px;margin-bottom:24px">ニックネームで希望を送信できます。まだ気になる点がある方はLINEでご相談ください。</p>
-      <div class="btns"><a class="btn" href="#apply">ライバー所属応募へ進む</a><a class="btn ghost" href="#line">LINEで無料相談</a></div>
+    <div class="btns"><a class="btn white" href="#TODO-line">LINEで無料相談</a></div>
+    <p class="note" style="margin-top:20px">相談した時点で契約が決まることはありません。24時間受付。即時の返信をお約束するものではありません。<br>所属・登録の可否や必要期間は、アプリや現在の状況によって異なります。<br>年齢・顔出し・活動準備などの疑問は <a href="#TODO-faq">よくある質問へ →</a></p>
+  </div>
+</section>
+
+<!-- APPLY -->
+<section id="apply">
+  <div class="wrap apply-row">
+    <div>
+      <h3 style="font-size:22px">条件を確認したうえで、応募へ進む方へ</h3>
+      <p class="body">ニックネームで希望を送信できます。まだ気になる点がある方はLINEでご相談ください。</p>
     </div>
+    <a class="btn ghost" href="#TODO-apply">ライバー所属応募フォームへ</a>
   </div>
 </section>
 
@@ -426,14 +433,25 @@ footer{border-top:1px solid var(--line);padding:48px 0 120px;font-size:13px;colo
       <div>運営 CoEmbody株式会社 「共に体現する」</div>
       <div style="margin-top:8px">© 2026 CoEmbody株式会社</div>
     </div>
-    <div>FOLLOW US<a href="#">Instagram</a><a href="#">X</a></div>
+    <div><a href="#TODO-instagram">Instagram</a><a href="#TODO-x">X</a></div>
   </div>
 </footer>
 
-<div class="fixbar">
-  <a class="btn line" href="#line">LINEで無料相談</a>
-  <a class="btn" href="#apply">所属応募へ</a>
+<div class="fixbar" id="fixbar">
+  <a class="btn" href="#TODO-line">LINEで無料相談</a>
+  <a class="textlink" href="#apply">応募する</a>
 </div>
 
+<script>
+// スマホの固定バーは、ヒーローを過ぎてから、相談セクションが見えるまでの間だけ表示
+(function(){
+  var bar=document.getElementById('fixbar'),hero=document.getElementById('top'),talk=document.getElementById('talk');
+  if(!('IntersectionObserver' in window)){bar.classList.add('is-show');return;}
+  var heroVisible=true,talkVisible=false;
+  function update(){bar.classList.toggle('is-show',!heroVisible&&!talkVisible);}
+  new IntersectionObserver(function(e){heroVisible=e[0].isIntersecting;update();}).observe(hero);
+  new IntersectionObserver(function(e){talkVisible=e[0].isIntersecting;update();}).observe(talk);
+})();
+</script>
 </body>
 </html>
