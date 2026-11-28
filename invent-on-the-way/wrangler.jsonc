@@ -1,0 +1,9 @@
+{
+  // Invent on the way（CoEmbody株式会社）所属のご案内ページ。LOL MGMTの所属案内ページを参考に作成。
+  // サロンサイト（ルートの wrangler.jsonc）とは別のWorkerとして公開する。
+  "name": "invent-on-the-way",
+  "compatibility_date": "2026-09-01",
+  "assets": {
+    "directory": "./public"
+  }
+}
