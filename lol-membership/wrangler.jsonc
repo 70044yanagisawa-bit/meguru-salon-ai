@@ -1,0 +1,9 @@
+{
+  // LOL MGMT「所属メリットと契約のご案内」白基調リデザイン案。
+  // サロンサイト（ルートの wrangler.jsonc）とは別のWorkerとして公開する。
+  "name": "lol-membership",
+  "compatibility_date": "2026-09-01",
+  "assets": {
+    "directory": "./public"
+  }
+}
