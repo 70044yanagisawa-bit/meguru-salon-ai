@@ -153,17 +153,40 @@ details .d-body{padding:0 0 18px;font-size:14px;color:var(--ink-2);line-height:1
 .approach p+p{margin-top:14px}
 @media (max-width:760px){.concept-head,.approach{grid-template-columns:1fr;gap:24px}.concept-logo img{margin:0;max-width:300px}.concept{grid-template-columns:1fr;gap:28px}.approach{margin-top:56px}}
 
+
+/* first-time worries */
+.worries{display:grid;grid-template-columns:repeat(3,1fr);gap:40px;margin-top:40px}
+.worry .q{font-size:15px;color:var(--ink-3);font-weight:500;margin-bottom:10px;padding-bottom:12px;border-bottom:1px solid var(--line)}
+.worry .q::before{content:"Q.";color:var(--blue);font-weight:700;margin-right:6px}
+.worry p{color:var(--ink-2);font-size:15px}
+@media (max-width:760px){.worries{grid-template-columns:1fr;gap:32px}}
+
+/* suits */
+.suits{list-style:none;display:grid;grid-template-columns:1fr 1fr;column-gap:40px;border-top:1px solid var(--line);margin-top:32px}
+.suits li{padding:18px 0 18px 32px;border-bottom:1px solid var(--line);position:relative;font-weight:500}
+.suits li::before{content:"";position:absolute;left:4px;top:27px;width:12px;height:7px;border-left:2px solid var(--blue);border-bottom:2px solid var(--blue);transform:rotate(-45deg)}
+.suits li span{display:block;font-size:14px;font-weight:400;color:var(--ink-3)}
+@media (max-width:760px){.suits{grid-template-columns:1fr}}
+
+/* faq */
+.faq{margin-top:32px;border-top:1px solid var(--line);max-width:48em}
+.faq details{margin:0;border-top:0;max-width:none}
+.faq summary{padding:20px 0;font-size:16px}
+.faq summary span::before{content:"Q.";color:var(--blue);font-weight:700;margin-right:8px}
+.faq .d-body{font-size:15px}
+
 /* talk (blue band) */
 .talk{background:var(--blue);color:#fff;border-top:0}
 .talk h2,.talk h3{color:#fff}
 .talk .lead{color:#fff}
 .talk .note{color:rgba(255,255,255,.86)}
 .talk a{color:#fff}
-.flow{list-style:none;display:grid;grid-template-columns:repeat(3,1fr);gap:32px;margin:48px 0}
-.flow li{border-top:1px solid rgba(255,255,255,.4);padding-top:16px}
-.flow .s-n{display:block;font-size:28px;line-height:1;margin-bottom:12px;font-weight:400}
+.flow{list-style:none;margin:48px 0;max-width:760px;border-top:1px solid rgba(255,255,255,.35)}
+.flow li{display:grid;grid-template-columns:64px 1fr;column-gap:16px;padding:20px 0;border-bottom:1px solid rgba(255,255,255,.35)}
+.flow .s-n{grid-row:span 2;font-size:28px;line-height:1.2;font-weight:400}
+.flow h3{margin-bottom:4px}
 .flow p{font-size:15px;color:rgba(255,255,255,.9)}
-@media (max-width:760px){.flow{grid-template-columns:1fr;gap:24px}}
+@media (max-width:760px){.flow li{grid-template-columns:44px 1fr;column-gap:8px}.flow .s-n{font-size:24px}}
 .msg-area{max-width:560px}
 .msg-cap{font-size:14px;color:rgba(255,255,255,.86);margin-bottom:10px}
 .msg{background:#fff;color:var(--ink);border-radius:18px 18px 4px 18px;padding:16px 20px;font-size:15px;margin:0 0 32px auto;max-width:440px}
@@ -193,7 +216,7 @@ footer{border-top:1px solid var(--line);padding:56px 0 120px;font-size:14px;colo
   <div class="wrap hd">
     <a class="logo" href="/"><img src="/assets/logo-horizontal.png" alt="Invent on the way" width="771" height="101"></a>
     <nav class="nav">
-      <a href="#merit">メリット</a><a href="#support">サポート</a><a href="#conditions">契約の条件</a><a href="#concept">私たちについて</a>
+      <a href="#merit">メリット</a><a href="#support">サポート</a><a href="#conditions">契約の条件</a><a href="#concept">私たちについて</a><a href="#faq">よくある質問</a>
       <a class="btn" href="#talk">無料で相談する</a>
     </nav>
   </div>
@@ -214,6 +237,19 @@ footer{border-top:1px solid var(--line);padding:56px 0 120px;font-size:14px;colo
       <p class="meta">未経験歓迎・全国オンライン対応</p>
     </div>
     <div class="hero-photo">実際の所属ライバー／スタッフの写真<br>（自然光・普段の配信風景など）</div>
+  </div>
+</section>
+
+<!-- FIRST TIME -->
+<section id="first">
+  <div class="wrap">
+    <h2>はじめてでも、大丈夫です</h2>
+    <p class="lead">配信を始める前によくいただく不安に、先にお答えします。</p>
+    <div class="worries">
+      <div class="worry"><p class="q">何を話せばいいかわからない</p><h3><span class="ib">好きなこと・得意なことから</span><span class="ib">一緒に考えます</span></h3><p>配信のテーマや企画は、担当者や仲間と相談しながら決められます。最初から完璧な企画がなくても大丈夫です。</p></div>
+      <div class="worry"><p class="q">仕事や学校と両立できる？</p><h3>生活に合うペースで続けられます</h3><p>事務所独自の一律ノルマや配信の強制はありません。アプリ側の条件は、事前にご案内します。</p></div>
+      <div class="worry"><p class="q">ひとりで続けられるか不安</p><h3><span class="ib">ライバー同士が</span><span class="ib">コーチとして支え合います</span></h3><p>配信のあとに仲間と対話して振り返り、次の配信で新しいやり方を試せます。迷ったときは担当者にも相談できます。</p></div>
+    </div>
   </div>
 </section>
 
@@ -384,6 +420,21 @@ footer{border-top:1px solid var(--line);padding:56px 0 120px;font-size:14px;colo
   </div>
 </section>
 
+<!-- SUITS -->
+<section id="suits">
+  <div class="wrap">
+    <h2>こんな人に向いています</h2>
+    <ul class="suits">
+      <li>配信を、自分の商品や仕事につなげたい<span>配信で育てた信頼を、次の活動の土台にしたい人</span></li>
+      <li>仲間と試しながら続けたい<span>ひとりで悩むより、対話しながら改善したい人</span></li>
+      <li>未経験から、自分のペースで始めたい<span>仕事や学校、家庭と両立しながら挑戦したい人</span></li>
+      <li>今の配信を振り返って伸ばしたい<span>経験はあるけれど、次の一手を見つけたい人</span></li>
+      <li>好きなこと・得意なことを発信したい<span>歌・雑談・趣味など、自分らしい配信をしたい人</span></li>
+      <li>まず一歩を、自分で踏み出したい<span>「やってみたい」を行動に移したい人</span></li>
+    </ul>
+  </div>
+</section>
+
 <!-- ALREADY -->
 <section id="already">
   <div class="wrap">
@@ -394,16 +445,38 @@ footer{border-top:1px solid var(--line);padding:56px 0 120px;font-size:14px;colo
   </div>
 </section>
 
+<!-- FAQ -->
+<!-- TODO: 顔出し・年齢の回答は、自社の方針に合わせて確認すること -->
+<section id="faq">
+  <div class="wrap">
+    <h2>よくある質問</h2>
+    <div class="faq">
+      <details><summary><span>配信をしたことがなくても大丈夫ですか？</span></summary><div class="d-body">大丈夫です。配信の準備やテーマ選びから、担当者や仲間と一緒に考えられます。</div></details>
+      <details><summary><span>顔出しは必須ですか？</span></summary><div class="d-body">顔出しをするかどうかは、希望するアプリの規定とご本人の希望を確認したうえで、一緒に相談して決められます。</div></details>
+      <details><summary><span>地方に住んでいても所属できますか？</span></summary><div class="d-body">全国どこからでもオンラインで相談・所属手続きができます。</div></details>
+      <details><summary><span>毎日配信できなくても大丈夫ですか？</span></summary><div class="d-body">事務所独自の一律ノルマはありません。ただし、アプリの公式登録・報酬制度・イベント等には、配信日数や時間などの条件があります。希望するアプリの条件は事前にご案内します。</div></details>
+      <details><summary><span>相談や応募をしたら、必ず所属しなければいけませんか？</span></summary><div class="d-body">いいえ。相談した時点で契約が決まることはありません。支援内容・報酬・契約・退所の条件を確認し、ご本人の意思で所属を決めてから手続きに進みます。</div></details>
+      <details><summary><span>機材は必要ですか？費用はかかりますか？</span></summary><div class="d-body">登録料・所属費用・月額費用は0円です。通信費・配信機材などは原則ご本人の負担です。必要な準備は、希望するアプリに合わせてご案内します。</div></details>
+      <details><summary><span>年齢の条件はありますか？</span></summary><div class="d-body">年齢の条件はアプリごとに異なります。希望するアプリの規定を確認したうえで、個別にご案内します。</div></details>
+      <details><summary><span>ほかの事務所に所属中でも相談できますか？</span></summary><div class="d-body">相談できます。今の事務所との契約と各アプリの規定を尊重し、必要な確認をしたうえでご案内します。詳しくは<a href="#already">ほかの事務所に所属中の方へ</a>をご覧ください。</div></details>
+    </div>
+  </div>
+</section>
+
 <!-- TALK -->
 <section class="talk" id="talk">
   <div class="wrap">
     <h2>所属を決める前に、<span class="ib">LINEで相談できます</span></h2>
     <p class="lead">気になることを聞くだけでも大丈夫です。状況に合わせてご案内します。</p>
 
-    <ol class="flow">
-      <li><span class="s-n">1</span><h3>LINEで相談</h3><p>知りたいことや、希望するアプリを<span class="nw">お送りください。</span></p></li>
-      <li><span class="s-n">2</span><h3>条件を確認</h3><p>支援内容・報酬・契約・退所の条件を一緒に確認します。</p></li>
-      <li><span class="s-n">3</span><h3>納得して手続きへ</h3><p>内容を確かめ、ご本人の意思で所属を決めてから進みます。</p></li>
+    <h3 style="font-size:20px;margin-top:48px">相談から活動開始までの流れ</h3>
+    <!-- TODO: 面談の所要時間・形式、連絡までの目安日数が決まっていれば追記 -->
+    <ol class="flow" style="margin-top:20px">
+      <li><span class="s-n">1</span><h3>LINEで相談・応募</h3><p>知りたいことや、希望するアプリをお送りください。ニックネームで大丈夫です。</p></li>
+      <li><span class="s-n">2</span><h3>担当者からご連絡</h3><p>内容を確認し、面談の日程を担当者からご連絡します。</p></li>
+      <li><span class="s-n">3</span><h3>オンライン面談</h3><p>配信の経験や目標、生活のペースをお聞きします。お住まいの地域に関係なく、オンラインで行います。</p></li>
+      <li><span class="s-n">4</span><h3>条件と契約書の確認</h3><p>支援内容・報酬・契約・退所の条件を一緒に確認します。契約書は署名前に確認できます。</p></li>
+      <li><span class="s-n">5</span><h3>納得して契約、活動スタート</h3><p>ご本人の意思で所属を決めてから契約します。アプリの登録や配信の準備を、担当者と進めていきます。</p></li>
     </ol>
 
     <div class="msg-area">
@@ -412,7 +485,7 @@ footer{border-top:1px solid var(--line);padding:56px 0 120px;font-size:14px;colo
     </div>
 
     <div class="btns"><a class="btn line" href="#TODO-line">LINEで無料相談</a></div>
-    <p class="note" style="margin-top:20px">相談した時点で契約が決まることはありません。24時間受付。即時の返信をお約束するものではありません。<br>所属・登録の可否や必要期間は、アプリや現在の状況によって異なります。<br>年齢・顔出し・活動準備などの疑問は <a href="#TODO-faq">よくある質問へ →</a></p>
+    <p class="note" style="margin-top:20px">相談した時点で契約が決まることはありません。24時間受付。即時の返信をお約束するものではありません。<br>所属・登録の可否や必要期間は、アプリや現在の状況によって異なります。<br>年齢・顔出し・活動準備などの疑問は <a href="#faq">よくある質問へ →</a></p>
   </div>
 </section>
 
